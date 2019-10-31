@@ -50,21 +50,21 @@ public class Register extends JFrame {
 	public Register() {
 		setTitle("Register");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 763, 368);
+		setBounds(100, 100, 647, 368);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{20, 0, 100, 0, 37, 62, 110, 20, 0};
+		gbl_contentPane.columnWidths = new int[]{20, 0, 100, 100, 20, 100, 100, 100, 20, 0};
 		gbl_contentPane.rowHeights = new int[]{20, 0, 60, 0, 31, 10, 0, 0, 22, 0, 0, 20, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.SOUTHEAST;
-		gbc_panel.gridwidth = 2;
+		gbc_panel.gridwidth = 3;
 		gbc_panel.gridheight = 4;
 		gbc_panel.insets = new Insets(0, 0, 5, 5);
 		gbc_panel.gridx = 1;
@@ -86,6 +86,7 @@ public class Register extends JFrame {
 		
 		textField = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.gridwidth = 2;
 		gbc_textField.anchor = GridBagConstraints.SOUTH;
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
@@ -104,6 +105,7 @@ public class Register extends JFrame {
 		
 		textField_1 = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.gridwidth = 2;
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 6;
@@ -121,6 +123,7 @@ public class Register extends JFrame {
 		
 		textField_2 = new JTextField();
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.gridwidth = 2;
 		gbc_textField_2.anchor = GridBagConstraints.NORTH;
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
@@ -139,6 +142,7 @@ public class Register extends JFrame {
 		
 		textField_3 = new JTextField();
 		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
+		gbc_textField_3.gridwidth = 2;
 		gbc_textField_3.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_3.gridx = 2;
@@ -156,6 +160,7 @@ public class Register extends JFrame {
 		
 		textField_5 = new JTextField();
 		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
+		gbc_textField_5.gridwidth = 2;
 		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_5.gridx = 6;
@@ -173,6 +178,7 @@ public class Register extends JFrame {
 		
 		textField_4 = new JTextField();
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
+		gbc_textField_4.gridwidth = 2;
 		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_4.gridx = 2;
@@ -190,6 +196,7 @@ public class Register extends JFrame {
 		
 		textField_6 = new JTextField();
 		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
+		gbc_textField_6.gridwidth = 2;
 		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_6.gridx = 6;
@@ -208,7 +215,7 @@ public class Register extends JFrame {
 		
 		JLabel lblHaveAnAccount = new JLabel("Have an account?");
 		GridBagConstraints gbc_lblHaveAnAccount = new GridBagConstraints();
-		gbc_lblHaveAnAccount.anchor = GridBagConstraints.EAST;
+		gbc_lblHaveAnAccount.anchor = GridBagConstraints.WEST;
 		gbc_lblHaveAnAccount.gridwidth = 2;
 		gbc_lblHaveAnAccount.insets = new Insets(0, 0, 5, 5);
 		gbc_lblHaveAnAccount.gridx = 3;
