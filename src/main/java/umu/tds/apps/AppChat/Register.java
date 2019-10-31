@@ -6,20 +6,30 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 
 public class Register extends JFrame {
@@ -93,7 +103,7 @@ public class Register extends JFrame {
 		panel.add(lblChooseImage, gbc_lblChooseImage);
 		
 		
-		JLabel imgUser = new JLabel("");
+		final JLabel imgUser = new JLabel("");
 		imgUser.setIcon(new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png")));
 		GridBagConstraints gbc_imgUser = new GridBagConstraints();
 		gbc_imgUser.fill = GridBagConstraints.BOTH;
@@ -106,19 +116,41 @@ public class Register extends JFrame {
 
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						// TODO Auto-generated method stub
-						
+						JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+						jfc.setDialogTitle("Select an image");
+						jfc.setAcceptAllFileFilterUsed(false);
+						FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG and PNG images", "jpg", "png");
+						jfc.addChoosableFileFilter(filter);
+
+						int returnValue = jfc.showOpenDialog(null);
+						if (returnValue == JFileChooser.APPROVE_OPTION) {
+							System.out.println(jfc.getSelectedFile().getPath());
+							BufferedImage img;
+							try {
+								img = ImageIO.read(jfc.getSelectedFile());
+								Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
+								ImageIcon icon = new ImageIcon(imgScaled);
+								imgUser.setIcon(icon);
+								
+								Dimension imageSize = new Dimension(128, 128);
+								imgUser.setPreferredSize(imageSize);
+
+								imgUser.revalidate();
+								imgUser.repaint();
+								lblChooseImage.setText("");
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						}
 					}
 
 					@Override
 					public void mouseEntered(MouseEvent e) {
-						// TODO Auto-generated method stub
-						lblChooseImage.setText("Choose your image");
+						lblChooseImage.setText("Change your avatar");
 					}
 
 					@Override
 					public void mouseExited(MouseEvent e) {
-						// TODO Auto-generated method stub
 						lblChooseImage.setText("");
 					}
 
