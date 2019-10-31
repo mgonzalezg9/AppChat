@@ -53,9 +53,9 @@ public class Register extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{20, 0, 31, 0, 21, 0, 0, 0, 20, 0};
+		gbl_contentPane.columnWidths = new int[]{20, 0, 100, 0, 21, 0, 110, 20, 0};
 		gbl_contentPane.rowHeights = new int[]{20, 0, 10, 0, 0, 20, 0, 0, 22, 0, 0, 20, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
@@ -120,7 +120,6 @@ public class Register extends JFrame {
 		
 		textField_2 = new JTextField();
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.gridwidth = 2;
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 6;
@@ -155,7 +154,6 @@ public class Register extends JFrame {
 		
 		textField_5 = new JTextField();
 		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-		gbc_textField_5.gridwidth = 2;
 		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_5.gridx = 6;
@@ -190,7 +188,6 @@ public class Register extends JFrame {
 		
 		textField_6 = new JTextField();
 		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
-		gbc_textField_6.gridwidth = 2;
 		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_6.gridx = 6;
