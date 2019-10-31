@@ -14,6 +14,8 @@ import java.awt.Insets;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 public class Register extends JFrame {
 
@@ -48,48 +50,47 @@ public class Register extends JFrame {
 	public Register() {
 		setTitle("Register");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 789, 412);
+		setBounds(100, 100, 763, 368);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{20, 0, 100, 0, 21, 0, 110, 20, 0};
-		gbl_contentPane.rowHeights = new int[]{20, 0, 10, 0, 0, 20, 0, 0, 22, 0, 0, 20, 0};
+		gbl_contentPane.columnWidths = new int[]{20, 0, 100, 0, 37, 62, 110, 20, 0};
+		gbl_contentPane.rowHeights = new int[]{20, 0, 60, 0, 31, 10, 0, 0, 22, 0, 0, 20, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		JLabel lblChooseYourImage = new JLabel("Choose your image:");
-		GridBagConstraints gbc_lblChooseYourImage = new GridBagConstraints();
-		gbc_lblChooseYourImage.anchor = GridBagConstraints.EAST;
-		gbc_lblChooseYourImage.insets = new Insets(0, 0, 5, 5);
-		gbc_lblChooseYourImage.gridx = 2;
-		gbc_lblChooseYourImage.gridy = 1;
-		contentPane.add(lblChooseYourImage, gbc_lblChooseYourImage);
+		JPanel panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.anchor = GridBagConstraints.SOUTHEAST;
+		gbc_panel.gridwidth = 2;
+		gbc_panel.gridheight = 4;
+		gbc_panel.insets = new Insets(0, 0, 5, 5);
+		gbc_panel.gridx = 1;
+		gbc_panel.gridy = 1;
+		contentPane.add(panel, gbc_panel);
+		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Register.class.getResource("/images/user.png")));
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.gridwidth = 3;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 3;
-		gbc_lblNewLabel.gridy = 1;
-		contentPane.add(lblNewLabel, gbc_lblNewLabel);
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png")));
+		panel.add(label);
 		
 		JLabel lblUser = new JLabel("User");
 		GridBagConstraints gbc_lblUser = new GridBagConstraints();
 		gbc_lblUser.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUser.anchor = GridBagConstraints.EAST;
-		gbc_lblUser.gridx = 1;
-		gbc_lblUser.gridy = 3;
+		gbc_lblUser.anchor = GridBagConstraints.SOUTHEAST;
+		gbc_lblUser.gridx = 5;
+		gbc_lblUser.gridy = 2;
 		contentPane.add(lblUser, gbc_lblUser);
 		
 		textField = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.anchor = GridBagConstraints.SOUTH;
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 3;
+		gbc_textField.gridx = 6;
+		gbc_textField.gridy = 2;
 		contentPane.add(textField, gbc_textField);
 		textField.setColumns(10);
 		
@@ -97,22 +98,22 @@ public class Register extends JFrame {
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPassword.gridx = 1;
-		gbc_lblPassword.gridy = 4;
+		gbc_lblPassword.gridx = 5;
+		gbc_lblPassword.gridy = 3;
 		contentPane.add(lblPassword, gbc_lblPassword);
 		
 		textField_1 = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 2;
-		gbc_textField_1.gridy = 4;
+		gbc_textField_1.gridx = 6;
+		gbc_textField_1.gridy = 3;
 		contentPane.add(textField_1, gbc_textField_1);
 		textField_1.setColumns(10);
 		
 		JLabel lblConfirmPassword = new JLabel("Confirm password");
 		GridBagConstraints gbc_lblConfirmPassword = new GridBagConstraints();
-		gbc_lblConfirmPassword.anchor = GridBagConstraints.EAST;
+		gbc_lblConfirmPassword.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblConfirmPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblConfirmPassword.gridx = 5;
 		gbc_lblConfirmPassword.gridy = 4;
@@ -120,6 +121,7 @@ public class Register extends JFrame {
 		
 		textField_2 = new JTextField();
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.anchor = GridBagConstraints.NORTH;
 		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_2.gridx = 6;
