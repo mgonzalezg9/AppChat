@@ -11,11 +11,16 @@ import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.Font;
 
 public class Register extends JFrame {
 
@@ -70,11 +75,67 @@ public class Register extends JFrame {
 		gbc_panel.gridx = 1;
 		gbc_panel.gridy = 1;
 		contentPane.add(panel, gbc_panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 0, 0};
+		gbl_panel.rowHeights = new int[]{128, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
 		
-		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png")));
-		panel.add(label);
+		final JLabel lblChooseImage = new JLabel("");
+		lblChooseImage.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblChooseImage.setForeground(Color.RED);
+		GridBagConstraints gbc_lblChooseImage = new GridBagConstraints();
+		gbc_lblChooseImage.anchor = GridBagConstraints.EAST;
+		gbc_lblChooseImage.insets = new Insets(0, 0, 0, 5);
+		gbc_lblChooseImage.gridx = 0;
+		gbc_lblChooseImage.gridy = 0;
+		panel.add(lblChooseImage, gbc_lblChooseImage);
+		
+		
+		JLabel imgUser = new JLabel("");
+		imgUser.setIcon(new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png")));
+		GridBagConstraints gbc_imgUser = new GridBagConstraints();
+		gbc_imgUser.fill = GridBagConstraints.BOTH;
+		gbc_imgUser.gridx = 1;
+		gbc_imgUser.gridy = 0;
+		panel.add(imgUser, gbc_imgUser);
+		
+		imgUser.addMouseListener(
+				new MouseListener() {
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						lblChooseImage.setText("Choose your image");
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						lblChooseImage.setText("");
+					}
+
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+			         
+			      }	
+			);
 		
 		JLabel lblUser = new JLabel("User");
 		GridBagConstraints gbc_lblUser = new GridBagConstraints();
