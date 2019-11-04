@@ -1,4 +1,4 @@
-package umu.tds.apps.AppChat;
+package umu.tds.apps.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
