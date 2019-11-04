@@ -54,101 +54,74 @@ public class Login {
 		frmLogin = new JFrame();
 		frmLogin.setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/fire_120x120.png")));
 		frmLogin.setTitle("Login");
-		frmLogin.setBounds(100, 100, 614, 379);
+		frmLogin.setBounds(100, 100, 690, 444);
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JPanel panelSur = new JPanel();
-		frmLogin.getContentPane().add(panelSur, BorderLayout.SOUTH);
-		panelSur.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		JPanel panel_3 = new JPanel();
-		panelSur.add(panel_3);
-		GridBagLayout gbl_panel_3 = new GridBagLayout();
-		gbl_panel_3.columnWidths = new int[]{89, 0, 0};
-		gbl_panel_3.rowHeights = new int[]{23, 14, 20, 0};
-		gbl_panel_3.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_3.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel_3.setLayout(gbl_panel_3);
-		
-		JButton btnSignIn = new JButton("SIGN IN");
-		GridBagConstraints gbc_btnSignIn = new GridBagConstraints();
-		gbc_btnSignIn.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnSignIn.gridwidth = 2;
-		gbc_btnSignIn.insets = new Insets(0, 0, 5, 0);
-		gbc_btnSignIn.gridx = 0;
-		gbc_btnSignIn.gridy = 0;
-		panel_3.add(btnSignIn, gbc_btnSignIn);
-		
-		JLabel lblNeedAnAccount = new JLabel("Need an account? ");
-		GridBagConstraints gbc_lblNeedAnAccount = new GridBagConstraints();
-		gbc_lblNeedAnAccount.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNeedAnAccount.anchor = GridBagConstraints.WEST;
-		gbc_lblNeedAnAccount.gridx = 0;
-		gbc_lblNeedAnAccount.gridy = 1;
-		panel_3.add(lblNeedAnAccount, gbc_lblNeedAnAccount);
-		
-		JButton btnSignUp = new JButton("SIGN UP");
-		GridBagConstraints gbc_btnSignUp = new GridBagConstraints();
-		gbc_btnSignUp.insets = new Insets(0, 0, 5, 0);
-		gbc_btnSignUp.gridx = 1;
-		gbc_btnSignUp.gridy = 1;
-		panel_3.add(btnSignUp, gbc_btnSignUp);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{150, 200, 150, 0};
+		gridBagLayout.rowHeights = new int[]{100, 144, 96, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		frmLogin.getContentPane().setLayout(gridBagLayout);
 		
 		JPanel panelNorte = new JPanel();
-		frmLogin.getContentPane().add(panelNorte, BorderLayout.NORTH);
+		GridBagConstraints gbc_panelNorte = new GridBagConstraints();
+		gbc_panelNorte.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelNorte.insets = new Insets(0, 0, 5, 5);
+		gbc_panelNorte.gridx = 1;
+		gbc_panelNorte.gridy = 0;
+		frmLogin.getContentPane().add(panelNorte, gbc_panelNorte);
+		GridBagLayout gbl_panelNorte = new GridBagLayout();
+		gbl_panelNorte.columnWidths = new int[]{131, 50, 42, 0};
+		gbl_panelNorte.rowHeights = new int[]{60, 0};
+		gbl_panelNorte.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panelNorte.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		panelNorte.setLayout(gbl_panelNorte);
 		
-		JPanel panel = new JPanel();
-		panelNorte.add(panel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{60, 42, 0};
-		gbl_panel.rowHeights = new int[]{20, 60, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
-		
-		JLabel lblImg = new JLabel("");
-		GridBagConstraints gbc_lblImg = new GridBagConstraints();
-		gbc_lblImg.anchor = GridBagConstraints.NORTHWEST;
-		gbc_lblImg.insets = new Insets(0, 0, 0, 5);
-		gbc_lblImg.gridx = 0;
-		gbc_lblImg.gridy = 1;
-		panel.add(lblImg, gbc_lblImg);
-		lblImg.setIcon(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/fire_60x60.png")));
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/fire_120x120.png")));
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.anchor = GridBagConstraints.NORTHEAST;
+		gbc_label.insets = new Insets(0, 0, 0, 5);
+		gbc_label.gridx = 0;
+		gbc_label.gridy = 0;
+		panelNorte.add(label, gbc_label);
 		
 		JLabel lblAppchat = new JLabel("AppChat");
 		GridBagConstraints gbc_lblAppchat = new GridBagConstraints();
 		gbc_lblAppchat.anchor = GridBagConstraints.WEST;
-		gbc_lblAppchat.gridx = 1;
-		gbc_lblAppchat.gridy = 1;
-		panel.add(lblAppchat, gbc_lblAppchat);
+		gbc_lblAppchat.gridx = 2;
+		gbc_lblAppchat.gridy = 0;
+		panelNorte.add(lblAppchat, gbc_lblAppchat);
 		
-		JPanel panel_4 = new JPanel();
-		frmLogin.getContentPane().add(panel_4, BorderLayout.CENTER);
+		JPanel panelCentro = new JPanel();
+		GridBagConstraints gbc_panelCentro = new GridBagConstraints();
+		gbc_panelCentro.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelCentro.insets = new Insets(0, 0, 5, 5);
+		gbc_panelCentro.gridx = 1;
+		gbc_panelCentro.gridy = 1;
+		frmLogin.getContentPane().add(panelCentro, gbc_panelCentro);
+		GridBagLayout gbl_panelCentro = new GridBagLayout();
+		gbl_panelCentro.columnWidths = new int[]{0, 0, 0};
+		gbl_panelCentro.rowHeights = new int[]{25, 0, 15, 0, 25, 0};
+		gbl_panelCentro.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panelCentro.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panelCentro.setLayout(gbl_panelCentro);
 		
-		JPanel panel_2 = new JPanel();
-		panel_4.add(panel_2);
-		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[]{77, 142, 0, 0};
-		gbl_panel_2.rowHeights = new int[]{20, 0, 45, 0, 0};
-		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel_2.setLayout(gbl_panel_2);
-		
-		JLabel lblUser = new JLabel("User");
-		GridBagConstraints gbc_lblUser = new GridBagConstraints();
-		gbc_lblUser.anchor = GridBagConstraints.EAST;
-		gbc_lblUser.insets = new Insets(0, 0, 5, 5);
-		gbc_lblUser.gridx = 0;
-		gbc_lblUser.gridy = 1;
-		panel_2.add(lblUser, gbc_lblUser);
+		JLabel lblNewLabel = new JLabel("User");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 1;
+		panelCentro.add(lblNewLabel, gbc_lblNewLabel);
 		
 		textField = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.insets = new Insets(0, 0, 5, 0);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 1;
-		panel_2.add(textField, gbc_textField);
+		panelCentro.add(textField, gbc_textField);
 		textField.setColumns(10);
 		
 		JLabel lblPassword = new JLabel("Password");
@@ -156,16 +129,51 @@ public class Login {
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.gridx = 0;
-		gbc_lblPassword.gridy = 2;
-		panel_2.add(lblPassword, gbc_lblPassword);
+		gbc_lblPassword.gridy = 3;
+		panelCentro.add(lblPassword, gbc_lblPassword);
 		
 		passwordField = new JPasswordField();
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
-		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
+		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_passwordField.gridx = 1;
-		gbc_passwordField.gridy = 2;
-		panel_2.add(passwordField, gbc_passwordField);
+		gbc_passwordField.gridy = 3;
+		panelCentro.add(passwordField, gbc_passwordField);
+		
+		JPanel panelSur = new JPanel();
+		GridBagConstraints gbc_panelSur = new GridBagConstraints();
+		gbc_panelSur.insets = new Insets(0, 0, 0, 5);
+		gbc_panelSur.gridx = 1;
+		gbc_panelSur.gridy = 2;
+		frmLogin.getContentPane().add(panelSur, gbc_panelSur);
+		GridBagLayout gbl_panelSur = new GridBagLayout();
+		gbl_panelSur.columnWidths = new int[]{0, 0, 0};
+		gbl_panelSur.rowHeights = new int[]{0, 0, 0};
+		gbl_panelSur.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+		gbl_panelSur.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panelSur.setLayout(gbl_panelSur);
+		
+		JButton btnSignIn = new JButton("SIGN IN");
+		GridBagConstraints gbc_btnSignIn = new GridBagConstraints();
+		gbc_btnSignIn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnSignIn.gridwidth = 2;
+		gbc_btnSignIn.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSignIn.gridx = 0;
+		gbc_btnSignIn.gridy = 0;
+		panelSur.add(btnSignIn, gbc_btnSignIn);
+		
+		JLabel lblNewLabel_1 = new JLabel("Need an account? ");
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel_1.gridx = 0;
+		gbc_lblNewLabel_1.gridy = 1;
+		panelSur.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		
+		JButton btnSignUp = new JButton("SIGN UP");
+		GridBagConstraints gbc_btnSignUp = new GridBagConstraints();
+		gbc_btnSignUp.gridx = 1;
+		gbc_btnSignUp.gridy = 1;
+		panelSur.add(btnSignUp, gbc_btnSignUp);
 	}
 
 }
