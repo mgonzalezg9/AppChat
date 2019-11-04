@@ -52,7 +52,7 @@ public class Login {
 	 */
 	private void initialize() {
 		frmLogin = new JFrame();
-		frmLogin.setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/fire_120x120.png")));
+		frmLogin.setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/icon.png")));
 		frmLogin.setTitle("Login");
 		frmLogin.setBounds(100, 100, 690, 444);
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,7 +78,7 @@ public class Login {
 		panelNorte.setLayout(gbl_panelNorte);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/fire_120x120.png")));
+		label.setIcon(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/icon.png")));
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.anchor = GridBagConstraints.NORTHEAST;
 		gbc_label.insets = new Insets(0, 0, 0, 5);

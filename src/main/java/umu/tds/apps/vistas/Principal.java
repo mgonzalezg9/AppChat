@@ -17,6 +17,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.AbstractListModel;
+import java.awt.Toolkit;
 
 public class Principal extends JFrame {
 
@@ -42,6 +43,7 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 781, 637);
