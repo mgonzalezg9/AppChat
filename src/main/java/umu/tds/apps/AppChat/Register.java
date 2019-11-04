@@ -31,6 +31,7 @@ import java.awt.Image;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import com.toedter.calendar.JDateChooser;
 
 public class Register extends JFrame {
 
@@ -41,7 +42,6 @@ public class Register extends JFrame {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
-	private JTextField textField_6;
 
 	/**
 	 * Launch the application.
@@ -73,7 +73,7 @@ public class Register extends JFrame {
 		gbl_contentPane.columnWidths = new int[]{20, 0, 100, 100, 20, 100, 100, 100, 20, 0};
 		gbl_contentPane.rowHeights = new int[]{20, 0, 60, 0, 31, 10, 0, 0, 22, 0, 0, 20, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JPanel panel = new JPanel();
@@ -124,7 +124,6 @@ public class Register extends JFrame {
 
 						int returnValue = jfc.showOpenDialog(null);
 						if (returnValue == JFileChooser.APPROVE_OPTION) {
-							System.out.println(jfc.getSelectedFile().getPath());
 							BufferedImage img;
 							try {
 								img = ImageIO.read(jfc.getSelectedFile());
@@ -287,15 +286,14 @@ public class Register extends JFrame {
 		gbc_lblBirthDate.gridy = 7;
 		contentPane.add(lblBirthDate, gbc_lblBirthDate);
 		
-		textField_6 = new JTextField();
-		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
-		gbc_textField_6.gridwidth = 2;
-		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_6.gridx = 6;
-		gbc_textField_6.gridy = 7;
-		contentPane.add(textField_6, gbc_textField_6);
-		textField_6.setColumns(10);
+		JDateChooser dateChooser = new JDateChooser();
+		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
+		gbc_dateChooser.gridwidth = 2;
+		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
+		gbc_dateChooser.fill = GridBagConstraints.BOTH;
+		gbc_dateChooser.gridx = 6;
+		gbc_dateChooser.gridy = 7;
+		contentPane.add(dateChooser, gbc_dateChooser);
 		
 		JButton btnNewButton = new JButton("CREATE ACCOUNT");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
