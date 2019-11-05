@@ -25,6 +25,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/DriverPersistencia.jar"/>
 	<classpathentry kind="lib" path="lib/h2-1.3.160.jar"/>
-	<classpathentry kind="lib" path="jcalendar-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Manuel González/.m2/repository_local/com/toedter/jcalendar/1.4/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
