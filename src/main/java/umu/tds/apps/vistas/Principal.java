@@ -10,6 +10,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Label;
+import java.util.LinkedList;
+import java.util.List;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -19,6 +22,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.AbstractListModel;
+import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +33,7 @@ public class Principal extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private JTable table_1;
+	private JLabel profilePhoto;
 
 	/**
 	 * Launch the application.
@@ -172,12 +177,60 @@ public class Principal extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		listaChats.add(scrollPane);
 
-		JLabel profilePhoto = new JLabel();
+		profilePhoto = new JLabel();
 		profilePhoto.setIcon(new ImageIcon(
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
 		table_1 = new JTable();
-		table_1.setModel(new DefaultTableModel(new Object[][] { { profilePhoto, null }, },
-				new String[] { "New column", "New column" }));
+		table_1.setShowVerticalLines(false);
+		table_1.setShowGrid(false);
+		table_1.setBorder(null);
+		table_1.setModel(new TableModel() {
+			private Object[] columnNames = { "Profile photo", "Name" };
+
+			private Object[][] data = { { profilePhoto, "Diego Sevilla" },
+					
+			};
+
+			public int getColumnCount() {
+				return columnNames.length;
+			}
+
+			public int getRowCount() {
+				return data.length;
+			}
+
+			public String getColumnName(int col) {
+				return columnNames[col].toString();
+			}
+
+			public Object getValueAt(int row, int col) {
+				return data[row][col];
+			}
+
+			public Class<?> getColumnClass(int c) {
+				return Icon.class;
+			}
+
+			@Override
+			public void addTableModelListener(TableModelListener l) {
+				
+			}
+
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return false;
+			}
+
+			@Override
+			public void removeTableModelListener(TableModelListener l) {
+				
+			}
+
+			@Override
+			public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+				
+			}
+		});
 		scrollPane.setViewportView(table_1);
 
 		JPanel chatPersonal = new JPanel();
