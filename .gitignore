@@ -55,3 +55,6 @@ local.properties
 .scala_dependencies
 .worksheet
 /target/
+
+# Para librerias
+.classpath
