@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JLabel;
@@ -14,13 +15,28 @@ import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
 import javax.swing.JList;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.awt.event.ActionEvent;
 
 public class ventanaNuevoGrupo extends JFrame {
 
@@ -117,19 +133,15 @@ public class ventanaNuevoGrupo extends JFrame {
 		gbc_scrollPane.gridx = 1;
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
+	
+		String contactos[] = {"Alfonso favorito", "Manuel negro albino", "Joseliko", "Oscarizado", "Roberto", "Carmelo", "Aitortilla", "Aitormenta", "Javi", "Norberto", "GinesGM", "Perico", "Juan"};
 		
-		JList contactList = new JList();
+		final DefaultListModel modelContact = new DefaultListModel();
+		for (int i = 0; i < contactos.length; i++) modelContact.add(i, contactos[i]);
+		
+		final JList<String> contactList = new JList<>(modelContact);
 		contactList.setBackground(new Color(255, 204, 153));
 		scrollPane.setViewportView(contactList);
-		contactList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"dfgsdfg", "sdf", "gsdfg", "sdf", "gsd", "fg", "sd", "fg", "sdf", "g", "sdf", "g", "sdfg", "sd", "fg", "sd", "fg", "sdf", "g", "sdfg", "sdf", "g"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
 		
 		txtGroupName = new JTextField();
 		txtGroupName.setText("Group name..");
@@ -153,20 +165,83 @@ public class ventanaNuevoGrupo extends JFrame {
 		gbc_scrollPane_1.gridy = 1;
 		contentPane.add(scrollPane_1, gbc_scrollPane_1);
 		
-		JList addedList = new JList();
+		final DefaultListModel modelAdded = new DefaultListModel();
+		final JList<String> addedList = new JList<>(modelAdded);
 		addedList.setBackground(new Color(204, 255, 255));
-		addedList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"sdfsd", "sd", "f", "f", "f", "f", "f", "ff", "f", "f", "fasdfsadf", "asdf", "asd", "f", "asdf", "as", "df", "as", "df", "as", "df", "asd", "f", "asdf", "asd", "f"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
 		scrollPane_1.setViewportView(addedList);
 		
 		JButton btAddedContact = new JButton("");
+		btAddedContact.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String selected = (String) contactList.getSelectedValue();
+				if (selected != null) {
+					modelAdded.add(modelAdded.getSize(), selected);
+					modelContact.remove(contactList.getSelectedIndex());
+				}
+			}
+		});
+		
+		
+		contactList.addMouseListener(
+				new MouseListener() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if (e.getClickCount() == 2) {
+							String selected = (String) contactList.getSelectedValue();
+							modelAdded.add(modelAdded.getSize(), selected);
+							modelContact.remove(contactList.getSelectedIndex());
+						}
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent arg0) {
+					}
+
+					@Override
+					public void mouseExited(MouseEvent arg0) {
+					}
+
+					@Override
+					public void mousePressed(MouseEvent arg0) {
+
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent arg0) {
+					}
+			    }	
+		);
+		
+		addedList.addMouseListener(
+				new MouseListener() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if (e.getClickCount() == 2) {
+							String selected = (String) addedList.getSelectedValue();
+							modelContact.add(modelContact.getSize(), selected);
+							modelAdded.remove(addedList.getSelectedIndex());
+						}
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent arg0) {
+					}
+
+					@Override
+					public void mouseExited(MouseEvent arg0) {
+					}
+
+					@Override
+					public void mousePressed(MouseEvent arg0) {
+
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent arg0) {
+					}
+			    }	
+		);
+		
 		btAddedContact.setIcon(new ImageIcon(ventanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
 		GridBagConstraints gbc_btAddedContact = new GridBagConstraints();
 		gbc_btAddedContact.gridwidth = 2;
@@ -177,6 +252,15 @@ public class ventanaNuevoGrupo extends JFrame {
 		contentPane.add(btAddedContact, gbc_btAddedContact);
 		
 		JButton btRemoveContact = new JButton("");
+		btRemoveContact.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String selected = (String) addedList.getSelectedValue();
+				if (selected != null) {
+					modelContact.add(modelContact.getSize(), selected);
+					modelAdded.remove(addedList.getSelectedIndex());
+				}
+			}
+		});
 		btRemoveContact.setIcon(new ImageIcon(ventanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-izquierda.png")));
 		GridBagConstraints gbc_btRemoveContact = new GridBagConstraints();
 		gbc_btRemoveContact.gridwidth = 2;
