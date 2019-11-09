@@ -1,7 +1,9 @@
 package umu.tds.apps.vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -28,7 +30,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-
+import javax.swing.BoxLayout;
+import tds.BubbleText;
 
 public class Principal extends JFrame {
 
@@ -57,7 +60,8 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 781, 637);
@@ -191,7 +195,7 @@ public class Principal extends JFrame {
 			private Object[] columnNames = { "Profile photo", "Name" };
 
 			private Object[][] data = { { profilePhoto, "Diego Sevilla" },
-					
+
 			};
 
 			public int getColumnCount() {
@@ -216,7 +220,7 @@ public class Principal extends JFrame {
 
 			@Override
 			public void addTableModelListener(TableModelListener l) {
-				
+
 			}
 
 			@Override
@@ -226,23 +230,37 @@ public class Principal extends JFrame {
 
 			@Override
 			public void removeTableModelListener(TableModelListener l) {
-				
+
 			}
 
 			@Override
 			public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-				
+
 			}
 		});
 		scrollPane.setViewportView(table_1);
 
-		JPanel chatPersonal = new JPanel();
-		chatPersonal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		GridBagConstraints gbc_chatPersonal = new GridBagConstraints();
-		gbc_chatPersonal.fill = GridBagConstraints.BOTH;
-		gbc_chatPersonal.gridx = 1;
-		gbc_chatPersonal.gridy = 1;
-		contentPane.add(chatPersonal, gbc_chatPersonal);
+		JPanel chat = new JPanel();
+		chat.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		GridBagConstraints gbc_chat = new GridBagConstraints();
+		gbc_chat.fill = GridBagConstraints.BOTH;
+		gbc_chat.gridx = 1;
+		gbc_chat.gridy = 1;
+		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
+		chat.setSize(400, 700);
+		chat.setMinimumSize(new Dimension(400, 700));
+		chat.setMaximumSize(new Dimension(400, 700));
+		chat.setPreferredSize(new Dimension(400, 700));
+		contentPane.add(chat, gbc_chat);
+
+		BubbleText burbuja;
+		burbuja = new BubbleText(chat, "ASO nos esta yendo muy bien tito diego", Color.GREEN, "Tú", BubbleText.SENT);
+		chat.add(burbuja);
+		
+		BubbleText burbuja2;
+		burbuja2 = new BubbleText(chat, "Gensanta... esperaros a ver xv6", Color.LIGHT_GRAY, "Diego Sevilla", BubbleText.RECEIVED);
+		chat.add(burbuja2);
+
 	}
 
 }
