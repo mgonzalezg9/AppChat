@@ -13,9 +13,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Label;
+import java.awt.TextField;
 import java.awt.Toolkit;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -32,13 +34,20 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
 import tds.BubbleText;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Principal extends JFrame {
-
 	private JPanel contentPane;
+	private JPanel chat;
 	private JTable table;
 	private JTable table_1;
 	private JLabel profilePhoto;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -54,6 +63,12 @@ public class Principal extends JFrame {
 				}
 			}
 		});
+	}
+
+	private void sendMessage(JPanel panel, JTextField textField) throws IllegalArgumentException {
+		BubbleText burbuja = new BubbleText(panel, textField.getText(), Color.GREEN, "Tú", BubbleText.SENT);
+		chat.add(burbuja);
+		textField.setText(null);
 	}
 
 	/**
@@ -240,27 +255,104 @@ public class Principal extends JFrame {
 		});
 		scrollPane.setViewportView(table_1);
 
-		JPanel chat = new JPanel();
-		chat.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		GridBagConstraints gbc_chat = new GridBagConstraints();
-		gbc_chat.fill = GridBagConstraints.BOTH;
-		gbc_chat.gridx = 1;
-		gbc_chat.gridy = 1;
+		JPanel chatPersonal = new JPanel();
+		chatPersonal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		GridBagConstraints gbc_chatPersonal = new GridBagConstraints();
+		gbc_chatPersonal.fill = GridBagConstraints.BOTH;
+		gbc_chatPersonal.gridx = 1;
+		gbc_chatPersonal.gridy = 1;
+		contentPane.add(chatPersonal, gbc_chatPersonal);
+		GridBagLayout gbl_chatPersonal = new GridBagLayout();
+		gbl_chatPersonal.columnWidths = new int[] { 66, 0 };
+		gbl_chatPersonal.rowHeights = new int[] { 20, 0, 0 };
+		gbl_chatPersonal.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_chatPersonal.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+		chatPersonal.setLayout(gbl_chatPersonal);
+
+		JScrollPane scrollPane_1 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane_1.gridx = 0;
+		gbc_scrollPane_1.gridy = 0;
+		chatPersonal.add(scrollPane_1, gbc_scrollPane_1);
+
+		chat = new JPanel();
+		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400, 700);
-		chat.setMinimumSize(new Dimension(400, 700));
-		chat.setMaximumSize(new Dimension(400, 700));
-		chat.setPreferredSize(new Dimension(400, 700));
-		contentPane.add(chat, gbc_chat);
 
-		BubbleText burbuja;
-		burbuja = new BubbleText(chat, "ASO nos esta yendo muy bien tito diego", Color.GREEN, "Tú", BubbleText.SENT);
+		BubbleText burbuja = new BubbleText(chat, "Hola, ¿Como van las burbujas? xD", Color.LIGHT_GRAY, "Dieguin",
+				BubbleText.RECEIVED);
 		chat.add(burbuja);
-		
-		BubbleText burbuja2;
-		burbuja2 = new BubbleText(chat, "Gensanta... esperaros a ver xv6", Color.LIGHT_GRAY, "Diego Sevilla", BubbleText.RECEIVED);
-		chat.add(burbuja2);
 
+		JPanel writeText = new JPanel();
+		writeText.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		GridBagConstraints gbc_writeText = new GridBagConstraints();
+		gbc_writeText.anchor = GridBagConstraints.SOUTH;
+		gbc_writeText.fill = GridBagConstraints.HORIZONTAL;
+		gbc_writeText.gridx = 0;
+		gbc_writeText.gridy = 1;
+		chatPersonal.add(writeText, gbc_writeText);
+		GridBagLayout gbl_writeText = new GridBagLayout();
+		gbl_writeText.columnWidths = new int[] { 49, 25, 0, 0 };
+		gbl_writeText.rowHeights = new int[] { 20, 0 };
+		gbl_writeText.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_writeText.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
+		writeText.setLayout(gbl_writeText);
+
+		JLabel lblEmoji = new JLabel("");
+		lblEmoji.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO
+			}
+		});
+		lblEmoji.setIcon(BubbleText.getEmoji(new Random().nextInt(BubbleText.MAXICONO + 1)));
+		GridBagConstraints gbc_lblEmoji = new GridBagConstraints();
+		gbc_lblEmoji.anchor = GridBagConstraints.EAST;
+		gbc_lblEmoji.fill = GridBagConstraints.VERTICAL;
+		gbc_lblEmoji.insets = new Insets(0, 0, 0, 5);
+		gbc_lblEmoji.gridx = 0;
+		gbc_lblEmoji.gridy = 0;
+		writeText.add(lblEmoji, gbc_lblEmoji);
+
+		JLabel lblSend = new JLabel("");
+		lblSend.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					sendMessage(chat, textField);
+				} catch (IllegalArgumentException e2) {
+				}
+			}
+		});
+
+		JScrollPane scrollPane_2 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
+		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_2.insets = new Insets(0, 0, 0, 5);
+		gbc_scrollPane_2.gridx = 1;
+		gbc_scrollPane_2.gridy = 0;
+		writeText.add(scrollPane_2, gbc_scrollPane_2);
+
+		textField = new JTextField();
+		textField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					sendMessage(chat, textField);
+				} catch (IllegalArgumentException e) {
+				}
+			}
+		});
+		scrollPane_2.setViewportView(textField);
+		textField.setColumns(10);
+		lblSend.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/paper plane.png")));
+		GridBagConstraints gbc_lblSend = new GridBagConstraints();
+		gbc_lblSend.gridx = 2;
+		gbc_lblSend.gridy = 0;
+		writeText.add(lblSend, gbc_lblSend);
 	}
 
 }
