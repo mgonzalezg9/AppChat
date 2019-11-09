@@ -6,23 +6,38 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
 import java.util.List;
+import java.util.ResourceBundle.Control;
 import java.awt.GridBagLayout;
+import java.awt.Image;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.TexturePaint;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 // Clase que gestiona el carrousel de imagenes
 class Carrousel {
@@ -44,13 +59,38 @@ class Carrousel {
 		indicador.setText(numMostrado + "/" + imagenes.size());
 	}
 
-	public void desplazarCarrousel(int offset) {
+	public void desplazar(int offset) {
 		numImagen = (numImagen + offset) % imagenes.size();
-		if (numImagen < 0) numImagen += imagenes.size();
+		if (numImagen < 0)
+			numImagen += imagenes.size();
 		int numMostrado = numImagen + 1;
 		indicador.setText(numMostrado + "/" + imagenes.size());
 
 		profilePhoto.setIcon(imagenes.get(numImagen));
+	}
+
+	public void addImagen(JFileChooser jfc) {
+		int returnValue = jfc.showOpenDialog(null);
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			try {
+				// Escala la imagen
+				BufferedImage img = ImageIO.read(jfc.getSelectedFile());
+				Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
+				ImageIcon icon = new ImageIcon(imgScaled);
+
+				// La añade
+				Controlador.addImagenUsuario(icon);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			int numMostrado = numImagen + 1;
+			indicador.setText(numMostrado + "/" + imagenes.size());
+		}
+	}
+
+	public void removeImagen(int op) {
+		Controlador.removeImagenUsuario(op);
+		desplazar(-1);
 	}
 
 }
@@ -59,6 +99,8 @@ public class UserSettings extends JFrame {
 
 	private JPanel contentPane;
 	private Carrousel car;
+	private JTextArea txtrRespetandoElNnn;
+	private JFrame frame;
 
 	/**
 	 * Launch the application.
@@ -80,7 +122,9 @@ public class UserSettings extends JFrame {
 	 * Create the frame.
 	 */
 	public UserSettings() {
+		frame = this;
 		setTitle("Settings");
+		Controlador.addImagenUsuario(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")));
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(UserSettings.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,13 +160,28 @@ public class UserSettings extends JFrame {
 		panel.add(profilePhoto);
 
 		JButton button_3 = new JButton("-");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int size = Controlador.getImagenesUsuario().size();
+				String[] elems = new String[size];
+
+				for (int i = 0; i < elems.length; i++) {
+					elems[i] = String.valueOf(i + 1);
+				}
+
+				String op = (String) JOptionPane.showInputDialog(frame, "Elige la imagen a eliminar:",
+						"Borrado de foto de perfil", JOptionPane.QUESTION_MESSAGE, null, elems, elems[0]);
+
+				car.removeImagen(Integer.valueOf(op) - 1);
+			}
+		});
 		panel_1.add(button_3);
 
 		JButton button = new JButton("<");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Ver anterior imagen del carrousel
-				car.desplazarCarrousel(-1);
+				car.desplazar(-1);
 			}
 		});
 		panel_1.add(button);
@@ -131,7 +190,7 @@ public class UserSettings extends JFrame {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Ver siguiente imagen del carrousel
-				car.desplazarCarrousel(1);
+				car.desplazar(1);
 			}
 		});
 
@@ -143,6 +202,19 @@ public class UserSettings extends JFrame {
 		panel_1.add(button_1);
 
 		JButton button_2 = new JButton("+");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Pedimos amablemente una imagen
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+				jfc.setDialogTitle("Select an image");
+				jfc.setAcceptAllFileFilterUsed(false);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG and PNG images", "jpg", "png");
+				jfc.addChoosableFileFilter(filter);
+
+				// Si se ha escogido la añade
+				car.addImagen(jfc);
+			}
+		});
 		panel_1.add(button_2);
 
 		JPanel panel_4 = new JPanel();
@@ -153,7 +225,7 @@ public class UserSettings extends JFrame {
 		gbc_panel_4.gridy = 2;
 		contentPane.add(panel_4, gbc_panel_4);
 
-		JLabel lblNewLabel = new JLabel("Dieguillo_777");
+		JLabel lblNewLabel = new JLabel(Controlador.getNombreUsuario());
 		panel_4.add(lblNewLabel);
 
 		JPanel panel_5 = new JPanel();
@@ -175,11 +247,16 @@ public class UserSettings extends JFrame {
 		gbc_scrollPane.gridy = 4;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		JTextArea txtrRespetandoElNnn = new JTextArea();
+		txtrRespetandoElNnn = new JTextArea(Controlador.getSaludo());
+		txtrRespetandoElNnn.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				Controlador.setSaludo(txtrRespetandoElNnn.getText());
+			}
+		});
 		scrollPane.setViewportView(txtrRespetandoElNnn);
 		txtrRespetandoElNnn.setPreferredSize(new Dimension(200, 100));
 		txtrRespetandoElNnn.setMinimumSize(new Dimension(10, 25));
-		txtrRespetandoElNnn.setText("A tope con el NNN. ¿Y tú?");
 	}
 
 }
