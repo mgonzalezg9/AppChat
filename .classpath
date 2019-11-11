@@ -23,8 +23,13 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="lib/DriverPersistencia.jar"/>
 	<classpathentry kind="lib" path="lib/h2-1.3.160.jar"/>
+=======
+	<classpathentry exported="true" kind="lib" path="lib/DriverPersistencia.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/h2-1.3.160.jar"/>
+>>>>>>> 57185be16ec53f5625cfd4ccd77ec5d2e714c341
 	<classpathentry kind="lib" path="C:/Users/Alphonse/.m2/repository/com/toedter/jcalendar/1.4/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
