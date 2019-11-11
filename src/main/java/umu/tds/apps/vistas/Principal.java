@@ -38,8 +38,12 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPopupMenu;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class Principal extends JFrame {
 	private JPanel contentPane;
@@ -48,6 +52,7 @@ public class Principal extends JFrame {
 	private JTable table_1;
 	private JLabel profilePhoto;
 	private JTextField textField;
+	private static JPopupMenu popupSettsGrupos;
 
 	/**
 	 * Launch the application.
@@ -149,8 +154,47 @@ public class Principal extends JFrame {
 		panel_2.add(label_2);
 
 		JLabel label_1 = new JLabel("");
+		label_1.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("hao");
+				popupSettsGrupos.setLocation(e.getLocationOnScreen());
+				popupSettsGrupos.setVisible(true);
+			}
+		});
 		label_1.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points.png")));
 		panel_2.add(label_1);
+
+		popupSettsGrupos = new JPopupMenu();
+		addPopup(label_1, popupSettsGrupos);
+
+		JLabel lblHola = new JLabel("Hola");
+		popupSettsGrupos.add(lblHola);
 
 		JPanel settingsDer = new JPanel();
 		settingsDer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -385,4 +429,23 @@ public class Principal extends JFrame {
 		writeText.add(lblSend, gbc_lblSend);
 	}
 
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 }
