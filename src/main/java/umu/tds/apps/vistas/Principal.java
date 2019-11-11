@@ -116,6 +116,14 @@ public class Principal extends JFrame {
 		settingsIzq.add(panel_1, gbc_panel_1);
 
 		JLabel label = new JLabel("");
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				UserSettings settingsUsuario = new UserSettings();
+				settingsUsuario.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				settingsUsuario.setVisible(true);
+			}
+		});
 		label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-PNG-Picture.png")));
 		panel_1.add(label);
 
