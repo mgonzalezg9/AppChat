@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
-public class contactos extends JFrame {
+public class Contactos extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -28,7 +28,7 @@ public class contactos extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					contactos frame = new contactos();
+					Contactos frame = new Contactos();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,8 +40,8 @@ public class contactos extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public contactos() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(contactos.class.getResource("/umu/tds/apps/resources/icon.png")));
+	public Contactos() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Contactos.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Contacts");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 536, 346);

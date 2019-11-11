@@ -14,7 +14,7 @@ import java.awt.Insets;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class modificarGrupo extends JFrame {
+public class ModificarGrupo extends JFrame {
 
 	private JPanel contentPane;
 
@@ -25,7 +25,7 @@ public class modificarGrupo extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					modificarGrupo frame = new modificarGrupo();
+					ModificarGrupo frame = new ModificarGrupo();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,8 +37,8 @@ public class modificarGrupo extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public modificarGrupo() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(modificarGrupo.class.getResource("/umu/tds/apps/resources/icon.png")));
+	public ModificarGrupo() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ModificarGrupo.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Choose group");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 449, 133);

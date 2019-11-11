@@ -137,6 +137,14 @@ public class Principal extends JFrame {
 		settingsIzq.add(panel_2, gbc_panel_2);
 
 		JLabel label_2 = new JLabel("");
+		label_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Contactos ventanaContactos = new Contactos();
+				ventanaContactos.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				ventanaContactos.setVisible(true);
+			}
+		});
 		label_2.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-PNG-Picture.png")));
 		panel_2.add(label_2);
 
@@ -160,6 +168,12 @@ public class Principal extends JFrame {
 		settingsDer.setLayout(gbl_settingsDer);
 
 		JPanel panel_3 = new JPanel();
+		panel_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO
+			}
+		});
 		FlowLayout flowLayout_2 = (FlowLayout) panel_3.getLayout();
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
@@ -186,6 +200,14 @@ public class Principal extends JFrame {
 		settingsDer.add(panel, gbc_panel);
 
 		JLabel label_4 = new JLabel("");
+		label_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Busqueda ventanaBusqueda = new Busqueda();
+				ventanaBusqueda.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				ventanaBusqueda.setVisible(true);
+			}
+		});
 		label_4.setIcon(new ImageIcon(
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
 		panel.add(label_4);

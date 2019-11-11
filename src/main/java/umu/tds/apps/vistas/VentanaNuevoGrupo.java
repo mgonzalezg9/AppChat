@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
-public class ventanaNuevoGrupo extends JFrame {
+public class VentanaNuevoGrupo extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtGroupName;
@@ -50,7 +50,7 @@ public class ventanaNuevoGrupo extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ventanaNuevoGrupo frame = new ventanaNuevoGrupo();
+					VentanaNuevoGrupo frame = new VentanaNuevoGrupo();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,7 +62,7 @@ public class ventanaNuevoGrupo extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ventanaNuevoGrupo() {
+	public VentanaNuevoGrupo() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 497, 340);
 		contentPane = new JPanel();
@@ -101,7 +101,7 @@ public class ventanaNuevoGrupo extends JFrame {
 		settings.add(panel, gbc_panel);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(ventanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/diego.jpg")));
+		lblNewLabel.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/diego.jpg")));
 		panel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Diego Sevilla");
@@ -116,11 +116,11 @@ public class ventanaNuevoGrupo extends JFrame {
 		settings.add(panel_1, gbc_panel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon(ventanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
+		lblNewLabel_2.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
 		panel_1.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setIcon(new ImageIcon(ventanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/3points.png")));
+		lblNewLabel_3.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/3points.png")));
 		panel_1.add(lblNewLabel_3);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -242,7 +242,7 @@ public class ventanaNuevoGrupo extends JFrame {
 			    }	
 		);
 		
-		btAddedContact.setIcon(new ImageIcon(ventanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
+		btAddedContact.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
 		GridBagConstraints gbc_btAddedContact = new GridBagConstraints();
 		gbc_btAddedContact.gridwidth = 2;
 		gbc_btAddedContact.fill = GridBagConstraints.HORIZONTAL;
@@ -261,7 +261,7 @@ public class ventanaNuevoGrupo extends JFrame {
 				}
 			}
 		});
-		btRemoveContact.setIcon(new ImageIcon(ventanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-izquierda.png")));
+		btRemoveContact.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-izquierda.png")));
 		GridBagConstraints gbc_btRemoveContact = new GridBagConstraints();
 		gbc_btRemoveContact.gridwidth = 2;
 		gbc_btRemoveContact.fill = GridBagConstraints.HORIZONTAL;
