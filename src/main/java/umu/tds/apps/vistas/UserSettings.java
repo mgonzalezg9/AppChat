@@ -90,7 +90,20 @@ class Carrousel {
 
 	public void removeImagen(int op) {
 		Controlador.removeImagenUsuario(op);
-		desplazar(-1);
+		if (imagenes.size() > 0)
+			desplazar(-1);
+		else {
+			// Pedimos amablemente una imagen
+			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+			jfc.setDialogTitle("Select an image");
+			jfc.setAcceptAllFileFilterUsed(false);
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG and PNG images", "jpg", "png");
+			jfc.addChoosableFileFilter(filter);
+
+			addImagen(jfc);
+			profilePhoto.setIcon(imagenes.get(imagenes.size() - 1));
+		}
+
 	}
 
 }
@@ -172,7 +185,8 @@ public class UserSettings extends JFrame {
 				String op = (String) JOptionPane.showInputDialog(frame, "Elige la imagen a eliminar:",
 						"Borrado de foto de perfil", JOptionPane.QUESTION_MESSAGE, null, elems, elems[0]);
 
-				car.removeImagen(Integer.valueOf(op) - 1);
+				if ((op != null) && (op.length() > 0))
+					car.removeImagen(Integer.valueOf(op) - 1);
 			}
 		});
 		panel_1.add(button_3);
