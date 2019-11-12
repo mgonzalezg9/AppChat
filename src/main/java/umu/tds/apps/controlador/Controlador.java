@@ -17,7 +17,7 @@ public class Controlador {
 	
 	public static boolean iniciarSesion(String dni, char[] password) {
 		// TODO
-		return false;
+		return true;
 	}
 	
 	public static String getNombreUsuario() {
