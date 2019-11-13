@@ -43,4 +43,8 @@ public class Controlador {
 	public static ImageIcon removeImagenUsuario(int pos) {
 		return imagenes.remove(pos);
 	}
+	
+	public static boolean deleteChat() {
+		return false;
+	}
 }

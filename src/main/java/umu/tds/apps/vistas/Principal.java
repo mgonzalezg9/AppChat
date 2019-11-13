@@ -34,6 +34,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
 import tds.BubbleText;
+import umu.tds.apps.controlador.Controlador;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
@@ -44,6 +46,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class Principal extends JFrame {
 	private JPanel contentPane;
@@ -52,7 +55,7 @@ public class Principal extends JFrame {
 	private JTable table_1;
 	private JLabel profilePhoto;
 	private JTextField textField;
-	private static JPopupMenu popupSettsGrupos;
+	private JPopupMenu popupSettsGrupos;
 
 	/**
 	 * Launch the application.
@@ -154,47 +157,87 @@ public class Principal extends JFrame {
 		panel_2.add(label_2);
 
 		JLabel label_1 = new JLabel("");
-		label_1.addMouseListener(new MouseListener() {
 
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("hao");
-				popupSettsGrupos.setLocation(e.getLocationOnScreen());
-				popupSettsGrupos.setVisible(true);
-			}
-		});
 		label_1.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points.png")));
 		panel_2.add(label_1);
 
 		popupSettsGrupos = new JPopupMenu();
 		addPopup(label_1, popupSettsGrupos);
 
-		JLabel lblHola = new JLabel("Hola");
-		popupSettsGrupos.add(lblHola);
+		JMenuItem mntmNewMenuItem = new JMenuItem("Add Contact");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CreateContact window = new CreateContact();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
+			}
+		});
+		popupSettsGrupos.add(mntmNewMenuItem);
+
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New Group");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaNuevoGrupo window = new VentanaNuevoGrupo();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
+			}
+		});
+		popupSettsGrupos.add(mntmNewMenuItem_1);
+
+		JMenuItem mntmModifyGroup = new JMenuItem("Modify Group");
+		mntmModifyGroup.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ModificarGrupo window = new ModificarGrupo();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
+			}
+		});
+		popupSettsGrupos.add(mntmModifyGroup);
+
+		JMenuItem mntmMostrarContactos = new JMenuItem("Show Contacts");
+		mntmMostrarContactos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Contactos window = new Contactos();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
+			}
+		});
+		popupSettsGrupos.add(mntmMostrarContactos);
+
+		JMenuItem mntmGetPremium = new JMenuItem("Get Premium");
+		mntmGetPremium.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Ventana con premium
+			}
+		});
+		popupSettsGrupos.add(mntmGetPremium);
+
+		JMenuItem mntmShowStatistics = new JMenuItem("Show statistics");
+		mntmShowStatistics.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				EstadisticasUso window = new EstadisticasUso();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
+			}
+		});
+		popupSettsGrupos.add(mntmShowStatistics);
+
+		JMenuItem mntmLogout = new JMenuItem("Sign out");
+		mntmLogout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Login window = new Login();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
+			}
+		});
+		popupSettsGrupos.add(mntmLogout);
 
 		JPanel settingsDer = new JPanel();
 		settingsDer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -215,7 +258,9 @@ public class Principal extends JFrame {
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO
+				CreateContact window = new CreateContact();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
 			}
 		});
 		FlowLayout flowLayout_2 = (FlowLayout) panel_3.getLayout();
@@ -259,6 +304,35 @@ public class Principal extends JFrame {
 		JLabel label_5 = new JLabel("");
 		label_5.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points.png")));
 		panel.add(label_5);
+
+		JPopupMenu popupSettsChat = new JPopupMenu();
+		addPopup(label_5, popupSettsChat);
+
+		JMenuItem mntmRemoveAllMessages = new JMenuItem("Remove all messages");
+		mntmRemoveAllMessages.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chat.removeAll();
+				chat.updateUI();
+			}
+		});
+		popupSettsChat.add(mntmRemoveAllMessages);
+
+		JMenuItem mntmDeleteContact = new JMenuItem("Delete chat");
+		mntmDeleteContact.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (Controlador.deleteChat()) {
+					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(Principal.this,
+							"Unable to delete the chat. Please check your chat privileges.", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		popupSettsChat.add(mntmDeleteContact);
 
 		JPanel listaChats = new JPanel();
 		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -445,6 +519,11 @@ public class Principal extends JFrame {
 
 			private void showMenu(MouseEvent e) {
 				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				showMenu(e);
 			}
 		});
 	}
