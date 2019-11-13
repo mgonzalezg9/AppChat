@@ -232,8 +232,9 @@ public class Principal extends JFrame {
 		mntmLogout.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Principal.this.setVisible(false);
 				Login window = new Login();
-				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				window.setVisible(true);
 			}
 		});
