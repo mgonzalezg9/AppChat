@@ -217,7 +217,9 @@ public class Principal extends JFrame {
 		mntmGetPremium.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Ventana con premium
+				Premium window = new Premium();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
 			}
 		});
 		popupSettsGrupos.add(mntmGetPremium);
