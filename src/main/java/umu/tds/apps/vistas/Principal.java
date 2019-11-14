@@ -47,6 +47,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import java.awt.CardLayout;
 
 public class Principal extends JFrame {
 	private JPanel contentPane;
@@ -233,8 +234,8 @@ public class Principal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Login window = new Login();
-				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-				window.setVisible(true);
+				/*window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);*/
 			}
 		});
 		popupSettsGrupos.add(mntmLogout);
@@ -412,9 +413,9 @@ public class Principal extends JFrame {
 		contentPane.add(chatPersonal, gbc_chatPersonal);
 		GridBagLayout gbl_chatPersonal = new GridBagLayout();
 		gbl_chatPersonal.columnWidths = new int[] { 66, 0 };
-		gbl_chatPersonal.rowHeights = new int[] { 20, 0, 0 };
+		gbl_chatPersonal.rowHeights = new int[] { 141, 126, 0, 0 };
 		gbl_chatPersonal.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_chatPersonal.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+		gbl_chatPersonal.rowWeights = new double[] { 1.0, 1.0, 0.0, Double.MIN_VALUE };
 		chatPersonal.setLayout(gbl_chatPersonal);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -434,13 +435,29 @@ public class Principal extends JFrame {
 				BubbleText.RECEIVED);
 		chat.add(burbuja);
 
+		JPanel panel_iconos = new JPanel();
+		GridBagConstraints gbc_panel_iconos = new GridBagConstraints();
+		gbc_panel_iconos.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_iconos.fill = GridBagConstraints.BOTH;
+		gbc_panel_iconos.gridx = 0;
+		gbc_panel_iconos.gridy = 1;
+		chatPersonal.add(panel_iconos, gbc_panel_iconos);
+		panel_iconos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		// Añadimos todos los iconos al panel.
+		for (int i = 1; i <= BubbleText.MAXICONO; i++) {
+			JLabel labelIconos = new JLabel("");
+			labelIconos.setIcon(BubbleText.getEmoji(i));
+			panel_iconos.add(labelIconos);
+		}
+		
 		JPanel writeText = new JPanel();
 		writeText.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_writeText = new GridBagConstraints();
-		gbc_writeText.anchor = GridBagConstraints.SOUTH;
 		gbc_writeText.fill = GridBagConstraints.HORIZONTAL;
+		gbc_writeText.anchor = GridBagConstraints.SOUTH;
 		gbc_writeText.gridx = 0;
-		gbc_writeText.gridy = 1;
+		gbc_writeText.gridy = 2;
 		chatPersonal.add(writeText, gbc_writeText);
 		GridBagLayout gbl_writeText = new GridBagLayout();
 		gbl_writeText.columnWidths = new int[] { 49, 25, 0, 0 };
