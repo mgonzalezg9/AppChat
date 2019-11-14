@@ -47,6 +47,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 
 public class Principal extends JFrame {
 	private JPanel contentPane;
@@ -89,6 +90,7 @@ public class Principal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 781, 637);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -99,6 +101,7 @@ public class Principal extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel settingsIzq = new JPanel();
+		settingsIzq.setBackground(new Color(141, 110, 99));
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsIzq = new GridBagConstraints();
 		gbc_settingsIzq.insets = new Insets(0, 0, 5, 5);
@@ -114,6 +117,7 @@ public class Principal extends JFrame {
 		settingsIzq.setLayout(gbl_settingsIzq);
 
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(141, 110, 99));
 		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
@@ -132,10 +136,11 @@ public class Principal extends JFrame {
 				settingsUsuario.setVisible(true);
 			}
 		});
-		label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-PNG-Picture.png")));
+		label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-white.png")));
 		panel_1.add(label);
 
 		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(141, 110, 99));
 		FlowLayout flowLayout_1 = (FlowLayout) panel_2.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.RIGHT);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -153,12 +158,12 @@ public class Principal extends JFrame {
 				ventanaContactos.setVisible(true);
 			}
 		});
-		label_2.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-PNG-Picture.png")));
+		label_2.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-white.png")));
 		panel_2.add(label_2);
 
 		JLabel label_1 = new JLabel("");
 
-		label_1.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points.png")));
+		label_1.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points-white.png")));
 		panel_2.add(label_1);
 
 		popupSettsGrupos = new JPopupMenu();
@@ -241,6 +246,7 @@ public class Principal extends JFrame {
 		popupSettsGrupos.add(mntmLogout);
 
 		JPanel settingsDer = new JPanel();
+		settingsDer.setBackground(new Color(141, 110, 99));
 		settingsDer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsDer = new GridBagConstraints();
 		gbc_settingsDer.insets = new Insets(0, 0, 5, 0);
@@ -256,6 +262,7 @@ public class Principal extends JFrame {
 		settingsDer.setLayout(gbl_settingsDer);
 
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(141, 110, 99));
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -275,13 +282,15 @@ public class Principal extends JFrame {
 		settingsDer.add(panel_3, gbc_panel_3);
 
 		JLabel label_3 = new JLabel("");
-		label_3.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-PNG-Picture.png")));
+		label_3.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-white.png")));
 		panel_3.add(label_3);
 
 		JLabel lblDiegoSevilla = new JLabel("Diego Sevilla");
+		lblDiegoSevilla.setForeground(new Color(255, 255, 255));
 		panel_3.add(lblDiegoSevilla);
 
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(141, 110, 99));
 		FlowLayout flowLayout_3 = (FlowLayout) panel.getLayout();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.NORTHEAST;
@@ -298,12 +307,11 @@ public class Principal extends JFrame {
 				ventanaBusqueda.setVisible(true);
 			}
 		});
-		label_4.setIcon(new ImageIcon(
-				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
+		label_4.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/search-white.png")));
 		panel.add(label_4);
 
 		JLabel label_5 = new JLabel("");
-		label_5.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points.png")));
+		label_5.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points-white.png")));
 		panel.add(label_5);
 
 		JPopupMenu popupSettsChat = new JPopupMenu();
@@ -336,6 +344,7 @@ public class Principal extends JFrame {
 		popupSettsChat.add(mntmDeleteContact);
 
 		JPanel listaChats = new JPanel();
+		listaChats.setBackground(Color.WHITE);
 		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagConstraints gbc_listaChats = new GridBagConstraints();
 		gbc_listaChats.insets = new Insets(0, 0, 0, 5);
@@ -345,13 +354,15 @@ public class Principal extends JFrame {
 		contentPane.add(listaChats, gbc_listaChats);
 		listaChats.setLayout(new BorderLayout(0, 0));
 
-		JScrollPane scrollPane = new JScrollPane();
-		listaChats.add(scrollPane);
-
 		profilePhoto = new JLabel();
 		profilePhoto.setIcon(new ImageIcon(
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBackground(Color.WHITE);
+		listaChats.add(scrollPane);
 		table_1 = new JTable();
+		table_1.setBackground(Color.WHITE);
 		table_1.setShowVerticalLines(false);
 		table_1.setShowGrid(false);
 		table_1.setBorder(null);
@@ -405,6 +416,7 @@ public class Principal extends JFrame {
 		scrollPane.setViewportView(table_1);
 
 		JPanel chatPersonal = new JPanel();
+		chatPersonal.setBackground(new Color(245, 222, 179));
 		chatPersonal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagConstraints gbc_chatPersonal = new GridBagConstraints();
 		gbc_chatPersonal.fill = GridBagConstraints.BOTH;
@@ -419,6 +431,7 @@ public class Principal extends JFrame {
 		chatPersonal.setLayout(gbl_chatPersonal);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBackground(Color.WHITE);
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);
@@ -427,6 +440,7 @@ public class Principal extends JFrame {
 		chatPersonal.add(scrollPane_1, gbc_scrollPane_1);
 
 		chat = new JPanel();
+		chat.setBackground(new Color(245, 222, 179));
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400, 700);
@@ -436,6 +450,7 @@ public class Principal extends JFrame {
 		chat.add(burbuja);
 
 		JPanel writeText = new JPanel();
+		writeText.setBackground(new Color(255, 171, 0));
 		writeText.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_writeText = new GridBagConstraints();
 		gbc_writeText.anchor = GridBagConstraints.SOUTH;
@@ -451,6 +466,9 @@ public class Principal extends JFrame {
 		writeText.setLayout(gbl_writeText);
 
 		JLabel lblEmoji = new JLabel("");
+		lblEmoji.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblEmoji.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmoji.setBackground(new Color(255, 171, 0));
 		lblEmoji.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -459,7 +477,6 @@ public class Principal extends JFrame {
 		});
 		lblEmoji.setIcon(BubbleText.getEmoji(new Random().nextInt(BubbleText.MAXICONO + 1)));
 		GridBagConstraints gbc_lblEmoji = new GridBagConstraints();
-		gbc_lblEmoji.anchor = GridBagConstraints.EAST;
 		gbc_lblEmoji.fill = GridBagConstraints.VERTICAL;
 		gbc_lblEmoji.insets = new Insets(0, 0, 0, 5);
 		gbc_lblEmoji.gridx = 0;
@@ -467,6 +484,9 @@ public class Principal extends JFrame {
 		writeText.add(lblEmoji, gbc_lblEmoji);
 
 		JLabel lblSend = new JLabel("");
+		lblSend.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSend.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblSend.setBackground(new Color(255, 171, 0));
 		lblSend.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -479,6 +499,7 @@ public class Principal extends JFrame {
 		});
 
 		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBackground(new Color(255, 171, 0));
 		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
 		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane_2.insets = new Insets(0, 0, 0, 5);
