@@ -4,10 +4,12 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 
 import umu.tds.apps.vistas.Login;
+import umu.tds.apps.AppChat.*;
 import umu.tds.apps.vistas.UserSettings;
 
 public class Controlador {
@@ -46,5 +48,15 @@ public class Controlador {
 	
 	public static boolean deleteChat() {
 		return false;
+	}
+
+	public static Status getEstado(User u) {
+		if (new Random().nextInt(2) == 0) {
+			return new Status(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")), "Flying");
+		} else
+			return new Status(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/fire_120x120.png")), "Fuegooo");
+	
+		
+		
 	}
 }
