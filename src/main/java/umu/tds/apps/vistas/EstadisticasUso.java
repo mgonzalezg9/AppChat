@@ -109,6 +109,7 @@ public class EstadisticasUso extends JFrame {
 				// Nueva ventana con el grafico
 				setVisible(false);
 				GraficaUso grafica = new GraficaUso();
+				grafica.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				grafica.setVisible(true);
 			}
 		});

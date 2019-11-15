@@ -107,8 +107,8 @@ public class Principal extends JFrame {
 		gbl_contentPane.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 		
-		iconsVisible = true;
-
+		iconsVisible = false;
+		
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(new Color(141, 110, 99));
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -442,6 +442,7 @@ public class Principal extends JFrame {
 		chatPersonal.setLayout(gbl_chatPersonal);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBorder(null);
 		scrollPane_1.setBackground(Color.WHITE);
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
@@ -454,13 +455,14 @@ public class Principal extends JFrame {
 		chat.setBackground(new Color(245, 222, 179));
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
-		chat.setSize(400, 700);
+		chat.setSize(400,700);
 
 		BubbleText burbuja = new BubbleText(chat, "Hola, ¿Como van las burbujas? xD", Color.LIGHT_GRAY, "Dieguin",
 				BubbleText.RECEIVED);
 		chat.add(burbuja);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBorder(null);
 		GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
 		gbc_scrollPane_3.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane_3.insets = new Insets(0, 0, 5, 0);
@@ -470,7 +472,9 @@ public class Principal extends JFrame {
 
 		JPanel panel_iconos = new JPanel();
 		scrollPane_3.setViewportView(panel_iconos);
+		scrollPane_3.setBackground(new Color(245, 222, 179));
 		panel_iconos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel_iconos.setBackground(new Color(245, 222, 179));
 
 		// Añadimos todos los iconos al panel.
 		
@@ -486,6 +490,8 @@ public class Principal extends JFrame {
 				}
 			});
 		}
+		
+		scrollPane_3.setVisible(iconsVisible);
 		
 		JPanel writeText = new JPanel();
 		writeText.setBackground(new Color(255, 171, 0));
