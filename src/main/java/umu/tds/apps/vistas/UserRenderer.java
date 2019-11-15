@@ -8,7 +8,10 @@ import javax.swing.ListCellRenderer;
 import umu.tds.apps.AppChat.User;
 
 public class UserRenderer extends JLabel implements ListCellRenderer<User> {
-
+	public UserRenderer () {
+		setOpaque(true);
+	}
+	
 	@Override
 	public Component getListCellRendererComponent(JList<? extends User> list, User value, int index, boolean isSelected,
 			boolean cellHasFocus) {
