@@ -48,6 +48,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import java.awt.CardLayout;
 
 public class Principal extends JFrame {
 	private JPanel contentPane;
@@ -57,6 +58,7 @@ public class Principal extends JFrame {
 	private JLabel profilePhoto;
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
+	private boolean iconsVisible;
 
 	/**
 	 * Launch the application.
@@ -79,6 +81,11 @@ public class Principal extends JFrame {
 		chat.add(burbuja);
 		textField.setText(null);
 	}
+	
+	private void sendIcon(JPanel panel, int iconID) throws IllegalArgumentException {
+		BubbleText burbuja = new BubbleText(panel, iconID, Color.GREEN, "Tú", BubbleText.SENT, 10);
+		chat.add(burbuja);
+	}
 
 	/**
 	 * Create the frame.
@@ -99,6 +106,8 @@ public class Principal extends JFrame {
 		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
+		
+		iconsVisible = true;
 
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(new Color(141, 110, 99));
@@ -427,9 +436,9 @@ public class Principal extends JFrame {
 		contentPane.add(chatPersonal, gbc_chatPersonal);
 		GridBagLayout gbl_chatPersonal = new GridBagLayout();
 		gbl_chatPersonal.columnWidths = new int[] { 66, 0 };
-		gbl_chatPersonal.rowHeights = new int[] { 20, 0, 0 };
+		gbl_chatPersonal.rowHeights = new int[] { 476, 80, 0, 0 };
 		gbl_chatPersonal.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_chatPersonal.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+		gbl_chatPersonal.rowWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		chatPersonal.setLayout(gbl_chatPersonal);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -450,15 +459,42 @@ public class Principal extends JFrame {
 		BubbleText burbuja = new BubbleText(chat, "Hola, ¿Como van las burbujas? xD", Color.LIGHT_GRAY, "Dieguin",
 				BubbleText.RECEIVED);
 		chat.add(burbuja);
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
+		gbc_scrollPane_3.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_3.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane_3.gridx = 0;
+		gbc_scrollPane_3.gridy = 1;
+		chatPersonal.add(scrollPane_3, gbc_scrollPane_3);
 
+		JPanel panel_iconos = new JPanel();
+		scrollPane_3.setViewportView(panel_iconos);
+		panel_iconos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		// Añadimos todos los iconos al panel.
+		
+		for (int i = 0; i <= BubbleText.MAXICONO; i++) {
+			JLabel labelIconos = new JLabel("");
+			labelIconos.setIcon(BubbleText.getEmoji(i));
+			labelIconos.setName(Integer.toString(i));
+			panel_iconos.add(labelIconos);
+			labelIconos.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					sendIcon(chat, Integer.valueOf(labelIconos.getName()));
+				}
+			});
+		}
+		
 		JPanel writeText = new JPanel();
 		writeText.setBackground(new Color(255, 171, 0));
 		writeText.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_writeText = new GridBagConstraints();
-		gbc_writeText.anchor = GridBagConstraints.SOUTH;
 		gbc_writeText.fill = GridBagConstraints.HORIZONTAL;
+		gbc_writeText.anchor = GridBagConstraints.SOUTH;
 		gbc_writeText.gridx = 0;
-		gbc_writeText.gridy = 1;
+		gbc_writeText.gridy = 2;
 		chatPersonal.add(writeText, gbc_writeText);
 		GridBagLayout gbl_writeText = new GridBagLayout();
 		gbl_writeText.columnWidths = new int[] { 49, 25, 0, 0 };
@@ -474,7 +510,9 @@ public class Principal extends JFrame {
 		lblEmoji.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO
+				iconsVisible = !iconsVisible;
+				scrollPane_3.setVisible(iconsVisible);
+				chatPersonal.updateUI();
 			}
 		});
 		lblEmoji.setIcon(BubbleText.getEmoji(new Random().nextInt(BubbleText.MAXICONO + 1)));
