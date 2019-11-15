@@ -456,6 +456,7 @@ public class Principal extends JFrame {
 		panel_iconos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		// Añadimos todos los iconos al panel.
+		
 		for (int i = 0; i <= BubbleText.MAXICONO; i++) {
 			JLabel labelIconos = new JLabel("");
 			labelIconos.setIcon(BubbleText.getEmoji(i));
