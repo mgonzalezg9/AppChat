@@ -18,7 +18,7 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 
-public class busqueda extends JFrame {
+public class Busqueda extends JFrame {
 
 	private JPanel contentPane;
 
@@ -29,7 +29,7 @@ public class busqueda extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					busqueda frame = new busqueda();
+					Busqueda frame = new Busqueda();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,9 +41,9 @@ public class busqueda extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public busqueda() {
+	public Busqueda() {
 		setTitle("Search");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 606, 319);
 		contentPane = new JPanel();
@@ -57,7 +57,7 @@ public class busqueda extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
+		label.setIcon(new ImageIcon(Busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.gridheight = 2;
 		gbc_label.insets = new Insets(0, 0, 5, 5);

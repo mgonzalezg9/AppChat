@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
+import java.awt.Toolkit;  
 
 public class Register extends JFrame {
 
@@ -63,6 +64,7 @@ public class Register extends JFrame {
 	 * Create the frame.
 	 */
 	public Register() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Register.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Register");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 647, 368);
