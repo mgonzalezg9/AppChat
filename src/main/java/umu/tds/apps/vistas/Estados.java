@@ -25,6 +25,8 @@ import javax.swing.JScrollPane;
 import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Estados extends JFrame {
 
@@ -109,17 +111,36 @@ public class Estados extends JFrame {
 		scrollPane.setBorder(null);
 		listaEstados.add(scrollPane);
 		
-		JList list = new JList();
-		list.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				System.out.println("hola");
-				User u = (User) list.getSelectedValue();
-				Status s = Controlador.getEstado(u);
-				lblFraseProfunda.setText(s.getFrase());
-				lblEstadoSeleccionado.setIcon(s.getImg());
-			}
-		});
+		JList<User> list = new JList();
+		list.addMouseListener(
+				new MouseListener() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						User u = (User) list.getSelectedValue();
+						Status s = Controlador.getEstado(u);
+						lblFraseProfunda.setText(s.getFrase());
+						lblEstadoSeleccionado.setIcon(s.getImg());
+					}
+
+					@Override
+					public void mouseEntered(MouseEvent arg0) {
+					}
+
+					@Override
+					public void mouseExited(MouseEvent arg0) {
+					}
+
+					@Override
+					public void mousePressed(MouseEvent arg0) {
+
+					}
+
+					@Override
+					public void mouseReleased(MouseEvent arg0) {
+					}
+			    }	
+		);
+		
 		list.setBackground(Color.WHITE);
 		list.setBorder(null);
 		list.setCellRenderer(new UserRenderer());
