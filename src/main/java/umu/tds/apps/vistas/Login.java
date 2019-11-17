@@ -27,11 +27,15 @@ import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.border.EtchedBorder;
+import static umu.tds.apps.vistas.Theme.*;
 
 public class Login extends JFrame {
-
 	private JTextField userField;
 	private JPasswordField passwordField;
+	
 
 	/**
 	 * Launch the application.
@@ -53,6 +57,7 @@ public class Login extends JFrame {
 	 * Create the application.
 	 */
 	public Login() {
+		getContentPane().setBackground(MAIN_COLOR_LIGHT);
 		initialize();
 	}
 
@@ -60,19 +65,19 @@ public class Login extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Login");
-		setBounds(100, 100, 690, 444);
+		setBounds(100, 100, 699, 463);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 150, 200, 150, 0 };
+		gridBagLayout.columnWidths = new int[] { 120, 200, 120, 0 };
 		gridBagLayout.rowHeights = new int[] { 100, 144, 96, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
 		JPanel panelNorte = new JPanel();
+		panelNorte.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panelNorte = new GridBagConstraints();
 		gbc_panelNorte.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelNorte.insets = new Insets(0, 0, 5, 5);
@@ -95,7 +100,8 @@ public class Login extends JFrame {
 		gbc_label.gridy = 0;
 		panelNorte.add(label, gbc_label);
 
-		JLabel lblAppchat = new JLabel("AppChat");
+		JLabel lblAppchat = new JLabel("");
+		lblAppchat.setIcon(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/header.png")));
 		GridBagConstraints gbc_lblAppchat = new GridBagConstraints();
 		gbc_lblAppchat.anchor = GridBagConstraints.WEST;
 		gbc_lblAppchat.gridx = 2;
@@ -103,6 +109,7 @@ public class Login extends JFrame {
 		panelNorte.add(lblAppchat, gbc_lblAppchat);
 
 		JPanel panelCentro = new JPanel();
+		panelCentro.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panelCentro = new GridBagConstraints();
 		gbc_panelCentro.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelCentro.insets = new Insets(0, 0, 5, 5);
@@ -117,6 +124,7 @@ public class Login extends JFrame {
 		panelCentro.setLayout(gbl_panelCentro);
 
 		JLabel userLabel = new JLabel("User");
+		userLabel.setForeground(Color.BLACK);
 		GridBagConstraints gbc_userLabel = new GridBagConstraints();
 		gbc_userLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_userLabel.anchor = GridBagConstraints.EAST;
@@ -127,10 +135,14 @@ public class Login extends JFrame {
 		userField = new JTextField();
 		userField.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusGained(FocusEvent arg0) {
-				userField.setBackground(Color.WHITE);
+			public void focusGained(FocusEvent e) {
+				userField.setBackground(MAIN_COLOR);
 			}
 		});
+		userField.setForeground(Color.WHITE);
+		userField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		userField.setCaretColor(Color.WHITE);
+		userField.setBackground(new Color(141, 110, 99));
 		GridBagConstraints gbc_userField = new GridBagConstraints();
 		gbc_userField.insets = new Insets(0, 0, 5, 0);
 		gbc_userField.fill = GridBagConstraints.HORIZONTAL;
@@ -140,6 +152,7 @@ public class Login extends JFrame {
 		userField.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setForeground(Color.BLACK);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -151,9 +164,13 @@ public class Login extends JFrame {
 		passwordField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				passwordField.setBackground(Color.WHITE);
+				passwordField.setBackground(MAIN_COLOR);
 			}
 		});
+		passwordField.setForeground(Color.WHITE);
+		passwordField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		passwordField.setCaretColor(Color.WHITE);
+		passwordField.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
 		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
@@ -162,6 +179,7 @@ public class Login extends JFrame {
 		panelCentro.add(passwordField, gbc_passwordField);
 
 		JPanel panelSur = new JPanel();
+		panelSur.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panelSur = new GridBagConstraints();
 		gbc_panelSur.insets = new Insets(0, 0, 0, 5);
 		gbc_panelSur.gridx = 1;
@@ -175,6 +193,7 @@ public class Login extends JFrame {
 		panelSur.setLayout(gbl_panelSur);
 
 		JButton btnSignIn = new JButton("SIGN IN");
+		btnSignIn.setBackground(SECONDARY_COLOR);
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Comprobamos que el login haya sido satisfactorio
@@ -204,6 +223,7 @@ public class Login extends JFrame {
 		panelSur.add(btnSignIn, gbc_btnSignIn);
 
 		JLabel lblNewLabel_1 = new JLabel("Need an account? ");
+		lblNewLabel_1.setForeground(Color.BLACK);
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNewLabel_1.gridx = 0;
@@ -211,6 +231,7 @@ public class Login extends JFrame {
 		panelSur.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		JButton btnSignUp = new JButton("SIGN UP");
+		btnSignUp.setBackground(SECONDARY_COLOR);
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Cierra la ventana actual
