@@ -80,11 +80,17 @@ public class Principal extends JFrame {
 		BubbleText burbuja = new BubbleText(panel, textField.getText(), Color.GREEN, "Tú", BubbleText.SENT);
 		chat.add(burbuja);
 		textField.setText(null);
+
+		// TODO Conectar con persistencia
 	}
-	
+
 	private void sendIcon(JPanel panel, int iconID) throws IllegalArgumentException {
 		BubbleText burbuja = new BubbleText(panel, iconID, Color.GREEN, "Tú", BubbleText.SENT, 10);
 		chat.add(burbuja);
+	}
+
+	private void loadChat() {
+		Controlador.getChat(null, chat).stream().forEach(b -> chat.add(b));
 	}
 
 	/**
@@ -106,9 +112,9 @@ public class Principal extends JFrame {
 		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
-		
+
 		iconsVisible = false;
-		
+
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(new Color(141, 110, 99));
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -167,7 +173,7 @@ public class Principal extends JFrame {
 				window.setVisible(true);
 			}
 		});
-		label_2.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-white.png")));
+		label_2.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/status-white.png")));
 		panel_2.add(label_2);
 
 		JLabel label_1 = new JLabel("");
@@ -455,12 +461,11 @@ public class Principal extends JFrame {
 		chat.setBackground(new Color(245, 222, 179));
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
-		chat.setSize(400,700);
+		chat.setSize(400, 700);
 
-		BubbleText burbuja = new BubbleText(chat, "Hola, ¿Como van las burbujas? xD", Color.LIGHT_GRAY, "Dieguin",
-				BubbleText.RECEIVED);
-		chat.add(burbuja);
-		
+		// Se muestran todas las burbujas de la conversacion actual
+		loadChat();
+
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBorder(null);
 		GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
@@ -477,7 +482,6 @@ public class Principal extends JFrame {
 		panel_iconos.setBackground(new Color(245, 222, 179));
 
 		// Añadimos todos los iconos al panel.
-		
 		for (int i = 0; i <= BubbleText.MAXICONO; i++) {
 			JLabel labelIconos = new JLabel("");
 			labelIconos.setIcon(BubbleText.getEmoji(i));
@@ -490,9 +494,9 @@ public class Principal extends JFrame {
 				}
 			});
 		}
-		
+
 		scrollPane_3.setVisible(iconsVisible);
-		
+
 		JPanel writeText = new JPanel();
 		writeText.setBackground(new Color(255, 171, 0));
 		writeText.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -534,7 +538,6 @@ public class Principal extends JFrame {
 		lblSend.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblSend.setBackground(new Color(255, 171, 0));
 		lblSend.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
@@ -564,7 +567,7 @@ public class Principal extends JFrame {
 		});
 		scrollPane_2.setViewportView(textField);
 		textField.setColumns(10);
-		lblSend.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/paper plane.png")));
+		lblSend.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/paper plane-white.png")));
 		GridBagConstraints gbc_lblSend = new GridBagConstraints();
 		gbc_lblSend.gridx = 2;
 		gbc_lblSend.gridy = 0;
