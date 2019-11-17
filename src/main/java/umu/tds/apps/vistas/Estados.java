@@ -32,12 +32,14 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
+import java.awt.FlowLayout;
 
 public class Estados extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblFraseProfunda;
 	private JLabel lblEstadoSeleccionado;
+	private JLabel lblNewLabel;
 	private JList<User> list;
 
 	/**
@@ -60,10 +62,11 @@ public class Estados extends JFrame {
 	 * Create the frame.
 	 */
 	public Estados() {
+		setTitle("Status");
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Estados.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 600, 382);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -85,55 +88,64 @@ public class Estados extends JFrame {
 		contentPane.add(panelIzq, gbc_panelIzq);
 		GridBagLayout gbl_panelIzq = new GridBagLayout();
 		gbl_panelIzq.columnWidths = new int[] { 0, 0 };
-		gbl_panelIzq.rowHeights = new int[] { 0, 0, 0 };
+		gbl_panelIzq.rowHeights = new int[] { 0, 0, 0, 0 };
 		gbl_panelIzq.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panelIzq.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+		gbl_panelIzq.rowWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		panelIzq.setLayout(gbl_panelIzq);
 
 		JPanel panelMiEstado = new JPanel();
-		panelMiEstado.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelMiEstado.setBackground(Color.WHITE);
-		GridBagConstraints gbc_panelMiEstado = new GridBagConstraints();
-		gbc_panelMiEstado.insets = new Insets(0, 0, 5, 0);
-		gbc_panelMiEstado.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panelMiEstado.gridx = 0;
-		gbc_panelMiEstado.gridy = 0;
-		panelIzq.add(panelMiEstado, gbc_panelMiEstado);
+		
 
-		JLabel lblNewLabel = new JLabel("Mi estado");
-		lblNewLabel.addMouseListener(new MouseAdapter() {
+		JPanel panel_2 = new JPanel();
+		panel_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
+				panel_2.setBackground(new Color(255, 171, 0));
 				list.clearSelection();
 				Status s = Controlador.getEstado(Controlador.getUsuario());
 				lblEstadoSeleccionado.setIcon(s.getImg());
 				lblFraseProfunda.setText(s.getFrase());
 			}
 		});
+		panel_2.setBackground(new Color(141, 110, 99));
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_2.gridx = 0;
+		gbc_panel_2.gridy = 0;
+		panelIzq.add(panel_2, gbc_panel_2);
+
+		lblNewLabel = new JLabel("My status");
+		panel_2.add(lblNewLabel);
+		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		panelMiEstado.add(lblNewLabel);
 
 		JLabel label = new JLabel("");
-		label.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-				list.clearSelection();
-				Status s = Controlador.getEstado(Controlador.getUsuario());
-				lblEstadoSeleccionado.setIcon(s.getImg());
-				lblFraseProfunda.setText(s.getFrase());
-			}
-		});
+		panel_2.add(label);
 		label.setIcon(new ImageIcon(Estados.class.getResource("/umu/tds/apps/resources/diego.jpg")));
-		panelMiEstado.add(label);
+		panelMiEstado.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelMiEstado.setBackground(new Color(141, 110, 99));
+		GridBagConstraints gbc_panelMiEstado = new GridBagConstraints();
+		gbc_panelMiEstado.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelMiEstado.insets = new Insets(0, 0, 5, 0);
+		gbc_panelMiEstado.gridx = 0;
+		gbc_panelMiEstado.gridy = 1;
+		panelIzq.add(panelMiEstado, gbc_panelMiEstado);
+		panelMiEstado.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel label_1 = new JLabel("My contacts");
+		label_1.setHorizontalAlignment(SwingConstants.CENTER);
+		label_1.setForeground(Color.WHITE);
+		label_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panelMiEstado.add(label_1);
 
 		JPanel listaEstados = new JPanel();
 		listaEstados.setBackground(Color.WHITE);
 		GridBagConstraints gbc_listaEstados = new GridBagConstraints();
 		gbc_listaEstados.fill = GridBagConstraints.BOTH;
 		gbc_listaEstados.gridx = 0;
-		gbc_listaEstados.gridy = 1;
+		gbc_listaEstados.gridy = 2;
 		panelIzq.add(listaEstados, gbc_listaEstados);
 		listaEstados.setLayout(new BorderLayout(0, 0));
 
@@ -142,25 +154,6 @@ public class Estados extends JFrame {
 		panel_3.setBackground(Color.WHITE);
 		listaEstados.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
-
-		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_4.setBackground(Color.WHITE);
-		panel_3.add(panel_4);
-		GridBagLayout gbl_panel_4 = new GridBagLayout();
-		gbl_panel_4.columnWidths = new int[] { 123, 0 };
-		gbl_panel_4.rowHeights = new int[] { 22, 0 };
-		gbl_panel_4.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel_4.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-		panel_4.setLayout(gbl_panel_4);
-
-		JLabel lblMisContactos = new JLabel("Mis contactos");
-		GridBagConstraints gbc_lblMisContactos = new GridBagConstraints();
-		gbc_lblMisContactos.gridx = 0;
-		gbc_lblMisContactos.gridy = 0;
-		panel_4.add(lblMisContactos, gbc_lblMisContactos);
-		lblMisContactos.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMisContactos.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
@@ -185,17 +178,19 @@ public class Estados extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.fill = GridBagConstraints.VERTICAL;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 0;
 		panel.add(scrollPane, gbc_scrollPane);
 		scrollPane.setBorder(null);
 
-		list = new JList();
+		list = new JList<User>();
 		list.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		list.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+				panel_2.setBackground(new Color(141, 110, 99));
 				User u = (User) list.getSelectedValue();
 				Status s = Controlador.getEstado(u);
 				lblFraseProfunda.setText(s.getFrase());
@@ -212,7 +207,8 @@ public class Estados extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-
+				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+				panel_2.setBackground(new Color(141, 110, 99));
 			}
 
 			@Override
@@ -221,6 +217,8 @@ public class Estados extends JFrame {
 		});
 
 		list.setBackground(Color.WHITE);
+		list.setSelectionBackground(new Color(255, 171, 0));
+		list.setSelectionForeground(new Color(255, 255, 255));
 		list.setBorder(null);
 		list.setCellRenderer(new UserRenderer());
 		scrollPane.setViewportView(list);
@@ -247,12 +245,19 @@ public class Estados extends JFrame {
 		gbc_lblEstadoSeleccionado.gridy = 0;
 		panelDer.add(lblEstadoSeleccionado, gbc_lblEstadoSeleccionado);
 
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(190, 156, 145));
+		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.anchor = GridBagConstraints.SOUTH;
+		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 1;
+		panelDer.add(panel_1, gbc_panel_1);
+
 		lblFraseProfunda = new JLabel("Frase profunda");
-		GridBagConstraints gbc_lblFraseProfunda = new GridBagConstraints();
-		gbc_lblFraseProfunda.anchor = GridBagConstraints.SOUTH;
-		gbc_lblFraseProfunda.gridx = 0;
-		gbc_lblFraseProfunda.gridy = 1;
-		panelDer.add(lblFraseProfunda, gbc_lblFraseProfunda);
+		panel_1.add(lblFraseProfunda);
+		lblFraseProfunda.setBorder(null);
 	}
 
 }
