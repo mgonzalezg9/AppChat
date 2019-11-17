@@ -59,4 +59,8 @@ public class Controlador {
 		
 		
 	}
+
+	public static User getUsuario() {
+		return new User(new ImageIcon(), "");
+	}
 }
