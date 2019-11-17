@@ -162,9 +162,9 @@ public class Principal extends JFrame {
 		label_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Contactos ventanaContactos = new Contactos();
-				ventanaContactos.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-				ventanaContactos.setVisible(true);
+				Estados window = new Estados();
+				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				window.setVisible(true);
 			}
 		});
 		label_2.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-white.png")));
