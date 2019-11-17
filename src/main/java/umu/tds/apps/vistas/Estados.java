@@ -239,6 +239,7 @@ public class Estados extends JFrame {
 		panelDer.setLayout(gbl_panelDer);
 
 		lblEstadoSeleccionado = new JLabel("");
+		lblEstadoSeleccionado.setIcon(new ImageIcon(Estados.class.getResource("/umu/tds/apps/resources/icon.png")));
 		GridBagConstraints gbc_lblEstadoSeleccionado = new GridBagConstraints();
 		gbc_lblEstadoSeleccionado.insets = new Insets(0, 0, 5, 0);
 		gbc_lblEstadoSeleccionado.gridx = 0;
@@ -255,7 +256,7 @@ public class Estados extends JFrame {
 		gbc_panel_1.gridy = 1;
 		panelDer.add(panel_1, gbc_panel_1);
 
-		lblFraseProfunda = new JLabel("Frase profunda");
+		lblFraseProfunda = new JLabel("Status");
 		panel_1.add(lblFraseProfunda);
 		lblFraseProfunda.setBorder(null);
 	}
