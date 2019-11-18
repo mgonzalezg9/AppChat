@@ -455,7 +455,7 @@ public class Principal extends JFrame {
 		chat.setBackground(new Color(245, 222, 179));
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
-		chat.setSize(400,700);
+		chat.setSize(400, 700);
 
 		BubbleText burbuja = new BubbleText(chat, "Hola, ¿Como van las burbujas? xD", Color.LIGHT_GRAY, "Dieguin",
 				BubbleText.RECEIVED);
