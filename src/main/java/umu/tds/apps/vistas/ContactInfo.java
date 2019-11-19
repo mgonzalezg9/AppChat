@@ -1,0 +1,93 @@
+package umu.tds.apps.vistas;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.GridBagLayout;
+import javax.swing.JLabel;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.ImageIcon;
+
+public class ContactInfo extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ContactInfo frame = new ContactInfo();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ContactInfo() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 438, 298);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{10, 127, 130, 10, 0};
+		gbl_contentPane.rowHeights = new int[]{10, 0, 10, 0, 0, 10, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		contentPane.setLayout(gbl_contentPane);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(ContactInfo.class.getResource("/umu/tds/apps/resources/user.png")));
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.gridwidth = 2;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 1;
+		gbc_lblNewLabel.gridy = 1;
+		contentPane.add(lblNewLabel, gbc_lblNewLabel);
+		
+		JLabel lblName = new JLabel("Name: ");
+		GridBagConstraints gbc_lblName = new GridBagConstraints();
+		gbc_lblName.anchor = GridBagConstraints.EAST;
+		gbc_lblName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblName.gridx = 1;
+		gbc_lblName.gridy = 3;
+		contentPane.add(lblName, gbc_lblName);
+		
+		JLabel lblAlfonso = new JLabel("Alfonso");
+		GridBagConstraints gbc_lblAlfonso = new GridBagConstraints();
+		gbc_lblAlfonso.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblAlfonso.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAlfonso.gridx = 2;
+		gbc_lblAlfonso.gridy = 3;
+		contentPane.add(lblAlfonso, gbc_lblAlfonso);
+		
+		JLabel lblTele = new JLabel("Telephone number: ");
+		GridBagConstraints gbc_lblTele = new GridBagConstraints();
+		gbc_lblTele.anchor = GridBagConstraints.EAST;
+		gbc_lblTele.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTele.gridx = 1;
+		gbc_lblTele.gridy = 4;
+		contentPane.add(lblTele, gbc_lblTele);
+		
+		JLabel label = new JLabel("668765998");
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.fill = GridBagConstraints.HORIZONTAL;
+		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.gridx = 2;
+		gbc_label.gridy = 4;
+		contentPane.add(label, gbc_label);
+	}
+
+}
