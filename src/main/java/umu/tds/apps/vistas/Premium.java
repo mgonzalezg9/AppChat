@@ -1,5 +1,6 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -38,10 +39,12 @@ public class Premium extends JFrame {
 	 * Create the frame.
 	 */
 	public Premium() {
+		setTitle("Get premium");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Premium.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 502, 372);
 		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -60,6 +63,7 @@ public class Premium extends JFrame {
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JLabel lblBecomePremiumFor = new JLabel("Become Premium for a low prize!");
+		lblBecomePremiumFor.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblBecomePremiumFor = new GridBagConstraints();
 		gbc_lblBecomePremiumFor.insets = new Insets(0, 0, 5, 0);
 		gbc_lblBecomePremiumFor.gridx = 0;
@@ -67,6 +71,7 @@ public class Premium extends JFrame {
 		contentPane.add(lblBecomePremiumFor, gbc_lblBecomePremiumFor);
 		
 		JLabel lblOnlyA = new JLabel("Only 15.99$ a month before January 2020");
+		lblOnlyA.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblOnlyA = new GridBagConstraints();
 		gbc_lblOnlyA.insets = new Insets(0, 0, 5, 0);
 		gbc_lblOnlyA.gridx = 0;
@@ -74,6 +79,7 @@ public class Premium extends JFrame {
 		contentPane.add(lblOnlyA, gbc_lblOnlyA);
 		
 		JButton btnStartNow = new JButton("START NOW");
+		btnStartNow.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnStartNow = new GridBagConstraints();
 		gbc_btnStartNow.gridx = 0;
 		gbc_btnStartNow.gridy = 3;

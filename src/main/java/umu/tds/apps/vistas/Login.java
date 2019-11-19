@@ -124,7 +124,7 @@ public class Login extends JFrame {
 		panelCentro.setLayout(gbl_panelCentro);
 
 		JLabel userLabel = new JLabel("User");
-		userLabel.setForeground(Color.BLACK);
+		userLabel.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_userLabel = new GridBagConstraints();
 		gbc_userLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_userLabel.anchor = GridBagConstraints.EAST;
@@ -139,10 +139,10 @@ public class Login extends JFrame {
 				userField.setBackground(MAIN_COLOR);
 			}
 		});
-		userField.setForeground(Color.WHITE);
+		userField.setForeground(LETTERS_COLOR);
 		userField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		userField.setCaretColor(Color.WHITE);
-		userField.setBackground(new Color(141, 110, 99));
+		userField.setCaretColor(LETTERS_COLOR);
+		userField.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_userField = new GridBagConstraints();
 		gbc_userField.insets = new Insets(0, 0, 5, 0);
 		gbc_userField.fill = GridBagConstraints.HORIZONTAL;
@@ -152,7 +152,7 @@ public class Login extends JFrame {
 		userField.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setForeground(Color.BLACK);
+		lblPassword.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -167,9 +167,9 @@ public class Login extends JFrame {
 				passwordField.setBackground(MAIN_COLOR);
 			}
 		});
-		passwordField.setForeground(Color.WHITE);
+		passwordField.setForeground(LETTERS_COLOR);
 		passwordField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		passwordField.setCaretColor(Color.WHITE);
+		passwordField.setCaretColor(LETTERS_COLOR);
 		passwordField.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
 		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
@@ -223,7 +223,7 @@ public class Login extends JFrame {
 		panelSur.add(btnSignIn, gbc_btnSignIn);
 
 		JLabel lblNewLabel_1 = new JLabel("Need an account? ");
-		lblNewLabel_1.setForeground(Color.BLACK);
+		lblNewLabel_1.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNewLabel_1.gridx = 0;

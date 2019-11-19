@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -103,7 +105,7 @@ public class Principal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 781, 637);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.WHITE);
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -116,7 +118,7 @@ public class Principal extends JFrame {
 		iconsVisible = false;
 
 		JPanel settingsIzq = new JPanel();
-		settingsIzq.setBackground(new Color(141, 110, 99));
+		settingsIzq.setBackground(MAIN_COLOR);
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsIzq = new GridBagConstraints();
 		gbc_settingsIzq.insets = new Insets(0, 0, 5, 5);
@@ -132,7 +134,7 @@ public class Principal extends JFrame {
 		settingsIzq.setLayout(gbl_settingsIzq);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(141, 110, 99));
+		panel_1.setBackground(MAIN_COLOR);
 		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
@@ -155,7 +157,7 @@ public class Principal extends JFrame {
 		panel_1.add(label);
 
 		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(new Color(141, 110, 99));
+		panel_2.setBackground(MAIN_COLOR);
 		FlowLayout flowLayout_1 = (FlowLayout) panel_2.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.RIGHT);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -263,7 +265,7 @@ public class Principal extends JFrame {
 		popupSettsGrupos.add(mntmLogout);
 
 		JPanel settingsDer = new JPanel();
-		settingsDer.setBackground(new Color(141, 110, 99));
+		settingsDer.setBackground(MAIN_COLOR);
 		settingsDer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsDer = new GridBagConstraints();
 		gbc_settingsDer.insets = new Insets(0, 0, 5, 0);
@@ -279,7 +281,7 @@ public class Principal extends JFrame {
 		settingsDer.setLayout(gbl_settingsDer);
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(141, 110, 99));
+		panel_3.setBackground(MAIN_COLOR);
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -303,11 +305,11 @@ public class Principal extends JFrame {
 		panel_3.add(label_3);
 
 		JLabel lblDiegoSevilla = new JLabel("Diego Sevilla");
-		lblDiegoSevilla.setForeground(new Color(255, 255, 255));
+		lblDiegoSevilla.setForeground(LETTERS_COLOR);
 		panel_3.add(lblDiegoSevilla);
 
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(141, 110, 99));
+		panel.setBackground(MAIN_COLOR);
 		FlowLayout flowLayout_3 = (FlowLayout) panel.getLayout();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.NORTHEAST;
@@ -433,7 +435,7 @@ public class Principal extends JFrame {
 		scrollPane.setViewportView(table_1);
 
 		JPanel chatPersonal = new JPanel();
-		chatPersonal.setBackground(new Color(245, 222, 179));
+		chatPersonal.setBackground(CHAT_COLOR);
 		chatPersonal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagConstraints gbc_chatPersonal = new GridBagConstraints();
 		gbc_chatPersonal.fill = GridBagConstraints.BOTH;
@@ -458,7 +460,7 @@ public class Principal extends JFrame {
 		chatPersonal.add(scrollPane_1, gbc_scrollPane_1);
 
 		chat = new JPanel();
-		chat.setBackground(new Color(245, 222, 179));
+		chat.setBackground(CHAT_COLOR);
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400, 700);
@@ -477,9 +479,9 @@ public class Principal extends JFrame {
 
 		JPanel panel_iconos = new JPanel();
 		scrollPane_3.setViewportView(panel_iconos);
-		scrollPane_3.setBackground(new Color(245, 222, 179));
+		scrollPane_3.setBackground(CHAT_COLOR);
 		panel_iconos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panel_iconos.setBackground(new Color(245, 222, 179));
+		panel_iconos.setBackground(CHAT_COLOR);
 
 		// Añadimos todos los iconos al panel.
 		for (int i = 0; i <= BubbleText.MAXICONO; i++) {
@@ -498,7 +500,7 @@ public class Principal extends JFrame {
 		scrollPane_3.setVisible(iconsVisible);
 
 		JPanel writeText = new JPanel();
-		writeText.setBackground(new Color(255, 171, 0));
+		writeText.setBackground(SECONDARY_COLOR);
 		writeText.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_writeText = new GridBagConstraints();
 		gbc_writeText.fill = GridBagConstraints.HORIZONTAL;
@@ -516,7 +518,7 @@ public class Principal extends JFrame {
 		JLabel lblEmoji = new JLabel("");
 		lblEmoji.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblEmoji.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEmoji.setBackground(new Color(255, 171, 0));
+		lblEmoji.setBackground(SECONDARY_COLOR);
 		lblEmoji.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -536,7 +538,7 @@ public class Principal extends JFrame {
 		JLabel lblSend = new JLabel("");
 		lblSend.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSend.setHorizontalTextPosition(SwingConstants.CENTER);
-		lblSend.setBackground(new Color(255, 171, 0));
+		lblSend.setBackground(SECONDARY_COLOR);
 		lblSend.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -548,7 +550,7 @@ public class Principal extends JFrame {
 		});
 
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBackground(new Color(255, 171, 0));
+		scrollPane_2.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
 		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane_2.insets = new Insets(0, 0, 0, 5);

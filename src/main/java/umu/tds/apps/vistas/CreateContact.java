@@ -2,6 +2,7 @@ package umu.tds.apps.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import static umu.tds.apps.vistas.Theme.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,6 +48,7 @@ public class CreateContact extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 558, 334);
 		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -57,6 +59,7 @@ public class CreateContact extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
@@ -70,6 +73,7 @@ public class CreateContact extends JFrame {
 		label.setIcon(new ImageIcon(CreateContact.class.getResource("/umu/tds/apps/resources/icon.png")));
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel.insets = new Insets(0, 0, 5, 5);
@@ -84,7 +88,9 @@ public class CreateContact extends JFrame {
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblName = new JLabel("Name");
+		lblName.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
+		gbc_lblName.anchor = GridBagConstraints.EAST;
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
 		gbc_lblName.gridx = 0;
 		gbc_lblName.gridy = 0;
@@ -100,6 +106,7 @@ public class CreateContact extends JFrame {
 		textField.setColumns(10);
 		
 		JLabel lblPhoneNumber = new JLabel("Phone number");
+		lblPhoneNumber.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblPhoneNumber = new GridBagConstraints();
 		gbc_lblPhoneNumber.anchor = GridBagConstraints.EAST;
 		gbc_lblPhoneNumber.insets = new Insets(0, 0, 0, 5);
@@ -116,6 +123,7 @@ public class CreateContact extends JFrame {
 		textField_1.setColumns(10);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
@@ -125,6 +133,7 @@ public class CreateContact extends JFrame {
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnAdd = new JButton("ADD");
+		btnAdd.setBackground(SECONDARY_COLOR);
 		panel_2.add(btnAdd);
 	}
 

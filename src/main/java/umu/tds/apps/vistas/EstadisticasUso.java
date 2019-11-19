@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -70,6 +72,7 @@ public class EstadisticasUso extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 410, 213);
 		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -80,6 +83,7 @@ public class EstadisticasUso extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel panel = new JPanel();
+		panel.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
@@ -88,6 +92,7 @@ public class EstadisticasUso extends JFrame {
 		contentPane.add(panel, gbc_panel);
 
 		JLabel lblGraphicType = new JLabel("Graphic type");
+		lblGraphicType.setForeground(LETTERS_COLOR);
 		panel.add(lblGraphicType);
 
 		JComboBox comboBox = new JComboBox();
@@ -97,6 +102,7 @@ public class EstadisticasUso extends JFrame {
 		panel.add(comboBox);
 
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_1.gridx = 0;
@@ -104,6 +110,7 @@ public class EstadisticasUso extends JFrame {
 		contentPane.add(panel_1, gbc_panel_1);
 
 		JButton btnView = new JButton("VIEW");
+		btnView.setBackground(SECONDARY_COLOR);
 		btnView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Nueva ventana con el grafico
@@ -116,6 +123,7 @@ public class EstadisticasUso extends JFrame {
 		panel_1.add(btnView);
 
 		JButton btnExport = new JButton("EXPORT");
+		btnExport.setBackground(SECONDARY_COLOR);
 		panel_1.add(btnExport);
 	}
 

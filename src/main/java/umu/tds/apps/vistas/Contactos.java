@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -47,6 +49,7 @@ public class Contactos extends JFrame {
 		setBounds(100, 100, 536, 346);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0};
@@ -56,6 +59,7 @@ public class Contactos extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		scrollPane = new JScrollPane();
+		scrollPane.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
@@ -77,6 +81,7 @@ public class Contactos extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		JButton btnExport = new JButton("EXPORT");
+		btnExport.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnExport = new GridBagConstraints();
 		gbc_btnExport.gridx = 0;
 		gbc_btnExport.gridy = 1;

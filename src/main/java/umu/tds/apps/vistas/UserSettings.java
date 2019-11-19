@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -57,6 +59,7 @@ class Carrousel {
 
 		int numMostrado = numImagen + 1;
 		indicador.setText(numMostrado + "/" + imagenes.size());
+		indicador.setForeground(LETTERS_COLOR);
 	}
 
 	public void desplazar(int offset) {
@@ -143,6 +146,7 @@ public class UserSettings extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 822, 575);
 		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -153,6 +157,7 @@ public class UserSettings extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel panel = new JPanel();
+		panel.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.insets = new Insets(0, 0, 5, 5);
 		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
@@ -161,6 +166,7 @@ public class UserSettings extends JFrame {
 		contentPane.add(panel, gbc_panel);
 
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(MAIN_COLOR_LIGHT);
 		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
@@ -173,6 +179,7 @@ public class UserSettings extends JFrame {
 		panel.add(profilePhoto);
 
 		JButton button_3 = new JButton("-");
+		button_3.setBackground(SECONDARY_COLOR);
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int size = Controlador.getInstancia().getImagenesUsuario().size();
@@ -192,6 +199,7 @@ public class UserSettings extends JFrame {
 		panel_1.add(button_3);
 
 		JButton button = new JButton("<");
+		button.setBackground(SECONDARY_COLOR);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Ver anterior imagen del carrousel
@@ -201,6 +209,7 @@ public class UserSettings extends JFrame {
 		panel_1.add(button);
 
 		JButton button_1 = new JButton(">");
+		button_1.setBackground(SECONDARY_COLOR);
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Ver siguiente imagen del carrousel
@@ -216,6 +225,7 @@ public class UserSettings extends JFrame {
 		panel_1.add(button_1);
 
 		JButton button_2 = new JButton("+");
+		button_2.setBackground(SECONDARY_COLOR);
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Pedimos amablemente una imagen
@@ -232,6 +242,7 @@ public class UserSettings extends JFrame {
 		panel_1.add(button_2);
 
 		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
 		gbc_panel_4.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_4.fill = GridBagConstraints.HORIZONTAL;
@@ -240,9 +251,11 @@ public class UserSettings extends JFrame {
 		contentPane.add(panel_4, gbc_panel_4);
 
 		JLabel lblNewLabel = new JLabel(Controlador.getInstancia().getNombreUsuario());
+		lblNewLabel.setForeground(LETTERS_COLOR);
 		panel_4.add(lblNewLabel);
 
 		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
 		gbc_panel_5.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_5.fill = GridBagConstraints.HORIZONTAL;
@@ -251,6 +264,7 @@ public class UserSettings extends JFrame {
 		contentPane.add(panel_5, gbc_panel_5);
 
 		JLabel lblGreeting = new JLabel("Greeting:");
+		lblGreeting.setForeground(LETTERS_COLOR);
 		panel_5.add(lblGreeting);
 
 		JScrollPane scrollPane = new JScrollPane();

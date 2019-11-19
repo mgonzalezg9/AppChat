@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -32,7 +34,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
-import java.awt.Toolkit;  
+import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;  
 
 public class Register extends JFrame {
 
@@ -70,6 +73,7 @@ public class Register extends JFrame {
 		setBounds(100, 100, 647, 368);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{20, 0, 100, 100, 20, 100, 100, 100, 20, 0};
@@ -79,6 +83,7 @@ public class Register extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.SOUTHEAST;
 		gbc_panel.gridwidth = 3;
@@ -171,6 +176,7 @@ public class Register extends JFrame {
 			);
 		
 		JLabel lblUser = new JLabel("User");
+		lblUser.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblUser = new GridBagConstraints();
 		gbc_lblUser.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUser.anchor = GridBagConstraints.SOUTHEAST;
@@ -190,6 +196,7 @@ public class Register extends JFrame {
 		textField.setColumns(10);
 		
 		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -208,6 +215,7 @@ public class Register extends JFrame {
 		textField_1.setColumns(10);
 		
 		JLabel lblConfirmPassword = new JLabel("Confirm password");
+		lblConfirmPassword.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblConfirmPassword = new GridBagConstraints();
 		gbc_lblConfirmPassword.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblConfirmPassword.insets = new Insets(0, 0, 5, 5);
@@ -227,6 +235,7 @@ public class Register extends JFrame {
 		textField_2.setColumns(10);
 		
 		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
 		gbc_lblEmail.anchor = GridBagConstraints.EAST;
 		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
@@ -245,6 +254,7 @@ public class Register extends JFrame {
 		textField_3.setColumns(10);
 		
 		JLabel lblName = new JLabel("Name");
+		lblName.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.EAST;
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
@@ -263,6 +273,7 @@ public class Register extends JFrame {
 		textField_5.setColumns(10);
 		
 		JLabel lblPhoneNumber = new JLabel("Phone number");
+		lblPhoneNumber.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblPhoneNumber = new GridBagConstraints();
 		gbc_lblPhoneNumber.anchor = GridBagConstraints.EAST;
 		gbc_lblPhoneNumber.insets = new Insets(0, 0, 5, 5);
@@ -281,6 +292,7 @@ public class Register extends JFrame {
 		textField_4.setColumns(10);
 		
 		JLabel lblBirthDate = new JLabel("Birth Date");
+		lblBirthDate.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblBirthDate = new GridBagConstraints();
 		gbc_lblBirthDate.anchor = GridBagConstraints.EAST;
 		gbc_lblBirthDate.insets = new Insets(0, 0, 5, 5);
@@ -298,6 +310,18 @@ public class Register extends JFrame {
 		contentPane.add(dateChooser, gbc_dateChooser);
 		
 		JButton btnNewButton = new JButton("CREATE ACCOUNT");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Cierra la ventana actual
+				Register.this.setVisible(false);
+
+				// Abre la nueva ventana
+				JFrame principalWindow = new Principal();
+				principalWindow.setVisible(true);
+			}
+		});
+		btnNewButton.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton.gridwidth = 3;
@@ -307,6 +331,7 @@ public class Register extends JFrame {
 		contentPane.add(btnNewButton, gbc_btnNewButton);
 		
 		JLabel lblHaveAnAccount = new JLabel("Have an account?");
+		lblHaveAnAccount.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblHaveAnAccount = new GridBagConstraints();
 		gbc_lblHaveAnAccount.anchor = GridBagConstraints.WEST;
 		gbc_lblHaveAnAccount.gridwidth = 2;
@@ -315,7 +340,19 @@ public class Register extends JFrame {
 		gbc_lblHaveAnAccount.gridy = 10;
 		contentPane.add(lblHaveAnAccount, gbc_lblHaveAnAccount);
 		
-		JButton btnNewButton_1 = new JButton("Sign in");
+		JButton btnNewButton_1 = new JButton("SIGN IN");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Cierra la ventana actual
+				Register.this.setVisible(false);
+
+				// Abre la nueva ventana
+				JFrame loginWindow = new Login();
+				loginWindow.setVisible(true);
+			}
+		});
+		btnNewButton_1.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.anchor = GridBagConstraints.EAST;
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);

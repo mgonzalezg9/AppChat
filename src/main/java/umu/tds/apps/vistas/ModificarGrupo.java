@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -43,6 +45,7 @@ public class ModificarGrupo extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 449, 133);
 		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -53,6 +56,7 @@ public class ModificarGrupo extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblChooseGroup = new JLabel("Choose group:");
+		lblChooseGroup.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblChooseGroup = new GridBagConstraints();
 		gbc_lblChooseGroup.insets = new Insets(0, 0, 5, 0);
 		gbc_lblChooseGroup.gridx = 0;

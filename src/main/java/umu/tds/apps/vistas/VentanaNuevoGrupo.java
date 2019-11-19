@@ -1,5 +1,9 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.LETTERS_COLOR;
+import static umu.tds.apps.vistas.Theme.MAIN_COLOR_LIGHT;
+import static umu.tds.apps.vistas.Theme.SECONDARY_COLOR;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -37,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 
 public class VentanaNuevoGrupo extends JFrame {
 
@@ -66,6 +71,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 497, 340);
 		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -76,6 +82,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JPanel settings = new JPanel();
+		settings.setBackground(MAIN_COLOR_LIGHT);
 		settings.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settings = new GridBagConstraints();
 		gbc_settings.gridwidth = 12;
@@ -92,6 +99,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		settings.setLayout(gbl_settings);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.WEST;
 		gbc_panel.insets = new Insets(0, 0, 0, 5);
@@ -105,9 +113,11 @@ public class VentanaNuevoGrupo extends JFrame {
 		panel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Diego Sevilla");
+		lblNewLabel_1.setForeground(LETTERS_COLOR);
 		panel.add(lblNewLabel_1);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.anchor = GridBagConstraints.EAST;
 		gbc_panel_1.fill = GridBagConstraints.VERTICAL;
@@ -116,14 +126,23 @@ public class VentanaNuevoGrupo extends JFrame {
 		settings.add(panel_1, gbc_panel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
+		lblNewLabel_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Abre la nueva ventana
+				JFrame busquedaWindow = new Busqueda();
+				busquedaWindow.setVisible(true);
+			}
+		});
+		lblNewLabel_2.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/search-white.png")));
 		panel_1.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/3points.png")));
+		lblNewLabel_3.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/3points-white.png")));
 		panel_1.add(lblNewLabel_3);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBackground(MAIN_COLOR_LIGHT);
 		scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Contacts", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridheight = 6;
@@ -155,6 +174,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		txtGroupName.setColumns(10);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBackground(MAIN_COLOR_LIGHT);
 		scrollPane_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Added", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.gridheight = 6;
@@ -171,6 +191,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		scrollPane_1.setViewportView(addedList);
 		
 		JButton btAddedContact = new JButton("");
+		btAddedContact.setBackground(SECONDARY_COLOR);
 		btAddedContact.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String selected = (String) contactList.getSelectedValue();
@@ -252,6 +273,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		contentPane.add(btAddedContact, gbc_btAddedContact);
 		
 		JButton btRemoveContact = new JButton("");
+		btRemoveContact.setBackground(SECONDARY_COLOR);
 		btRemoveContact.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String selected = (String) addedList.getSelectedValue();
@@ -271,6 +293,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		contentPane.add(btRemoveContact, gbc_btRemoveContact);
 		
 		JButton btnNewButton = new JButton("CREATE GROUP");
+		btnNewButton.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton.gridwidth = 4;

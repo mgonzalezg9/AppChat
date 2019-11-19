@@ -2,6 +2,7 @@ package umu.tds.apps.vistas;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import static umu.tds.apps.vistas.Theme.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -68,7 +69,7 @@ public class Estados extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 382);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.WHITE);
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -79,7 +80,7 @@ public class Estados extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel panelIzq = new JPanel();
-		panelIzq.setBackground(Color.WHITE);
+		panelIzq.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panelIzq = new GridBagConstraints();
 		gbc_panelIzq.insets = new Insets(0, 0, 0, 5);
 		gbc_panelIzq.fill = GridBagConstraints.BOTH;
@@ -94,21 +95,22 @@ public class Estados extends JFrame {
 		panelIzq.setLayout(gbl_panelIzq);
 
 		JPanel panelMiEstado = new JPanel();
+		panelMiEstado.setBackground(MAIN_COLOR_LIGHT);
 		
 
 		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(MAIN_COLOR);
 		panel_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-				panel_2.setBackground(new Color(255, 171, 0));
+				panel_2.setBackground(SECONDARY_COLOR);
 				list.clearSelection();
 				Status s = Controlador.getInstancia().getEstado(Controlador.getInstancia().getUsuario());
 				lblEstadoSeleccionado.setIcon(s.getImg());
 				lblFraseProfunda.setText(s.getFrase());
 			}
 		});
-		panel_2.setBackground(new Color(141, 110, 99));
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
@@ -118,14 +120,14 @@ public class Estados extends JFrame {
 
 		lblNewLabel = new JLabel("My status");
 		panel_2.add(lblNewLabel);
-		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setForeground(LETTERS_COLOR);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		JLabel label = new JLabel("");
 		panel_2.add(label);
 		label.setIcon(new ImageIcon(Estados.class.getResource("/umu/tds/apps/resources/diego.jpg")));
 		panelMiEstado.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelMiEstado.setBackground(new Color(141, 110, 99));
+		panelMiEstado.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_panelMiEstado = new GridBagConstraints();
 		gbc_panelMiEstado.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelMiEstado.insets = new Insets(0, 0, 5, 0);
@@ -136,12 +138,12 @@ public class Estados extends JFrame {
 
 		JLabel label_1 = new JLabel("My contacts");
 		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setForeground(Color.WHITE);
+		label_1.setForeground(LETTERS_COLOR);
 		label_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		panelMiEstado.add(label_1);
 
 		JPanel listaEstados = new JPanel();
-		listaEstados.setBackground(Color.WHITE);
+		panelIzq.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_listaEstados = new GridBagConstraints();
 		gbc_listaEstados.fill = GridBagConstraints.BOTH;
 		gbc_listaEstados.gridx = 0;
@@ -150,13 +152,13 @@ public class Estados extends JFrame {
 		listaEstados.setLayout(new BorderLayout(0, 0));
 
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(MAIN_COLOR_LIGHT);
 		panel_3.setBorder(null);
-		panel_3.setBackground(Color.WHITE);
 		listaEstados.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
 
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.WHITE);
+		panel.setBackground(MAIN_COLOR_LIGHT);
 		panel_3.add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 256, 0 };
@@ -185,12 +187,13 @@ public class Estados extends JFrame {
 		scrollPane.setBorder(null);
 
 		list = new JList<User>();
+		list.setBackground(MAIN_COLOR);
 		list.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		list.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-				panel_2.setBackground(new Color(141, 110, 99));
+				panel_2.setBackground(MAIN_COLOR);
 				User u = (User) list.getSelectedValue();
 				Status s = Controlador.getInstancia().getEstado(u);
 				lblFraseProfunda.setText(s.getFrase());
@@ -208,7 +211,7 @@ public class Estados extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-				panel_2.setBackground(new Color(141, 110, 99));
+				panel_2.setBackground(MAIN_COLOR);
 			}
 
 			@Override
@@ -216,16 +219,15 @@ public class Estados extends JFrame {
 			}
 		});
 
-		list.setBackground(Color.WHITE);
-		list.setSelectionBackground(new Color(255, 171, 0));
-		list.setSelectionForeground(new Color(255, 255, 255));
+		list.setSelectionBackground(SECONDARY_COLOR);
+		list.setSelectionForeground(LETTERS_COLOR);
 		list.setBorder(null);
 		list.setCellRenderer(new UserRenderer());
 		scrollPane.setViewportView(list);
 		list.setModel(listModel);
 
 		JPanel panelDer = new JPanel();
-		panelDer.setBackground(Color.WHITE);
+		panelDer.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panelDer = new GridBagConstraints();
 		gbc_panelDer.fill = GridBagConstraints.BOTH;
 		gbc_panelDer.gridx = 1;
@@ -247,7 +249,7 @@ public class Estados extends JFrame {
 		panelDer.add(lblEstadoSeleccionado, gbc_lblEstadoSeleccionado);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(190, 156, 145));
+		panel_1.setBackground(MAIN_COLOR_LIGHT);
 		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.anchor = GridBagConstraints.SOUTH;
@@ -257,6 +259,7 @@ public class Estados extends JFrame {
 		panelDer.add(panel_1, gbc_panel_1);
 
 		lblFraseProfunda = new JLabel("Status");
+		lblFraseProfunda.setForeground(LETTERS_COLOR);
 		panel_1.add(lblFraseProfunda);
 		lblFraseProfunda.setBorder(null);
 	}

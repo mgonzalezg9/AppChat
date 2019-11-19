@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -54,6 +56,7 @@ public class Busqueda extends JFrame {
 		setBounds(100, 100, 606, 462);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 40, 0, 0, 20, 0, 10, 0};
@@ -72,6 +75,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(label, gbc_label);
 		
 		JLabel lblSender = new JLabel("Sender");
+		lblSender.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblSender = new GridBagConstraints();
 		gbc_lblSender.anchor = GridBagConstraints.EAST;
 		gbc_lblSender.insets = new Insets(0, 0, 5, 5);
@@ -89,6 +93,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(comboBox, gbc_comboBox);
 		
 		JLabel lblDate = new JLabel("Date");
+		lblDate.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblDate = new GridBagConstraints();
 		gbc_lblDate.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDate.gridx = 3;
@@ -104,6 +109,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(dateChooser, gbc_dateChooser);
 		
 		JLabel label_1 = new JLabel("-");
+		label_1.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 5;
@@ -119,6 +125,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(dateChooser_1, gbc_dateChooser_1);
 		
 		JLabel lblText = new JLabel("Text:");
+		lblText.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblText = new GridBagConstraints();
 		gbc_lblText.insets = new Insets(0, 0, 5, 5);
 		gbc_lblText.gridx = 1;
@@ -147,7 +154,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(scrollPane_1, gbc_scrollPane_1);
 		
 		JPanel chat = new JPanel();
-		chat.setBackground(new Color(245, 222, 179));
+		chat.setBackground(CHAT_COLOR);
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400,700);
@@ -163,6 +170,7 @@ public class Busqueda extends JFrame {
 		chat.add(burbuja2);
 		
 		JButton btnNewButton = new JButton("SEARCH");
+		btnNewButton.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridwidth = 3;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);

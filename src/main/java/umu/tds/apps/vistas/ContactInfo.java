@@ -1,5 +1,7 @@
 package umu.tds.apps.vistas;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -11,6 +13,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 public class ContactInfo extends JFrame {
 
@@ -36,9 +39,12 @@ public class ContactInfo extends JFrame {
 	 * Create the frame.
 	 */
 	public ContactInfo() {
+		setTitle("Contact info");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ContactInfo.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 438, 298);
 		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -58,6 +64,7 @@ public class ContactInfo extends JFrame {
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JLabel lblName = new JLabel("Name: ");
+		lblName.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.EAST;
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
@@ -66,6 +73,7 @@ public class ContactInfo extends JFrame {
 		contentPane.add(lblName, gbc_lblName);
 		
 		JLabel lblAlfonso = new JLabel("Alfonso");
+		lblAlfonso.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblAlfonso = new GridBagConstraints();
 		gbc_lblAlfonso.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblAlfonso.insets = new Insets(0, 0, 5, 5);
@@ -74,6 +82,7 @@ public class ContactInfo extends JFrame {
 		contentPane.add(lblAlfonso, gbc_lblAlfonso);
 		
 		JLabel lblTele = new JLabel("Telephone number: ");
+		lblTele.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_lblTele = new GridBagConstraints();
 		gbc_lblTele.anchor = GridBagConstraints.EAST;
 		gbc_lblTele.insets = new Insets(0, 0, 5, 5);
@@ -82,6 +91,7 @@ public class ContactInfo extends JFrame {
 		contentPane.add(lblTele, gbc_lblTele);
 		
 		JLabel label = new JLabel("668765998");
+		label.setForeground(LETTERS_COLOR);
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
