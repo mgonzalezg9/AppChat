@@ -277,7 +277,7 @@ public class Principal extends JFrame {
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CreateContact window = new CreateContact();
+				ContactInfo window = new ContactInfo();
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
