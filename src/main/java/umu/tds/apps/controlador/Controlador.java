@@ -13,9 +13,20 @@ import umu.tds.apps.AppChat.*;
 import umu.tds.apps.vistas.UserSettings;
 
 public class Controlador {
+	private static Controlador unicaInstancia = null;
 	private static List<ImageIcon> imagenes = new ArrayList<>();
 	private static String nickname = "Manuelillo";
 	private static String saludo = "Hola amigos del mundo!";
+	
+	private Controlador() { }
+	
+	// Aplicamos el patrón Singleton.
+	// Consiguiendo de esta forma que exista una única instancia de la clase controlador que es accesible globalmente.
+	public static Controlador getInstancia () {
+		if (unicaInstancia == null)
+			unicaInstancia = new Controlador();
+		return unicaInstancia;
+	}
 	
 	public static boolean iniciarSesion(String dni, char[] password) {
 		// TODO
