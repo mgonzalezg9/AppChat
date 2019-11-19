@@ -200,7 +200,7 @@ public class Login extends JFrame {
 				String user = userField.getText();
 				char[] password = passwordField.getPassword();
 
-				if (Controlador.iniciarSesion(user, password)) {
+				if (Controlador.getInstancia().iniciarSesion(user, password)) {
 					// Oculta la ventana actual
 					Login.this.setVisible(false);
 

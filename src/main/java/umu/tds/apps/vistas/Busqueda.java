@@ -1,6 +1,7 @@
 package umu.tds.apps.vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,8 +16,13 @@ import java.awt.Insets;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
+
+import tds.BubbleText;
+
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 
 public class Busqueda extends JFrame {
 
@@ -45,15 +51,15 @@ public class Busqueda extends JFrame {
 		setTitle("Search");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 606, 319);
+		setBounds(100, 100, 606, 462);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 40, 0, 0, 20, 0, 10, 0};
-		gbl_contentPane.rowHeights = new int[]{62, 64, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{62, 64, 10, 0, 10, 0, 10, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel label = new JLabel("");
@@ -130,6 +136,39 @@ public class Busqueda extends JFrame {
 		
 		JTextPane textPane = new JTextPane();
 		scrollPane.setViewportView(textPane);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_1.gridwidth = 6;
+		gbc_scrollPane_1.gridx = 1;
+		gbc_scrollPane_1.gridy = 3;
+		contentPane.add(scrollPane_1, gbc_scrollPane_1);
+		
+		JPanel chat = new JPanel();
+		chat.setBackground(new Color(245, 222, 179));
+		scrollPane_1.setViewportView(chat);
+		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
+		chat.setSize(400,700);
+
+		BubbleText burbuja = new BubbleText(chat, "Primer mensaje encontrado", Color.LIGHT_GRAY, "Dieguin",
+				BubbleText.RECEIVED);
+		chat.add(burbuja);
+		BubbleText burbuja1 = new BubbleText(chat, "Segundo mensaje encontrado chavales", Color.LIGHT_GRAY, "Manusín",
+				BubbleText.RECEIVED);
+		chat.add(burbuja1);
+		BubbleText burbuja2 = new BubbleText(chat, "Gensanta, si es que no paro de encontrar mensajes", Color.LIGHT_GRAY, "DiegoOriginals",
+				BubbleText.RECEIVED);
+		chat.add(burbuja2);
+		
+		JButton btnNewButton = new JButton("SEARCH");
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.gridwidth = 3;
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton.gridx = 2;
+		gbc_btnNewButton.gridy = 5;
+		contentPane.add(btnNewButton, gbc_btnNewButton);
 	}
 
 }

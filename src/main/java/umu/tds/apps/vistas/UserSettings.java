@@ -79,7 +79,7 @@ class Carrousel {
 				ImageIcon icon = new ImageIcon(imgScaled);
 
 				// La añade
-				Controlador.addImagenUsuario(icon);
+				Controlador.getInstancia().addImagenUsuario(icon);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -89,7 +89,7 @@ class Carrousel {
 	}
 
 	public void removeImagen(int op) {
-		Controlador.removeImagenUsuario(op);
+		Controlador.getInstancia().removeImagenUsuario(op);
 		if (imagenes.size() > 0)
 			desplazar(-1);
 		else {
@@ -137,7 +137,7 @@ public class UserSettings extends JFrame {
 	public UserSettings() {
 		frame = this;
 		setTitle("Settings");
-		Controlador.addImagenUsuario(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")));
+		Controlador.getInstancia().addImagenUsuario(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")));
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(UserSettings.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -175,7 +175,7 @@ public class UserSettings extends JFrame {
 		JButton button_3 = new JButton("-");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int size = Controlador.getImagenesUsuario().size();
+				int size = Controlador.getInstancia().getImagenesUsuario().size();
 				String[] elems = new String[size];
 
 				for (int i = 0; i < elems.length; i++) {
@@ -212,7 +212,7 @@ public class UserSettings extends JFrame {
 		panel_1.add(carrousel);
 
 		// Creamos un objeto carrousel para administrarlo
-		car = new Carrousel(profilePhoto, Controlador.getImagenesUsuario(), carrousel);
+		car = new Carrousel(profilePhoto, Controlador.getInstancia().getImagenesUsuario(), carrousel);
 		panel_1.add(button_1);
 
 		JButton button_2 = new JButton("+");
@@ -239,7 +239,7 @@ public class UserSettings extends JFrame {
 		gbc_panel_4.gridy = 2;
 		contentPane.add(panel_4, gbc_panel_4);
 
-		JLabel lblNewLabel = new JLabel(Controlador.getNombreUsuario());
+		JLabel lblNewLabel = new JLabel(Controlador.getInstancia().getNombreUsuario());
 		panel_4.add(lblNewLabel);
 
 		JPanel panel_5 = new JPanel();
@@ -261,11 +261,11 @@ public class UserSettings extends JFrame {
 		gbc_scrollPane.gridy = 4;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		txtrRespetandoElNnn = new JTextArea(Controlador.getSaludo());
+		txtrRespetandoElNnn = new JTextArea(Controlador.getInstancia().getSaludo());
 		txtrRespetandoElNnn.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				Controlador.setSaludo(txtrRespetandoElNnn.getText());
+				Controlador.getInstancia().setSaludo(txtrRespetandoElNnn.getText());
 			}
 		});
 		scrollPane.setViewportView(txtrRespetandoElNnn);

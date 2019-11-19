@@ -103,7 +103,7 @@ public class Estados extends JFrame {
 				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
 				panel_2.setBackground(new Color(255, 171, 0));
 				list.clearSelection();
-				Status s = Controlador.getEstado(Controlador.getUsuario());
+				Status s = Controlador.getInstancia().getEstado(Controlador.getInstancia().getUsuario());
 				lblEstadoSeleccionado.setIcon(s.getImg());
 				lblFraseProfunda.setText(s.getFrase());
 			}
@@ -192,7 +192,7 @@ public class Estados extends JFrame {
 				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 				panel_2.setBackground(new Color(141, 110, 99));
 				User u = (User) list.getSelectedValue();
-				Status s = Controlador.getEstado(u);
+				Status s = Controlador.getInstancia().getEstado(u);
 				lblFraseProfunda.setText(s.getFrase());
 				lblEstadoSeleccionado.setIcon(s.getImg());
 			}

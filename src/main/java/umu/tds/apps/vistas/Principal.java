@@ -283,7 +283,7 @@ public class Principal extends JFrame {
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CreateContact window = new CreateContact();
+				ContactInfo window = new ContactInfo();
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -348,7 +348,7 @@ public class Principal extends JFrame {
 		mntmDeleteContact.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Controlador.deleteChat()) {
+				if (Controlador.getInstancia().deleteChat()) {
 					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
