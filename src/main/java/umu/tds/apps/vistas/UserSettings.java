@@ -72,7 +72,7 @@ class Carrousel {
 		profilePhoto.setIcon(imagenes.get(numImagen));
 	}
 
-	public void addImagen(JFileChooser jfc) {
+	public boolean addImagen(JFileChooser jfc) {
 		int returnValue = jfc.showOpenDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			try {
@@ -88,14 +88,17 @@ class Carrousel {
 			}
 			int numMostrado = numImagen + 1;
 			indicador.setText(numMostrado + "/" + imagenes.size());
+			profilePhoto.setIcon(imagenes.get(imagenes.size() - 1));
+			return true;
 		}
+		return false;
 	}
 
 	public void removeImagen(int op) {
-		Controlador.getInstancia().removeImagenUsuario(op);
-		if (imagenes.size() > 0)
+		if (imagenes.size() > 1) {
+			Controlador.getInstancia().removeImagenUsuario(op);
 			desplazar(-1);
-		else {
+		} else {
 			// Pedimos amablemente una imagen
 			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 			jfc.setDialogTitle("Select an image");
@@ -103,8 +106,10 @@ class Carrousel {
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG and PNG images", "jpg", "png");
 			jfc.addChoosableFileFilter(filter);
 
-			addImagen(jfc);
-			profilePhoto.setIcon(imagenes.get(imagenes.size() - 1));
+			// Si se ha podido meter otra en su puesto se borra la imagen del carrousel
+			if (addImagen(jfc)) {
+				Controlador.getInstancia().removeImagenUsuario(op);
+			}
 		}
 
 	}
@@ -140,7 +145,8 @@ public class UserSettings extends JFrame {
 	public UserSettings() {
 		frame = this;
 		setTitle("Settings");
-		Controlador.getInstancia().addImagenUsuario(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")));
+		Controlador.getInstancia()
+				.addImagenUsuario(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")));
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(UserSettings.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
