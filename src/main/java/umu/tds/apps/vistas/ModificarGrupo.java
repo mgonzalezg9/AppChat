@@ -56,7 +56,7 @@ public class ModificarGrupo extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblChooseGroup = new JLabel("Choose group:");
-		lblChooseGroup.setForeground(LETTERS_COLOR);
+		lblChooseGroup.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblChooseGroup = new GridBagConstraints();
 		gbc_lblChooseGroup.insets = new Insets(0, 0, 5, 0);
 		gbc_lblChooseGroup.gridx = 0;

@@ -101,7 +101,7 @@ public class Register extends JFrame {
 		
 		final JLabel lblChooseImage = new JLabel("");
 		lblChooseImage.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblChooseImage.setForeground(Color.RED);
+		lblChooseImage.setForeground(WRONG_INPUT_COLOR);
 		GridBagConstraints gbc_lblChooseImage = new GridBagConstraints();
 		gbc_lblChooseImage.anchor = GridBagConstraints.EAST;
 		gbc_lblChooseImage.insets = new Insets(0, 0, 0, 5);
@@ -176,7 +176,7 @@ public class Register extends JFrame {
 			);
 		
 		JLabel lblUser = new JLabel("User");
-		lblUser.setForeground(LETTERS_COLOR);
+		lblUser.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblUser = new GridBagConstraints();
 		gbc_lblUser.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUser.anchor = GridBagConstraints.SOUTHEAST;
@@ -196,7 +196,7 @@ public class Register extends JFrame {
 		textField.setColumns(10);
 		
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setForeground(LETTERS_COLOR);
+		lblPassword.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -215,7 +215,7 @@ public class Register extends JFrame {
 		textField_1.setColumns(10);
 		
 		JLabel lblConfirmPassword = new JLabel("Confirm password");
-		lblConfirmPassword.setForeground(LETTERS_COLOR);
+		lblConfirmPassword.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblConfirmPassword = new GridBagConstraints();
 		gbc_lblConfirmPassword.anchor = GridBagConstraints.NORTHEAST;
 		gbc_lblConfirmPassword.insets = new Insets(0, 0, 5, 5);
@@ -235,7 +235,7 @@ public class Register extends JFrame {
 		textField_2.setColumns(10);
 		
 		JLabel lblEmail = new JLabel("Email");
-		lblEmail.setForeground(LETTERS_COLOR);
+		lblEmail.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
 		gbc_lblEmail.anchor = GridBagConstraints.EAST;
 		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
@@ -254,7 +254,7 @@ public class Register extends JFrame {
 		textField_3.setColumns(10);
 		
 		JLabel lblName = new JLabel("Name");
-		lblName.setForeground(LETTERS_COLOR);
+		lblName.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.EAST;
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
@@ -273,7 +273,7 @@ public class Register extends JFrame {
 		textField_5.setColumns(10);
 		
 		JLabel lblPhoneNumber = new JLabel("Phone number");
-		lblPhoneNumber.setForeground(LETTERS_COLOR);
+		lblPhoneNumber.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblPhoneNumber = new GridBagConstraints();
 		gbc_lblPhoneNumber.anchor = GridBagConstraints.EAST;
 		gbc_lblPhoneNumber.insets = new Insets(0, 0, 5, 5);
@@ -292,7 +292,7 @@ public class Register extends JFrame {
 		textField_4.setColumns(10);
 		
 		JLabel lblBirthDate = new JLabel("Birth Date");
-		lblBirthDate.setForeground(LETTERS_COLOR);
+		lblBirthDate.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblBirthDate = new GridBagConstraints();
 		gbc_lblBirthDate.anchor = GridBagConstraints.EAST;
 		gbc_lblBirthDate.insets = new Insets(0, 0, 5, 5);
@@ -331,7 +331,7 @@ public class Register extends JFrame {
 		contentPane.add(btnNewButton, gbc_btnNewButton);
 		
 		JLabel lblHaveAnAccount = new JLabel("Have an account?");
-		lblHaveAnAccount.setForeground(LETTERS_COLOR);
+		lblHaveAnAccount.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblHaveAnAccount = new GridBagConstraints();
 		gbc_lblHaveAnAccount.anchor = GridBagConstraints.WEST;
 		gbc_lblHaveAnAccount.gridwidth = 2;

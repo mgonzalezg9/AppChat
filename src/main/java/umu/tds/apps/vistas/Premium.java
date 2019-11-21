@@ -63,7 +63,7 @@ public class Premium extends JFrame {
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JLabel lblBecomePremiumFor = new JLabel("Become Premium for a low prize!");
-		lblBecomePremiumFor.setForeground(LETTERS_COLOR);
+		lblBecomePremiumFor.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblBecomePremiumFor = new GridBagConstraints();
 		gbc_lblBecomePremiumFor.insets = new Insets(0, 0, 5, 0);
 		gbc_lblBecomePremiumFor.gridx = 0;
@@ -71,7 +71,7 @@ public class Premium extends JFrame {
 		contentPane.add(lblBecomePremiumFor, gbc_lblBecomePremiumFor);
 		
 		JLabel lblOnlyA = new JLabel("Only 15.99$ a month before January 2020");
-		lblOnlyA.setForeground(LETTERS_COLOR);
+		lblOnlyA.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblOnlyA = new GridBagConstraints();
 		gbc_lblOnlyA.insets = new Insets(0, 0, 5, 0);
 		gbc_lblOnlyA.gridx = 0;

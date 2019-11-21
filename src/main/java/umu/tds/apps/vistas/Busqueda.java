@@ -75,7 +75,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(label, gbc_label);
 		
 		JLabel lblSender = new JLabel("Sender");
-		lblSender.setForeground(LETTERS_COLOR);
+		lblSender.setForeground(TEXT_COLOR_DARK);
 		GridBagConstraints gbc_lblSender = new GridBagConstraints();
 		gbc_lblSender.anchor = GridBagConstraints.EAST;
 		gbc_lblSender.insets = new Insets(0, 0, 5, 5);
@@ -93,7 +93,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(comboBox, gbc_comboBox);
 		
 		JLabel lblDate = new JLabel("Date");
-		lblDate.setForeground(LETTERS_COLOR);
+		lblDate.setForeground(TEXT_COLOR_DARK);
 		GridBagConstraints gbc_lblDate = new GridBagConstraints();
 		gbc_lblDate.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDate.gridx = 3;
@@ -109,7 +109,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(dateChooser, gbc_dateChooser);
 		
 		JLabel label_1 = new JLabel("-");
-		label_1.setForeground(LETTERS_COLOR);
+		label_1.setForeground(TEXT_COLOR_DARK);
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 5;
@@ -125,7 +125,7 @@ public class Busqueda extends JFrame {
 		contentPane.add(dateChooser_1, gbc_dateChooser_1);
 		
 		JLabel lblText = new JLabel("Text:");
-		lblText.setForeground(LETTERS_COLOR);
+		lblText.setForeground(TEXT_COLOR_DARK);
 		GridBagConstraints gbc_lblText = new GridBagConstraints();
 		gbc_lblText.insets = new Insets(0, 0, 5, 5);
 		gbc_lblText.gridx = 1;
@@ -159,13 +159,13 @@ public class Busqueda extends JFrame {
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400,700);
 
-		BubbleText burbuja = new BubbleText(chat, "Primer mensaje encontrado", Color.LIGHT_GRAY, "Dieguin",
+		BubbleText burbuja = new BubbleText(chat, "Primer mensaje encontrado", INCOMING_MESSAGE_COLOR, "Dieguin",
 				BubbleText.RECEIVED);
 		chat.add(burbuja);
-		BubbleText burbuja1 = new BubbleText(chat, "Segundo mensaje encontrado chavales", Color.LIGHT_GRAY, "Manusín",
+		BubbleText burbuja1 = new BubbleText(chat, "Segundo mensaje encontrado chavales", INCOMING_MESSAGE_COLOR, "Manusín",
 				BubbleText.RECEIVED);
 		chat.add(burbuja1);
-		BubbleText burbuja2 = new BubbleText(chat, "Gensanta, si es que no paro de encontrar mensajes", Color.LIGHT_GRAY, "DiegoOriginals",
+		BubbleText burbuja2 = new BubbleText(chat, "Gensanta, si es que no paro de encontrar mensajes", INCOMING_MESSAGE_COLOR, "DiegoOriginals",
 				BubbleText.RECEIVED);
 		chat.add(burbuja2);
 		

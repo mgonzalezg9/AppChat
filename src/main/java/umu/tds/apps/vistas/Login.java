@@ -1,6 +1,7 @@
 package umu.tds.apps.vistas;
 
 import java.awt.EventQueue;
+import static umu.tds.apps.vistas.Theme.*;
 
 import javax.swing.JFrame;
 import java.awt.GridBagLayout;
@@ -124,7 +125,7 @@ public class Login extends JFrame {
 		panelCentro.setLayout(gbl_panelCentro);
 
 		JLabel userLabel = new JLabel("User");
-		userLabel.setForeground(LETTERS_COLOR);
+		userLabel.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_userLabel = new GridBagConstraints();
 		gbc_userLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_userLabel.anchor = GridBagConstraints.EAST;
@@ -139,9 +140,9 @@ public class Login extends JFrame {
 				userField.setBackground(MAIN_COLOR);
 			}
 		});
-		userField.setForeground(LETTERS_COLOR);
+		userField.setForeground(TEXT_COLOR_LIGHT);
 		userField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		userField.setCaretColor(LETTERS_COLOR);
+		userField.setCaretColor(TEXT_COLOR_LIGHT);
 		userField.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_userField = new GridBagConstraints();
 		gbc_userField.insets = new Insets(0, 0, 5, 0);
@@ -152,7 +153,7 @@ public class Login extends JFrame {
 		userField.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setForeground(LETTERS_COLOR);
+		lblPassword.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
@@ -167,9 +168,9 @@ public class Login extends JFrame {
 				passwordField.setBackground(MAIN_COLOR);
 			}
 		});
-		passwordField.setForeground(LETTERS_COLOR);
+		passwordField.setForeground(TEXT_COLOR_LIGHT);
 		passwordField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		passwordField.setCaretColor(LETTERS_COLOR);
+		passwordField.setCaretColor(TEXT_COLOR_LIGHT);
 		passwordField.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
 		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
@@ -208,8 +209,8 @@ public class Login extends JFrame {
 					JFrame mainWindow = new Principal();
 					mainWindow.setVisible(true);
 				} else {
-					userField.setBackground(Color.RED);
-					passwordField.setBackground(Color.RED);
+					userField.setBackground(WRONG_INPUT_COLOR);
+					passwordField.setBackground(WRONG_INPUT_COLOR);
 				}
 
 			}
@@ -223,7 +224,7 @@ public class Login extends JFrame {
 		panelSur.add(btnSignIn, gbc_btnSignIn);
 
 		JLabel lblNewLabel_1 = new JLabel("Need an account? ");
-		lblNewLabel_1.setForeground(LETTERS_COLOR);
+		lblNewLabel_1.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNewLabel_1.gridx = 0;

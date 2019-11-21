@@ -59,7 +59,7 @@ class Carrousel {
 
 		int numMostrado = numImagen + 1;
 		indicador.setText(numMostrado + "/" + imagenes.size());
-		indicador.setForeground(LETTERS_COLOR);
+		indicador.setForeground(TEXT_COLOR_LIGHT);
 	}
 
 	public void desplazar(int offset) {
@@ -251,7 +251,7 @@ public class UserSettings extends JFrame {
 		contentPane.add(panel_4, gbc_panel_4);
 
 		JLabel lblNewLabel = new JLabel(Controlador.getInstancia().getNombreUsuario());
-		lblNewLabel.setForeground(LETTERS_COLOR);
+		lblNewLabel.setForeground(TEXT_COLOR_LIGHT);
 		panel_4.add(lblNewLabel);
 
 		JPanel panel_5 = new JPanel();
@@ -264,7 +264,7 @@ public class UserSettings extends JFrame {
 		contentPane.add(panel_5, gbc_panel_5);
 
 		JLabel lblGreeting = new JLabel("Greeting:");
-		lblGreeting.setForeground(LETTERS_COLOR);
+		lblGreeting.setForeground(TEXT_COLOR_LIGHT);
 		panel_5.add(lblGreeting);
 
 		JScrollPane scrollPane = new JScrollPane();

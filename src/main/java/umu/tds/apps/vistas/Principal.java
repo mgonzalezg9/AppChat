@@ -46,16 +46,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import java.awt.CardLayout;
 
 public class Principal extends JFrame {
 	private JPanel contentPane;
 	private JPanel chat;
-	private JTable table;
 	private JTable table_1;
 	private JLabel profilePhoto;
 	private JTextField textField;
@@ -79,7 +76,7 @@ public class Principal extends JFrame {
 	}
 
 	private void sendMessage(JPanel panel, JTextField textField) throws IllegalArgumentException {
-		BubbleText burbuja = new BubbleText(panel, textField.getText(), Color.GREEN, "Tú", BubbleText.SENT);
+		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
 		chat.add(burbuja);
 		textField.setText(null);
 
@@ -87,7 +84,7 @@ public class Principal extends JFrame {
 	}
 
 	private void sendIcon(JPanel panel, int iconID) throws IllegalArgumentException {
-		BubbleText burbuja = new BubbleText(panel, iconID, Color.GREEN, "Tú", BubbleText.SENT, 10);
+		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT, 10);
 		chat.add(burbuja);
 	}
 
@@ -305,7 +302,7 @@ public class Principal extends JFrame {
 		panel_3.add(label_3);
 
 		JLabel lblDiegoSevilla = new JLabel("Diego Sevilla");
-		lblDiegoSevilla.setForeground(LETTERS_COLOR);
+		lblDiegoSevilla.setForeground(TEXT_COLOR_LIGHT);
 		panel_3.add(lblDiegoSevilla);
 
 		JPanel panel = new JPanel();
@@ -363,7 +360,7 @@ public class Principal extends JFrame {
 		popupSettsChat.add(mntmDeleteContact);
 
 		JPanel listaChats = new JPanel();
-		listaChats.setBackground(Color.WHITE);
+		listaChats.setBackground(CHAT_COLOR);
 		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GridBagConstraints gbc_listaChats = new GridBagConstraints();
 		gbc_listaChats.insets = new Insets(0, 0, 0, 5);
@@ -378,10 +375,10 @@ public class Principal extends JFrame {
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBackground(Color.WHITE);
+		scrollPane.setBackground(CHAT_COLOR);
 		listaChats.add(scrollPane);
 		table_1 = new JTable();
-		table_1.setBackground(Color.WHITE);
+		table_1.setBackground(CHAT_COLOR);
 		table_1.setShowVerticalLines(false);
 		table_1.setShowGrid(false);
 		table_1.setBorder(null);
@@ -451,7 +448,7 @@ public class Principal extends JFrame {
 
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBorder(null);
-		scrollPane_1.setBackground(Color.WHITE);
+		scrollPane_1.setBackground(CHAT_COLOR);
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);

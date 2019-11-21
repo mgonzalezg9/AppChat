@@ -92,7 +92,7 @@ public class EstadisticasUso extends JFrame {
 		contentPane.add(panel, gbc_panel);
 
 		JLabel lblGraphicType = new JLabel("Graphic type");
-		lblGraphicType.setForeground(LETTERS_COLOR);
+		lblGraphicType.setForeground(TEXT_COLOR_LIGHT);
 		panel.add(lblGraphicType);
 
 		JComboBox comboBox = new JComboBox();

@@ -88,7 +88,7 @@ public class CreateContact extends JFrame {
 		panel.setLayout(gbl_panel);
 		
 		JLabel lblName = new JLabel("Name");
-		lblName.setForeground(LETTERS_COLOR);
+		lblName.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.EAST;
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
@@ -106,7 +106,7 @@ public class CreateContact extends JFrame {
 		textField.setColumns(10);
 		
 		JLabel lblPhoneNumber = new JLabel("Phone number");
-		lblPhoneNumber.setForeground(LETTERS_COLOR);
+		lblPhoneNumber.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblPhoneNumber = new GridBagConstraints();
 		gbc_lblPhoneNumber.anchor = GridBagConstraints.EAST;
 		gbc_lblPhoneNumber.insets = new Insets(0, 0, 0, 5);

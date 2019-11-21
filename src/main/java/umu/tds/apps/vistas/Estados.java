@@ -120,7 +120,7 @@ public class Estados extends JFrame {
 
 		lblNewLabel = new JLabel("My status");
 		panel_2.add(lblNewLabel);
-		lblNewLabel.setForeground(LETTERS_COLOR);
+		lblNewLabel.setForeground(TEXT_COLOR_LIGHT);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
 		JLabel label = new JLabel("");
@@ -138,7 +138,7 @@ public class Estados extends JFrame {
 
 		JLabel label_1 = new JLabel("My contacts");
 		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setForeground(LETTERS_COLOR);
+		label_1.setForeground(TEXT_COLOR_LIGHT);
 		label_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		panelMiEstado.add(label_1);
 
@@ -220,7 +220,7 @@ public class Estados extends JFrame {
 		});
 
 		list.setSelectionBackground(SECONDARY_COLOR);
-		list.setSelectionForeground(LETTERS_COLOR);
+		list.setSelectionForeground(TEXT_COLOR_LIGHT);
 		list.setBorder(null);
 		list.setCellRenderer(new UserRenderer());
 		scrollPane.setViewportView(list);
@@ -259,7 +259,7 @@ public class Estados extends JFrame {
 		panelDer.add(panel_1, gbc_panel_1);
 
 		lblFraseProfunda = new JLabel("Status");
-		lblFraseProfunda.setForeground(LETTERS_COLOR);
+		lblFraseProfunda.setForeground(TEXT_COLOR_LIGHT);
 		panel_1.add(lblFraseProfunda);
 		lblFraseProfunda.setBorder(null);
 	}
