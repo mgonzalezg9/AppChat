@@ -1,6 +1,7 @@
 package umu.tds.apps.vistas;
 
 import java.awt.Component;
+import static umu.tds.apps.vistas.Theme.*;
 
 import javax.swing.JLabel;
 import javax.swing.JList;

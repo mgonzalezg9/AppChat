@@ -164,7 +164,7 @@ public class Estados extends JFrame {
 		gbl_panel.columnWidths = new int[] { 256, 0 };
 		gbl_panel.rowHeights = new int[] { 128, 0 };
 		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 		DefaultListModel<User> listModel = new DefaultListModel<>();
 		listModel.addElement(
@@ -188,6 +188,7 @@ public class Estados extends JFrame {
 
 		list = new JList<User>();
 		list.setBackground(MAIN_COLOR);
+		list.setForeground(TEXT_COLOR_LIGHT);
 		list.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		list.addMouseListener(new MouseListener() {
 			@Override
