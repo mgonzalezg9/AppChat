@@ -1,22 +1,19 @@
 package pruebasLista;
 import javax.swing.*;
+
+import umu.tds.apps.AppChat.UserStatu;
+
+import static umu.tds.apps.vistas.Theme.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
-
-
-
-/**
- * FastPanelList v[2pre1, 2019-05-28 10!00 UTC] by Dreamspace President
- */
-final public class FastPanelList<T extends JPanel> {
-
+final public class UserStatesPanelList {
 
     public enum FPLOrientation {
         HORIZONTAL(Adjustable.HORIZONTAL),
@@ -34,12 +31,36 @@ final public class FastPanelList<T extends JPanel> {
 
 
     }
+    
+    // Cremos el panel correspondiente a un elemento de la lista.
+    private static JPanel supplyPanel(UserStatu usuario) {
+    	// Componentes del panel.
+    	final JLabel icon = new JLabel("");
+    	icon.setIcon(usuario.getIcon());
+    	final JLabel labelUserStatus = new JLabel(usuario.getName() + ": " + usuario.getStatus());
+    	labelUserStatus.setForeground(TEXT_COLOR_LIGHT);
+        final JLabel labelDate = new JLabel(usuario.getDate());
+        labelDate.setForeground(TEXT_COLOR_LIGHT);
+        
+        labelUserStatus.setHorizontalAlignment(SwingConstants.CENTER);
+        labelUserStatus.setVerticalAlignment(SwingConstants.CENTER);
 
+        // Creamos el panel
+        final JPanel panel = new JPanel(new BorderLayout(0,
+                                                         0));
+        panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+        panel.setBackground(MAIN_COLOR_LIGHT);
+        
+        panel.add(icon, BorderLayout.WEST);
+        panel.add(labelUserStatus, BorderLayout.CENTER);
+        panel.add(labelDate, BorderLayout.AFTER_LINE_ENDS);
 
+        // Devolvemos un elemento de la lista.
+        return panel;
+    }
 
-
+    // Properties.
     final public FPLOrientation orientation;
-    final private Function<Integer, T> panelSupplier;
     final private double fractionOfExtentToScrollPerArrowClick;
     final private double fractionOfExtentToScrollPerTrackClick;
     final private double fractionOfExtentToScrollPerMouseWheelStep;
@@ -55,50 +76,24 @@ final public class FastPanelList<T extends JPanel> {
     private long contentSize = 0; // The sum total extent of all "contained panels". (They're not really contained, but nobody will see that.)
     private long actualScrollPosition = 0; // The true scroll position, think contentSize.
     private Dimension lastKnownContainerSize = new Dimension(0, 0);
+    
+	private List<UserStatu> usuarios; // Lista de contactos.
 
 
-    private Map<Integer, T> knownPanels = new HashMap<>(); // All panels of which some pixels are currently potentially visible are cached here.
+    private Map<Integer, JPanel> knownPanels = new HashMap<>(); // All panels of which some pixels are currently potentially visible are cached here.
 
-
-    /**
-     * @param orientation                           Whether horizontal or the more common vertical arrangement.
-     * @param panelSupplier                         Your code that supplies the panels as needed on the fly. The
-     *                                              argument will NEVER be null - and your return value, too, must never
-     *                                              be null.
-     * @param fractionOfExtentToScrollPerArrowClick E.g. 0.1 for 10% of the visible area to become hidden/shown when you
-     *                                              click a scrollbar arrow.
-     * @param fractionOfExtentToScrollPerTrackClick E.g. 0.95 for 95% of the visible area to become hidden/shown when
-     *                                              you click in the scrollbar track.
-     * @param hideScrollbarWhenUnnecessary          Guess.
-     * @param panelSize                             Can later also be done via setter. (Not tested.) KEEP IN MIND THAT
-     *                                              THIS IS NOT YET SCALED, so if you have Desktop scaling 200% and are
-     *                                              running Java 8, you need to double the value (e.g. use my GUIScaling
-     *                                              class to automate this).
-     * @param panelCount                            dto.
-     */
-    public FastPanelList(final FPLOrientation orientation,
-                         final Function<Integer, T> panelSupplier,
-                         final double fractionOfExtentToScrollPerArrowClick,
-                         final double fractionOfExtentToScrollPerTrackClick,
-                         final double fractionOfExtentToScrollPerMouseWheelStep,
-                         final boolean hideScrollbarWhenUnnecessary,
-                         final int panelSize,
-                         final int panelCount) {
-
-
-        if (orientation == null) {
-            throw new IllegalArgumentException("orientation is null.");
-        }
-        if (panelSupplier == null) {
-            throw new IllegalArgumentException("panelSupplier is null.");
-        }
-
-        this.orientation = orientation;
-        this.panelSupplier = panelSupplier;
-        this.fractionOfExtentToScrollPerArrowClick = Math.max(0, fractionOfExtentToScrollPerArrowClick);
-        this.fractionOfExtentToScrollPerTrackClick = Math.max(0, fractionOfExtentToScrollPerTrackClick);
-        this.fractionOfExtentToScrollPerMouseWheelStep = Math.max(0, fractionOfExtentToScrollPerMouseWheelStep);
-        this.hideScrollbarWhenUnnecessary = hideScrollbarWhenUnnecessary;
+    // Constructor.
+    public UserStatesPanelList(final int panelSize, List<UserStatu> usuarios, final int panelCount) {
+    	// Users to show.
+    	this.usuarios = usuarios;
+    	// orientation Whether horizontal or the more common vertical arrangement.
+        this.orientation = UserStatesPanelList.FPLOrientation.VERTICAL;
+        // fractionOfExtentToScrollPerArrowClick E.g. 0.1 for 10% of the visible area to become hidden/shown when you click a scrollbar arrow.
+        this.fractionOfExtentToScrollPerArrowClick = Math.max(0, 0.1);
+        // fractionOfExtentToScrollPerTrackClick E.g. 0.95 for 95% of the visible area to become hidden/shown when you click in the scrollbar track.
+        this.fractionOfExtentToScrollPerTrackClick = Math.max(0, 0.95);
+        this.fractionOfExtentToScrollPerMouseWheelStep = Math.max(0, 0.91);
+        this.hideScrollbarWhenUnnecessary = false;
         setPanelSize(panelSize);
         setPanelCount(panelCount);
 
@@ -179,13 +174,13 @@ final public class FastPanelList<T extends JPanel> {
     }
 
 
-    public T getItemUnderMouse(final MouseEvent e) {
+    public JPanel getItemUnderMouse(final MouseEvent e) {
 
         return getItemUnderMouse(e.getX(), e.getY());
     }
 
 
-    public T getItemUnderMouse(final int xInComponent,
+    public JPanel getItemUnderMouse(final int xInComponent,
                                final int yInComponent) {
 
         final long realPositionUnderMouse = (actualScrollPosition + (orientation == FPLOrientation.HORIZONTAL ? (long) xInComponent : (long) yInComponent));
@@ -207,14 +202,14 @@ final public class FastPanelList<T extends JPanel> {
      * edge of visibility. In all other cases, either null will be returned - or your supplier will be called, so you
      * get your own JPanel spat right back at you.
      */
-    public T getItem(final Integer index,
+    public JPanel getItem(final Integer index,
                      final boolean callSupplierIfNotCached) {
 
-        T ret = null;
+        JPanel ret = null;
         if (index != null && index >= 0 && index < panelCount) {
             ret = knownPanels.get(index);
             if (ret == null && callSupplierIfNotCached) {
-                ret = panelSupplier.apply(index);
+                ret = supplyPanel(usuarios.get(index));
                 if (ret == null) {
                     throw new IllegalArgumentException("panelSupplier returned null for index " + index);
                 }
@@ -224,7 +219,7 @@ final public class FastPanelList<T extends JPanel> {
     }
 
 
-    /**
+	/**
      * @return a NEW Map containing the Map entries of the internal knownPanels map. These maps contain all panels that
      * are currently visible on screen. The index is identical to the number handed to your Supplier.
      * <p>
@@ -234,7 +229,7 @@ final public class FastPanelList<T extends JPanel> {
      * others ... don't exist. They only exist in the fantasy of the user. Until they scroll there, then some have
      * become real while others have fallen out of existence.
      */
-    public Map<Integer, T> getCachedItems() {
+    public Map<Integer, JPanel> getCachedItems() {
 
         return new HashMap<>(knownPanels);
     }
@@ -289,7 +284,7 @@ final public class FastPanelList<T extends JPanel> {
 
         long n = actualScrollPosition;
         final long endOfScreen = actualScrollPosition + containerSize + panelSize;
-        final Map<Integer, T> newKnownPanels = new HashMap<>();
+        final Map<Integer, JPanel> newKnownPanels = new HashMap<>();
 
         while (n < endOfScreen) { // Loop ongoing = need more panels to fill the view.
 
@@ -304,9 +299,9 @@ final public class FastPanelList<T extends JPanel> {
 
 
             // Obtain current panel - if possible from cache, else from external provider (which might likely create it from scratch).
-            T panel = knownPanels.get(panelIndexInt);
+            JPanel panel = knownPanels.get(panelIndexInt);
             if (panel == null) {
-                panel = panelSupplier.apply(panelIndexInt);
+                panel = supplyPanel(usuarios.get(panelIndexInt));
                 if (panel == null) {
                     throw new IllegalArgumentException("panelSupplier returned null for index " + panelIndex);
                 }

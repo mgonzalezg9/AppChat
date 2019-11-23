@@ -1,4 +1,4 @@
-package pruebasLista;
+/*package pruebasLista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -76,4 +76,4 @@ final public class FastPanelListDemo {
 
         return panel;
     }
-}
+}*/

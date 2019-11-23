@@ -1,38 +1,30 @@
 package pruebasLista;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.util.function.Function;
+import java.util.LinkedList;
+import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import umu.tds.apps.AppChat.UserStatu;
 
 import umu.tds.apps.vistas.Estados;
 
-import static umu.tds.apps.vistas.Theme.*;
-
 public class VentanaEstadosNueva extends JFrame {
-
+	// Propiedades.
 	private JPanel contentPane;
-	private static FastPanelList panelList = null;
+	private static UserStatesPanelList panelList = null;
 
-	/**
-	 * Launch the application.
-	 */
+	// Método principal.
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					VentanaEstadosNueva frame = new VentanaEstadosNueva();
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -40,21 +32,27 @@ public class VentanaEstadosNueva extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	// Constructor.
 	public VentanaEstadosNueva() {
-		panelList = new FastPanelList(FastPanelList.FPLOrientation.VERTICAL,
-                (Function<Integer, JPanel>)VentanaEstadosNueva::supplyPanel,
-                0.1,
-                0.95,
-                0.1,
-                false,
-                150,
-                30);
+		// Lista de contactos a mostrar.
+		List<UserStatu> usuarios = new LinkedList<UserStatu>();
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Manuel", "En luminata", "10/09/2019"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Diego", "XV6", "06/08/2009"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Alfon", "In github", "21/10/2019"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Alf", "Este es mi estado", "08/01/2010"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Blacknuel", "4nite", "12/05/2017"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
+		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
 		
-		final Container contentPane = panelList.container;
-        contentPane.setPreferredSize(new Dimension(400, 800));
+		// Creamos el panel de usuarios. Tamaño de cada elemento, lista de contactos y número de contactos.
+		panelList = new UserStatesPanelList(150, usuarios, usuarios.size());
+		
+		// Establecemos el contentPane y lo mostramos.
+		contentPane = panelList.container;
+        contentPane.setPreferredSize(new Dimension(450, 800));
         contentPane.setBackground(Color.GRAY);
         
 		setContentPane(contentPane);
@@ -66,31 +64,4 @@ public class VentanaEstadosNueva extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-	
-	// Cremos el panel elemento de la lista
-    private static JPanel supplyPanel(final int panelIndex) {
-    	
-    	final JLabel label0 = new JLabel("");
-    	label0.setIcon(new ImageIcon(FastPanelListDemo.class.getResource("/umu/tds/apps/resources/user.png")));
-    	final JLabel label1 = new JLabel("Diego" + panelIndex + ": Estado " + panelIndex);
-    	label1.setForeground(TEXT_COLOR_LIGHT);
-        final JLabel label2 = new JLabel(" 05/06/07 ");
-        label2.setForeground(TEXT_COLOR_LIGHT);
-        
-        label1.setHorizontalAlignment(SwingConstants.CENTER);
-        label1.setVerticalAlignment(SwingConstants.CENTER);
-
-
-        final JPanel panel = new JPanel(new BorderLayout(0,
-                                                         0));
-        panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        panel.setBackground(MAIN_COLOR_LIGHT);
-        
-        panel.add(label0, BorderLayout.WEST);
-        panel.add(label1, BorderLayout.CENTER);
-        panel.add(label2, BorderLayout.AFTER_LINE_ENDS);
-
-        return panel;
-    }
-
 }
