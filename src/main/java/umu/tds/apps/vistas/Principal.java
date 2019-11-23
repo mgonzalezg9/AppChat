@@ -20,6 +20,7 @@ import java.awt.Toolkit;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -60,7 +61,7 @@ public class Principal extends JFrame {
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
-	private static ContactsPanelList panelList = null;
+	private static PanelList panelList = null;
 
 	/**
 	 * Launch the application.
@@ -363,18 +364,18 @@ public class Principal extends JFrame {
 		popupSettsChat.add(mntmDeleteContact);
 		
 		List<Contact> contactos = new LinkedList<Contact>();
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En luminata", "10/09/2019"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Diego", "XV6", "06/08/2009"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfon", "In github", "21/10/2019"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alf", "Este es mi estado", "08/01/2010"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Blacknuel", "4nite", "12/05/2017"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
-		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En luminata", "10/09/2019"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Diego", "XV6", "06/08/2009"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfon", "In github", "21/10/2019"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alf", "Este es mi estado", "08/01/2010"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Blacknuel", "4nite", "12/05/2017"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
+		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
 		
-		panelList = new ContactsPanelList(70, contactos, contactos.size());
+		panelList = new PanelList(70, (Function<Contact, JPanel>)Principal::supplyPanel, contactos, contactos.size());
 		JPanel listaChats = panelList.container;
 		listaChats.setBackground(MAIN_COLOR_LIGHT);
 		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -541,6 +542,33 @@ public class Principal extends JFrame {
 		gbc_lblSend.gridy = 0;
 		writeText.add(lblSend, gbc_lblSend);
 	}
+	
+	// Cremos el panel correspondiente a un elemento de la lista.
+    private static JPanel supplyPanel(Contact contacto) {
+    	// Componentes del panel.
+    	final JLabel icon = new JLabel("");
+    	icon.setIcon(contacto.getIcon());
+    	final JLabel labelUserStatus = new JLabel(contacto.getName() + ": " + contacto.getlastMessage());
+    	labelUserStatus.setForeground(TEXT_COLOR_LIGHT);
+        final JLabel labelDate = new JLabel(contacto.getDate());
+        labelDate.setForeground(TEXT_COLOR_LIGHT);
+        
+        labelUserStatus.setHorizontalAlignment(SwingConstants.CENTER);
+        labelUserStatus.setVerticalAlignment(SwingConstants.CENTER);
+
+        // Creamos el panel
+        final JPanel panel = new JPanel(new BorderLayout(0,
+                                                         0));
+        panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+        panel.setBackground(MAIN_COLOR_LIGHT);
+        
+        panel.add(icon, BorderLayout.WEST);
+        panel.add(labelUserStatus, BorderLayout.CENTER);
+        panel.add(labelDate, BorderLayout.AFTER_LINE_ENDS);
+
+        // Devolvemos un elemento de la lista.
+        return panel;
+    }
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {

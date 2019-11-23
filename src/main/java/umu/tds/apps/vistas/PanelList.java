@@ -1,6 +1,7 @@
 package umu.tds.apps.vistas;
 import javax.swing.*;
 
+import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.UserStatu;
 
 import static umu.tds.apps.vistas.Theme.*;
@@ -12,8 +13,9 @@ import java.awt.event.MouseWheelEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
-final public class UserStatesPanelList {
+final public class PanelList<T> {
 
     public enum FPLOrientation {
         HORIZONTAL(Adjustable.HORIZONTAL),
@@ -32,35 +34,11 @@ final public class UserStatesPanelList {
 
     }
     
-    // Cremos el panel correspondiente a un elemento de la lista.
-    private static JPanel supplyPanel(UserStatu usuario) {
-    	// Componentes del panel.
-    	final JLabel icon = new JLabel("");
-    	icon.setIcon(usuario.getIcon());
-    	final JLabel labelUserStatus = new JLabel(usuario.getName() + ": " + usuario.getStatus());
-    	labelUserStatus.setForeground(TEXT_COLOR_LIGHT);
-        final JLabel labelDate = new JLabel(usuario.getDate());
-        labelDate.setForeground(TEXT_COLOR_LIGHT);
-        
-        labelUserStatus.setHorizontalAlignment(SwingConstants.CENTER);
-        labelUserStatus.setVerticalAlignment(SwingConstants.CENTER);
-
-        // Creamos el panel
-        final JPanel panel = new JPanel(new BorderLayout(0,
-                                                         0));
-        panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        panel.setBackground(MAIN_COLOR_LIGHT);
-        
-        panel.add(icon, BorderLayout.WEST);
-        panel.add(labelUserStatus, BorderLayout.CENTER);
-        panel.add(labelDate, BorderLayout.AFTER_LINE_ENDS);
-
-        // Devolvemos un elemento de la lista.
-        return panel;
-    }
+ 
 
     // Properties.
     final public FPLOrientation orientation;
+    final private Function<T, JPanel> panelSupplier;
     final private double fractionOfExtentToScrollPerArrowClick;
     final private double fractionOfExtentToScrollPerTrackClick;
     final private double fractionOfExtentToScrollPerMouseWheelStep;
@@ -77,17 +55,19 @@ final public class UserStatesPanelList {
     private long actualScrollPosition = 0; // The true scroll position, think contentSize.
     private Dimension lastKnownContainerSize = new Dimension(0, 0);
     
-	private List<UserStatu> usuarios; // Lista de contactos.
+	private List<T> contactos; // Lista de contactos.
 
 
     private Map<Integer, JPanel> knownPanels = new HashMap<>(); // All panels of which some pixels are currently potentially visible are cached here.
 
     // Constructor.
-    public UserStatesPanelList(final int panelSize, List<UserStatu> usuarios, final int panelCount) {
+    public PanelList(final int panelSize, Function<T, JPanel> panelSupplier, List<Contact> contactos, final int panelCount) {
     	// Users to show.
-    	this.usuarios = usuarios;
+    	this.contactos = (List<T>) contactos;
+    	// Element panel
+    	this.panelSupplier = panelSupplier;
     	// orientation Whether horizontal or the more common vertical arrangement.
-        this.orientation = UserStatesPanelList.FPLOrientation.VERTICAL;
+        this.orientation = PanelList.FPLOrientation.VERTICAL;
         // fractionOfExtentToScrollPerArrowClick E.g. 0.1 for 10% of the visible area to become hidden/shown when you click a scrollbar arrow.
         this.fractionOfExtentToScrollPerArrowClick = Math.max(0, 0.1);
         // fractionOfExtentToScrollPerTrackClick E.g. 0.95 for 95% of the visible area to become hidden/shown when you click in the scrollbar track.
@@ -209,7 +189,7 @@ final public class UserStatesPanelList {
         if (index != null && index >= 0 && index < panelCount) {
             ret = knownPanels.get(index);
             if (ret == null && callSupplierIfNotCached) {
-                ret = supplyPanel(usuarios.get(index));
+                ret = panelSupplier.apply((T) contactos.get(index));
                 if (ret == null) {
                     throw new IllegalArgumentException("panelSupplier returned null for index " + index);
                 }
@@ -301,7 +281,7 @@ final public class UserStatesPanelList {
             // Obtain current panel - if possible from cache, else from external provider (which might likely create it from scratch).
             JPanel panel = knownPanels.get(panelIndexInt);
             if (panel == null) {
-                panel = supplyPanel(usuarios.get(panelIndexInt));
+                panel = panelSupplier.apply((T) contactos.get(panelIndexInt));
                 if (panel == null) {
                     throw new IllegalArgumentException("panelSupplier returned null for index " + panelIndex);
                 }
