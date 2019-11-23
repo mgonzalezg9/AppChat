@@ -545,26 +545,54 @@ public class Principal extends JFrame {
 	
 	// Cremos el panel correspondiente a un elemento de la lista.
     private static JPanel supplyPanel(Contact contacto) {
-    	// Componentes del panel.
-    	final JLabel icon = new JLabel("");
-    	icon.setIcon(contacto.getIcon());
-    	final JLabel labelUserStatus = new JLabel(contacto.getName() + ": " + contacto.getlastMessage());
-    	labelUserStatus.setForeground(TEXT_COLOR_LIGHT);
-        final JLabel labelDate = new JLabel(contacto.getDate());
-        labelDate.setForeground(TEXT_COLOR_LIGHT);
-        
-        labelUserStatus.setHorizontalAlignment(SwingConstants.CENTER);
-        labelUserStatus.setVerticalAlignment(SwingConstants.CENTER);
-
         // Creamos el panel
-        final JPanel panel = new JPanel(new BorderLayout(0,
-                                                         0));
+        final JPanel panel = new JPanel();
+        GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_contentPane);
+        
+		// Creamos los componentes del panel y se los añadimos.
+		JLabel icon = new JLabel("");
+		icon.setIcon(contacto.getIcon());
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.gridheight = 2;
+		gbc_label.insets = new Insets(0, 0, 0, 5);
+		gbc_label.gridx = 0;
+		gbc_label.gridy = 0;
+		panel.add(icon, gbc_label);
+		
+		JLabel lblNombre = new JLabel(contacto.getName());
+		lblNombre.setForeground(TEXT_COLOR_LIGHT);
+		GridBagConstraints gbc_lblDiego = new GridBagConstraints();
+		gbc_lblDiego.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDiego.gridx = 1;
+		gbc_lblDiego.gridy = 0;
+		panel.add(lblNombre, gbc_lblDiego);
+		
+		JLabel lblFecha = new JLabel(contacto.getDate());
+		lblFecha.setForeground(TEXT_COLOR_LIGHT);
+		GridBagConstraints gbc_label_1 = new GridBagConstraints();
+		gbc_label_1.insets = new Insets(0, 0, 5, 0);
+		gbc_label_1.gridx = 3;
+		gbc_label_1.gridy = 0;
+		panel.add(lblFecha, gbc_label_1);
+		
+		JLabel lblUltimoMensaje = new JLabel(contacto.getlastMessage());
+		lblUltimoMensaje.setForeground(TEXT_COLOR_LIGHT);
+		GridBagConstraints gbc_lblFsad = new GridBagConstraints();
+		gbc_lblFsad.anchor = GridBagConstraints.WEST;
+		gbc_lblFsad.gridwidth = 3;
+		gbc_lblFsad.insets = new Insets(0, 0, 0, 5);
+		gbc_lblFsad.gridx = 1;
+		gbc_lblFsad.gridy = 1;
+		panel.add(lblUltimoMensaje, gbc_lblFsad);
+	
+        
         panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
         panel.setBackground(MAIN_COLOR_LIGHT);
-        
-        panel.add(icon, BorderLayout.WEST);
-        panel.add(labelUserStatus, BorderLayout.CENTER);
-        panel.add(labelDate, BorderLayout.AFTER_LINE_ENDS);
 
         // Devolvemos un elemento de la lista.
         return panel;
