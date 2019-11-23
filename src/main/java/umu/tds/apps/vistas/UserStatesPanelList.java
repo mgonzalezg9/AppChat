@@ -1,4 +1,4 @@
-package pruebasLista;
+package umu.tds.apps.vistas;
 import javax.swing.*;
 
 import umu.tds.apps.AppChat.UserStatu;

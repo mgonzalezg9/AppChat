@@ -167,7 +167,7 @@ public class Principal extends JFrame {
 		label_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Estados window = new Estados();
+				UserStatusWindow window = new UserStatusWindow();
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}

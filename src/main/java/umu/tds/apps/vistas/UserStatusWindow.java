@@ -1,4 +1,4 @@
-package pruebasLista;
+package umu.tds.apps.vistas;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,11 +10,10 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import umu.tds.apps.AppChat.UserStatu;
 
-import umu.tds.apps.vistas.Estados;
-
-public class VentanaEstadosNueva extends JFrame {
+public class UserStatusWindow extends JFrame {
 	// Propiedades.
 	private JPanel contentPane;
 	private static UserStatesPanelList panelList = null;
@@ -24,7 +23,7 @@ public class VentanaEstadosNueva extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaEstadosNueva frame = new VentanaEstadosNueva();
+					UserStatusWindow frame = new UserStatusWindow();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -33,7 +32,7 @@ public class VentanaEstadosNueva extends JFrame {
 	}
 
 	// Constructor.
-	public VentanaEstadosNueva() {
+	public UserStatusWindow() {
 		// Lista de contactos a mostrar.
 		List<UserStatu> usuarios = new LinkedList<UserStatu>();
 		usuarios.add(new UserStatu(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
@@ -56,7 +55,7 @@ public class VentanaEstadosNueva extends JFrame {
         contentPane.setBackground(Color.GRAY);
         
 		setContentPane(contentPane);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Estados.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(EstadosOld.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Status");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
