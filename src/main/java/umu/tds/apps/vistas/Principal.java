@@ -29,6 +29,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -36,6 +37,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
 import tds.BubbleText;
+import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.UserStatu;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
@@ -53,11 +56,11 @@ import javax.swing.SwingConstants;
 public class Principal extends JFrame {
 	private JPanel contentPane;
 	private JPanel chat;
-	private JTable table_1;
 	private JLabel profilePhoto;
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
+	private static ContactsPanelList panelList = null;
 
 	/**
 	 * Launch the application.
@@ -358,78 +361,44 @@ public class Principal extends JFrame {
 			}
 		});
 		popupSettsChat.add(mntmDeleteContact);
-
-		JPanel listaChats = new JPanel();
-		listaChats.setBackground(CHAT_COLOR);
+		
+		List<Contact> contactos = new LinkedList<Contact>();
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En luminata", "10/09/2019"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Diego", "XV6", "06/08/2009"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfon", "In github", "21/10/2019"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alf", "Este es mi estado", "08/01/2010"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Blacknuel", "4nite", "12/05/2017"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
+		contactos.add(new Contact(new ImageIcon(UserStatesPanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
+		
+		panelList = new ContactsPanelList(70, contactos, contactos.size());
+		JPanel listaChats = panelList.container;
+		listaChats.setBackground(MAIN_COLOR_LIGHT);
 		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		
+		listaChats.addMouseListener(new MouseAdapter() {
+			@Override
+            public void mouseClicked(MouseEvent e) {
+				final JPanel itemUnderMouse = panelList.getItemUnderMouse(e);
+                if (itemUnderMouse != null) {
+                    itemUnderMouse.setBackground(SECONDARY_COLOR);
+                }
+            }
+		});
+		
 		GridBagConstraints gbc_listaChats = new GridBagConstraints();
 		gbc_listaChats.insets = new Insets(0, 0, 0, 5);
 		gbc_listaChats.fill = GridBagConstraints.BOTH;
 		gbc_listaChats.gridx = 0;
 		gbc_listaChats.gridy = 1;
 		contentPane.add(listaChats, gbc_listaChats);
-		listaChats.setLayout(new BorderLayout(0, 0));
 
 		profilePhoto = new JLabel();
 		profilePhoto.setIcon(new ImageIcon(
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBackground(CHAT_COLOR);
-		listaChats.add(scrollPane);
-		table_1 = new JTable();
-		table_1.setBackground(CHAT_COLOR);
-		table_1.setShowVerticalLines(false);
-		table_1.setShowGrid(false);
-		table_1.setBorder(null);
-		table_1.setModel(new TableModel() {
-			private Object[] columnNames = { "Profile photo", "Name" };
-
-			private Object[][] data = { { profilePhoto, "Diego Sevilla" },
-
-			};
-
-			public int getColumnCount() {
-				return columnNames.length;
-			}
-
-			public int getRowCount() {
-				return data.length;
-			}
-
-			public String getColumnName(int col) {
-				return columnNames[col].toString();
-			}
-
-			public Object getValueAt(int row, int col) {
-				return data[row][col];
-			}
-
-			public Class<?> getColumnClass(int c) {
-				return Icon.class;
-			}
-
-			@Override
-			public void addTableModelListener(TableModelListener l) {
-
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-
-			@Override
-			public void removeTableModelListener(TableModelListener l) {
-
-			}
-
-			@Override
-			public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-			}
-		});
-		scrollPane.setViewportView(table_1);
 
 		JPanel chatPersonal = new JPanel();
 		chatPersonal.setBackground(CHAT_COLOR);
