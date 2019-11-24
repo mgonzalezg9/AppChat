@@ -35,7 +35,7 @@ import javax.swing.BoxLayout;
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 
-public class EstadosOld extends JFrame {
+public class Estados extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblFraseProfunda;
@@ -50,7 +50,7 @@ public class EstadosOld extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EstadosOld frame = new EstadosOld();
+					Estados frame = new Estados();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,10 +62,10 @@ public class EstadosOld extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EstadosOld() {
+	public Estados() {
 		setTitle("Status");
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(EstadosOld.class.getResource("/umu/tds/apps/resources/icon.png")));
+				Toolkit.getDefaultToolkit().getImage(Estados.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 382);
 		contentPane = new JPanel();
@@ -125,7 +125,7 @@ public class EstadosOld extends JFrame {
 
 		JLabel label = new JLabel("");
 		panel_2.add(label);
-		label.setIcon(new ImageIcon(EstadosOld.class.getResource("/umu/tds/apps/resources/diego.jpg")));
+		label.setIcon(new ImageIcon(Estados.class.getResource("/umu/tds/apps/resources/diego.jpg")));
 		panelMiEstado.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelMiEstado.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_panelMiEstado = new GridBagConstraints();
@@ -241,7 +241,7 @@ public class EstadosOld extends JFrame {
 		panelDer.setLayout(gbl_panelDer);
 
 		lblEstadoSeleccionado = new JLabel("");
-		lblEstadoSeleccionado.setIcon(new ImageIcon(EstadosOld.class.getResource("/umu/tds/apps/resources/icon.png")));
+		lblEstadoSeleccionado.setIcon(new ImageIcon(Estados.class.getResource("/umu/tds/apps/resources/icon.png")));
 		GridBagConstraints gbc_lblEstadoSeleccionado = new GridBagConstraints();
 		gbc_lblEstadoSeleccionado.insets = new Insets(0, 0, 5, 0);
 		gbc_lblEstadoSeleccionado.gridx = 0;

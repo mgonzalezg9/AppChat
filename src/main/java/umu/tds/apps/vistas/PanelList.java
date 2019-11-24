@@ -2,7 +2,6 @@ package umu.tds.apps.vistas;
 import javax.swing.*;
 
 import umu.tds.apps.AppChat.Contact;
-import umu.tds.apps.AppChat.UserStatus;
 
 import static umu.tds.apps.vistas.Theme.*;
 import java.awt.*;

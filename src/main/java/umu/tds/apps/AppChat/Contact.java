@@ -1,36 +1,25 @@
 package umu.tds.apps.AppChat;
 
+import java.util.List;
+
 import javax.swing.ImageIcon;
 
-public class Contact {
+public abstract class Contact {
 	// Properties.
-		private ImageIcon icon;
-		private String name;
-		private String lastMessage;
-		private String date;
-		
-		// Constructor.
-		public Contact(ImageIcon icon, String name, String lastMessage, String date) {
-			this.icon = icon;
-			this.name = name;
-			this.lastMessage = lastMessage;
-			this.date = date;
-		}
-		
-		// Getters.
-		public ImageIcon getIcon() {
-			return icon;
-		}
+	private String nombre;
+	private List<Message> mensajes;
 
-		public String getName() {
-			return name;
-		}
-
-		public String getlastMessage() {
-			return lastMessage;
-		}
-
-		public String getDate() {
-			return date;
-		}
+	// Constructor.
+	public Contact(String nombre, List<Message> mensajes) {
+		this.nombre = nombre;
+		this.mensajes = mensajes;
+	}
+	
+	// Getters.
+	public String getNombre() {
+		return nombre;
+	}
+	public List<Message> getMensajes() {
+		return mensajes;
+	}
 }
