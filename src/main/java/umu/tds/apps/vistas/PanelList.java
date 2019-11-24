@@ -2,7 +2,7 @@ package umu.tds.apps.vistas;
 import javax.swing.*;
 
 import umu.tds.apps.AppChat.Contact;
-import umu.tds.apps.AppChat.UserStatu;
+import umu.tds.apps.AppChat.UserStatus;
 
 import static umu.tds.apps.vistas.Theme.*;
 import java.awt.*;
@@ -34,8 +34,6 @@ final public class PanelList<T> {
 
     }
     
- 
-
     // Properties.
     final public FPLOrientation orientation;
     final private Function<T, JPanel> panelSupplier;
@@ -43,6 +41,7 @@ final public class PanelList<T> {
     final private double fractionOfExtentToScrollPerTrackClick;
     final private double fractionOfExtentToScrollPerMouseWheelStep;
     final private boolean hideScrollbarWhenUnnecessary;
+    private JPanel lastPanelClicked;
 
     final private JScrollBar scrollBar;
     final private int scrollBarWidth; // The default width it normally has in any GUI.
@@ -55,15 +54,15 @@ final public class PanelList<T> {
     private long actualScrollPosition = 0; // The true scroll position, think contentSize.
     private Dimension lastKnownContainerSize = new Dimension(0, 0);
     
-	private List<T> contactos; // Lista de contactos.
+	private List<T> elementos; // Lista de contactos.
 
 
     private Map<Integer, JPanel> knownPanels = new HashMap<>(); // All panels of which some pixels are currently potentially visible are cached here.
 
     // Constructor.
-    public PanelList(final int panelSize, Function<T, JPanel> panelSupplier, List<Contact> contactos, final int panelCount) {
+    public PanelList(final int panelSize, Function<T, JPanel> panelSupplier, List<T> elementos, final int panelCount) {
     	// Users to show.
-    	this.contactos = (List<T>) contactos;
+    	this.elementos = (List<T>) elementos;
     	// Element panel
     	this.panelSupplier = panelSupplier;
     	// orientation Whether horizontal or the more common vertical arrangement.
@@ -166,6 +165,8 @@ final public class PanelList<T> {
         final long realPositionUnderMouse = (actualScrollPosition + (orientation == FPLOrientation.HORIZONTAL ? (long) xInComponent : (long) yInComponent));
 
         final int indexUnderMouse = (int) (realPositionUnderMouse / panelSize);
+        //knownPanels.get(indexUnderMouse).setBackground(SECONDARY_COLOR);
+        //lastPanelClicked = knownPanels.get(indexUnderMouse);
         return knownPanels.get(indexUnderMouse);
     }
 
@@ -189,7 +190,7 @@ final public class PanelList<T> {
         if (index != null && index >= 0 && index < panelCount) {
             ret = knownPanels.get(index);
             if (ret == null && callSupplierIfNotCached) {
-                ret = panelSupplier.apply((T) contactos.get(index));
+                ret = panelSupplier.apply((T) elementos.get(index));
                 if (ret == null) {
                     throw new IllegalArgumentException("panelSupplier returned null for index " + index);
                 }
@@ -281,7 +282,7 @@ final public class PanelList<T> {
             // Obtain current panel - if possible from cache, else from external provider (which might likely create it from scratch).
             JPanel panel = knownPanels.get(panelIndexInt);
             if (panel == null) {
-                panel = panelSupplier.apply((T) contactos.get(panelIndexInt));
+                panel = panelSupplier.apply((T) elementos.get(panelIndexInt));
                 if (panel == null) {
                     throw new IllegalArgumentException("panelSupplier returned null for index " + panelIndex);
                 }

@@ -39,7 +39,7 @@ import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
 import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
-import umu.tds.apps.AppChat.UserStatu;
+import umu.tds.apps.AppChat.UserStatus;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
@@ -61,7 +61,8 @@ public class Principal extends JFrame {
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
-	private static PanelList panelList = null;
+	private JPanel lastPanelClicked;
+	private static PanelList<Contact> panelList = null;
 
 	/**
 	 * Launch the application.
@@ -375,7 +376,7 @@ public class Principal extends JFrame {
 		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
 		contactos.add(new Contact(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
 		
-		panelList = new PanelList(70, (Function<Contact, JPanel>)Principal::supplyPanel, contactos, contactos.size());
+		panelList = new PanelList<Contact>(70, (Function<Contact, JPanel>)Principal::supplyPanel, contactos, contactos.size());
 		JPanel listaChats = panelList.container;
 		listaChats.setBackground(MAIN_COLOR_LIGHT);
 		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -385,7 +386,13 @@ public class Principal extends JFrame {
             public void mouseClicked(MouseEvent e) {
 				final JPanel itemUnderMouse = panelList.getItemUnderMouse(e);
                 if (itemUnderMouse != null) {
-                    itemUnderMouse.setBackground(SECONDARY_COLOR);
+                	if (lastPanelClicked != null)
+                		lastPanelClicked.setBackground(MAIN_COLOR_LIGHT);   		
+
+                	lastPanelClicked = itemUnderMouse;
+                	lastPanelClicked.setBackground(SECONDARY_COLOR);
+                    chat.removeAll();
+    				chat.updateUI();
                 }
             }
 		});

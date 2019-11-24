@@ -2,7 +2,7 @@ package umu.tds.apps.AppChat;
 
 import javax.swing.ImageIcon;
 
-public class UserStatu {
+public class UserStatus {
 	// Properties.
 	private ImageIcon icon;
 	private String name;
@@ -10,7 +10,7 @@ public class UserStatu {
 	private String date;
 	
 	// Constructor.
-	public UserStatu(ImageIcon icon, String name, String status, String date) {
+	public UserStatus(ImageIcon icon, String name, String status, String date) {
 		this.icon = icon;
 		this.name = name;
 		this.status = status;

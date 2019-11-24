@@ -20,12 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import umu.tds.apps.AppChat.Contact;
-import umu.tds.apps.AppChat.UserStatu;
+import umu.tds.apps.AppChat.UserStatus;
 
 public class UserStatusWindow extends JFrame {
 	// Propiedades.
 	private JPanel contentPane;
-	private static PanelList panelList = null;
+	private PanelList<UserStatus> panelList = null;
 
 	// Método principal.
 	public static void main(String[] args) {
@@ -43,20 +43,20 @@ public class UserStatusWindow extends JFrame {
 	// Constructor.
 	public UserStatusWindow() {
 		// Lista de contactos a mostrar.
-		List<UserStatu> usuarios = new LinkedList<UserStatu>();
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Manuel", "En luminata", "10/09/2019"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Diego", "XV6", "06/08/2009"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Alfon", "In github", "21/10/2019"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Alf", "Este es mi estado", "08/01/2010"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Blacknuel", "4nite", "12/05/2017"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
-		usuarios.add(new UserStatu(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
+		List<UserStatus> usuarios = new LinkedList<UserStatus>();
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Manuel", "En luminata", "10/09/2019"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Diego", "XV6", "06/08/2009"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Alfon", "In github", "21/10/2019"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Alf", "Este es mi estado", "08/01/2010"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Blacknuel", "4nite", "12/05/2017"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
+		usuarios.add(new UserStatus(new ImageIcon(UserStatusWindow.class.getResource("/umu/tds/apps/resources/user.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
 		
 		// Creamos el panel de usuarios. Tamaño de cada elemento, lista de contactos y número de contactos.
-		panelList = new PanelList(150, (Function<UserStatu, JPanel>)UserStatusWindow::supplyPanel, usuarios, usuarios.size());
+		panelList = new PanelList<UserStatus>(150, (Function<UserStatus, JPanel>)UserStatusWindow::supplyPanel, usuarios, usuarios.size());
 		
 		// Establecemos el contentPane y lo mostramos.
 		contentPane = panelList.container;
@@ -74,7 +74,7 @@ public class UserStatusWindow extends JFrame {
 	}
 	
 	 // Cremos el panel correspondiente a un elemento de la lista.
-    private static JPanel supplyPanel(UserStatu usuario) {
+    private static JPanel supplyPanel(UserStatus usuario) {
     	// Componentes del panel.
     	final JLabel icon = new JLabel("");
     	icon.setIcon(usuario.getIcon());
