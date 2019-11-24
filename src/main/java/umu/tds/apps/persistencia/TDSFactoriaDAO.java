@@ -6,27 +6,27 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	
 	@Override
 	public GroupDAO getGrupoDAO() {
-		return AdaptadorGroupTDS.getUnicaInstancia();
+		return AdaptadorGroupTDS.getInstancia();
 	}
 
 	@Override
 	public IndividualContactDAO getContactoIndividualDAO() {
-		return AdaptadorIndividualContactTDS.getUnicaInstancia();
+		return AdaptadorIndividualContactTDS.getInstancia();
 	}
 
 	@Override
 	public MessageDAO getMensajeDAO() {
-		return AdaptadorMessageTDS.getUnicaInstancia();
+		return AdaptadorMessageTDS.getInstancia();
 	}
 
 	@Override
 	public StatusDAO getEstadoDAO() {
-		return AdaptadorStatusTDS.getUnicaInstancia();
+		return AdaptadorStatusTDS.getInstancia();
 	}
 
 	@Override
 	public UserDAO getUserDAO() {
-		return AdaptadorUserTDS.getUnicaInstancia();
+		return AdaptadorUserTDS.getInstancia();
 	}
 
 }

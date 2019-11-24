@@ -5,7 +5,17 @@ import java.util.List;
 import umu.tds.apps.AppChat.Status;
 
 public class AdaptadorStatusTDS implements StatusDAO {
+	private static AdaptadorStatusTDS unicaInstancia = null;
 
+	private AdaptadorStatusTDS() {
+	}
+
+	public static AdaptadorStatusTDS getInstancia() {
+		if (unicaInstancia == null)
+			unicaInstancia = new AdaptadorStatusTDS();
+		return unicaInstancia;
+	}
+	
 	@Override
 	public void registrarEstado(Status status) {
 		// TODO Auto-generated method stub

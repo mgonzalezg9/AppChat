@@ -5,6 +5,16 @@ import java.util.List;
 import umu.tds.apps.AppChat.User;
 
 public class AdaptadorUserTDS implements UserDAO {
+	private static AdaptadorUserTDS unicaInstancia = null;
+
+	private AdaptadorUserTDS() {
+	}
+
+	public static AdaptadorUserTDS getInstancia() {
+		if (unicaInstancia == null)
+			unicaInstancia = new AdaptadorUserTDS();
+		return unicaInstancia;
+	}
 
 	@Override
 	public void registrarUsuario(User user) {
