@@ -2,6 +2,8 @@ package umu.tds.apps.persistencia;
 
 import java.util.List;
 
+import umu.tds.apps.AppChat.Message;
+
 public class AdaptadorMessageTDS implements MessageDAO {
 	private static AdaptadorMessageTDS unicaInstancia = null;
 

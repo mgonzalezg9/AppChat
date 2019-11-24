@@ -2,6 +2,7 @@ package umu.tds.apps.persistencia;
 
 import java.util.List;
 
+import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.AppChat.User;
 
 public class AdaptadorIndividualContactTDS implements IndividualContactDAO {

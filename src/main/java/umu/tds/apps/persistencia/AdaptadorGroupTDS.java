@@ -2,6 +2,7 @@ package umu.tds.apps.persistencia;
 
 import java.util.List;
 
+import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.controlador.Controlador;
 
 public class AdaptadorGroupTDS implements GroupDAO {
