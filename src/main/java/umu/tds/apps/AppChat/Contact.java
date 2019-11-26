@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 public abstract class Contact {
 	// Properties.
+	private int codigo;
 	private String nombre;
 	private List<Message> mensajes;
 
@@ -14,12 +15,21 @@ public abstract class Contact {
 		this.nombre = nombre;
 		this.mensajes = mensajes;
 	}
-	
+
 	// Getters.
 	public String getNombre() {
 		return nombre;
 	}
+
 	public List<Message> getMensajes() {
 		return mensajes;
+	}
+
+	public int getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
 	}
 }

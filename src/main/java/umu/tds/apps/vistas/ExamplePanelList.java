@@ -78,7 +78,7 @@ public class ExamplePanelList extends JFrame {
     	// Componentes del panel.
     	final JLabel icon = new JLabel("");
     	icon.setIcon(usuario.getIcon());
-    	final JLabel labelUserStatus = new JLabel(usuario.getName() + ": " + usuario.getEstado().getFrase());
+    	final JLabel labelUserStatus = new JLabel(usuario.getName() + ": " + usuario.getEstado().orElse(null).getFrase());
     	labelUserStatus.setForeground(TEXT_COLOR_LIGHT);
         final JLabel labelDate = new JLabel(usuario.getFechaNacimiento().toString());
         labelDate.setForeground(TEXT_COLOR_LIGHT);

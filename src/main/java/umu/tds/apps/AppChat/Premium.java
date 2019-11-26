@@ -1,6 +1,6 @@
 package umu.tds.apps.AppChat;
 
-public class Premium implements UserRol {
+public class Premium extends UserRol {
 	private Discount descuento;
 	
 	public Premium(Discount descuento) {

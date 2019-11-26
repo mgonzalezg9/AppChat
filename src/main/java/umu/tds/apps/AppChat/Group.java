@@ -3,7 +3,8 @@ package umu.tds.apps.AppChat;
 import java.util.List;
 
 public class Group extends Contact {
-	// Properties.
+	// Properties
+	private int codigo;
 	private List<Contact> contactos;
 	private User admin;
 	
@@ -21,5 +22,13 @@ public class Group extends Contact {
 
 	public User getAdmin() {
 		return admin;
+	}
+
+	public int getCodigo() {
+		return codigo;
+	}
+	
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
 	}
 }

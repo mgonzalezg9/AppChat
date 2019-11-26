@@ -39,6 +39,7 @@ import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
 import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
 import umu.tds.apps.controlador.Controlador;
 
@@ -587,7 +588,7 @@ public class Principal extends JFrame {
 		gbc_label_1.gridy = 0;
 		panel.add(lblFecha, gbc_label_1);
 		
-		JLabel lblUltimoMensaje = new JLabel(contacto.getEstado().getFrase());
+		JLabel lblUltimoMensaje = new JLabel(contacto.getEstado().orElse(null).getFrase());
 		lblUltimoMensaje.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblFsad = new GridBagConstraints();
 		gbc_lblFsad.anchor = GridBagConstraints.WEST;
