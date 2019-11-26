@@ -18,7 +18,7 @@ public class AdaptadorUserTDS implements UserDAO {
 
 	@Override
 	public void registrarUsuario(User user) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

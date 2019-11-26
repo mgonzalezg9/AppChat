@@ -14,15 +14,25 @@ import javax.swing.JPanel;
 import tds.BubbleText;
 import umu.tds.apps.vistas.Login;
 import umu.tds.apps.AppChat.*;
+import umu.tds.apps.persistencia.DAOException;
+import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.vistas.UserSettings;
 
 public class Controlador {
-	private static Controlador unicaInstancia = null;
+	// Eliminar
 	private static List<ImageIcon> imagenes = new ArrayList<>();
 	private static String nickname = "Manuelillo";
 	private static String saludo = "Hola amigos del mundo!";
+	
+	private static Controlador unicaInstancia = null;
+	private FactoriaDAO factoria;
 
 	private Controlador() {
+		try {
+			factoria = FactoriaDAO.getInstancia();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Aplicamos el patrón Singleton.
