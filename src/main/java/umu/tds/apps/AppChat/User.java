@@ -24,6 +24,19 @@ public class User {
 
 	// Constructor
 	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
+			boolean premium, UserRol rol) {
+		super();
+		this.icon = icon;
+		this.name = name;
+		this.fechaNacimiento = fechaNacimiento;
+		this.numTelefono = numTelefono;
+		this.nick = nick;
+		this.password = password;
+		this.premium = premium;
+		this.rol = rol;
+	}
+
+	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
 			boolean premium, Status estado, List<Group> gruposAdmin, List<Contact> contactos) {
 		setCodigo(0);
 		this.icon = icon;
@@ -33,7 +46,7 @@ public class User {
 		this.nick = nick;
 		this.password = password;
 		this.premium = premium;
-		this.estado = Optional.ofNullable(estado);
+		this.setEstado(Optional.ofNullable(estado));
 		this.gruposAdmin = gruposAdmin;
 		this.contactos = contactos;
 	}
@@ -48,7 +61,7 @@ public class User {
 	public User(ImageIcon icon, String name, String mensaje, String fecha) {
 		this.icon = icon;
 		this.setName(name);
-		this.estado = Optional.of(new Status(icon, mensaje));
+		this.setEstado(Optional.of(new Status(icon, mensaje)));
 		this.fechaNacimiento = LocalDate.now();
 	}
 
@@ -89,6 +102,10 @@ public class User {
 		return estado;
 	}
 
+	public void setEstado(Optional<Status> estado) {
+		this.estado = estado;
+	}
+
 	public List<Group> getGruposAdmin() {
 		return gruposAdmin;
 	}
@@ -111,5 +128,18 @@ public class User {
 
 	public void setRol(UserRol rol) {
 		this.rol = rol;
+	}
+
+	public void addGrupoAdmin(Group g) {
+		gruposAdmin.add(g);
+	}
+
+	public void addContacto(IndividualContact c) {
+		contactos.add(c);
+	}
+
+	public void addGrupo(Group g) {
+		contactos.add(g);
+
 	}
 }

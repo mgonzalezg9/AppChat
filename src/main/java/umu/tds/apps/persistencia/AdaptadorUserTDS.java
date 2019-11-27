@@ -1,21 +1,28 @@
 package umu.tds.apps.persistencia;
 
+import java.rmi.ConnectException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.ImageIcon;
+
+import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
 
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import beans.Entidad;
 import beans.Propiedad;
 import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.Discount;
 import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
+import umu.tds.apps.AppChat.Normal;
+import umu.tds.apps.AppChat.Premium;
 import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
 import umu.tds.apps.AppChat.UserRol;
@@ -61,7 +68,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("nombre", user.getName()),
 				new Propiedad("fechanacimiento", user.getFechaNacimiento().toString()),
 				new Propiedad("telefono", String.valueOf(user.getNumTelefono())), new Propiedad("nick", user.getNick()),
-				new Propiedad("password", user.getPassword()), new Propiedad("imagen", user.getIcon().toString()),
+				new Propiedad("password", user.getPassword()), new Propiedad("imagen", user.getIcon().getDescription()),
 				new Propiedad("premium", String.valueOf(user.isPremium())),
 				new Propiedad("estado", obtenerCodigosEstado(user.getEstado().orElse(Status.NONE))),
 				new Propiedad("gruposadmin", obtenerCodigosGruposAdmin(user.getGruposAdmin())),
@@ -75,8 +82,6 @@ public class AdaptadorUserTDS implements UserDAO {
 		// Identificador unico
 		user.setCodigo(eUsuario.getId());
 	}
-
-	
 
 	@Override
 	public void borrarUsuario(User user) {
@@ -153,36 +158,59 @@ public class AdaptadorUserTDS implements UserDAO {
 		ImageIcon img = null;
 		Boolean premium = false;
 		UserRol rol = null;
-		try {
-			nombre = servPersistencia.recuperarPropiedadEntidad(eUser, "nombre");
-			fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUser, "fechanacimiento");
-		} catch (ParseException e) {
-			e.printStackTrace();
+		nombre = servPersistencia.recuperarPropiedadEntidad(eUser, "nombre");
+		fechaNacimiento = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUser, "fechanacimiento"));
+		telefono = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUser, "telefono"));
+		nick = servPersistencia.recuperarPropiedadEntidad(eUser, "nick");
+		password = servPersistencia.recuperarPropiedadEntidad(eUser, "password");
+		img = new ImageIcon(servPersistencia.recuperarPropiedadEntidad(eUser, "imagen"));
+		premium = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eUser, "premium"));
+
+		String rolString = servPersistencia.recuperarPropiedadEntidad(eUser, "rolusuario");
+		if (rolString.equals(Normal.class.getName())) {
+			rol = new Normal();
+		} else {
+			try {
+				rol = new Premium((Discount) Class.forName(rolString).newInstance());
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		
-		User usuario = null;
+
+		User usuario = new User(img, nombre, fechaNacimiento, telefono, nick, password, premium, rol);
 		usuario.setCodigo(codigo);
 
-		// IMPORTANTE: meter la venta en el pool antes de llamar a otros
+		// Metemos el usuario en el pool antes de llamar a otros
 		// adaptadores
 		PoolDAO.getInstancia().addObjeto(codigo, usuario);
 
 		// recuperar propiedades que son objetos llamando a adaptadores
 		// cliente
-		AdaptadorClienteTDS adaptadorCliente = AdaptadorClienteTDS.getUnicaInstancia();
-		int codigoCliente = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUser, "cliente"));
+		AdaptadorStatusTDS adaptadorEstado = AdaptadorStatusTDS.getInstancia();
+		int codigoEstado = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUser, "estado"));
 
-		Cliente cliente = adaptadorCliente.recuperarCliente(codigoCliente);
-		usuario.setCliente(cliente);
-		// lineas de venta
-		List<LineaVenta> lineasVenta = obtenerLineasVentaDesdeCodigos(
-				servPersistencia.recuperarPropiedadEntidad(eUser, "lineasventa"));
+		Status s = adaptadorEstado.recuperarEstado(codigoEstado);
+		usuario.setEstado(Optional.ofNullable(s));
+		// Grupos que el usuario administra
+		List<Group> gruposAdmin = obtenerGruposDesdeCodigos(
+				servPersistencia.recuperarPropiedadEntidad(eUser, "gruposadmin"));
 
-		for (LineaVenta lv : lineasVenta)
-			usuario.addLineaVenta(lv);
+		for (Group g : gruposAdmin)
+			usuario.addGrupoAdmin(g);
 
-		// devolver el objeto venta
+		// Contactos que el usuario tiene
+		List<IndividualContact> contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUser, "contactos"));
+
+		for (IndividualContact c : contactos)
+			usuario.addContacto(c);
+
+		// Grupos que el usuario tiene
+		List<Group> grupos = obtenerGruposDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUser, "grupos"));
+
+		for (Group g : grupos)
+			usuario.addGrupo(g);
+
+		// devolver el objeto usuario con todo
 		return usuario;
 	}
 
@@ -216,9 +244,9 @@ public class AdaptadorUserTDS implements UserDAO {
 																							// codigos
 				.trim();
 	}
-	
+
 	private String obtenerCodigosEstado(Status s) {
-		// Si tiene estado obtenemos la 
+		// Si tiene estado obtenemos la
 		if (s.equals(Status.NONE)) {
 			return "";
 		} else {
@@ -241,6 +269,16 @@ public class AdaptadorUserTDS implements UserDAO {
 				adaptadorGrupos.registrarGrupo((Group) c);
 			}
 		});
+	}
+
+	private List<Group> obtenerGruposDesdeCodigos(String codigos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private List<IndividualContact> obtenerContactosDesdeCodigos(String recuperarPropiedadEntidad) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

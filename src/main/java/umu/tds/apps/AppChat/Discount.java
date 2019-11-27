@@ -1,5 +1,10 @@
 package umu.tds.apps.AppChat;
 
-public interface Discount {
-	public double calcDescuento();
+public abstract class Discount {
+	public abstract double calcDescuento();
+
+	public String toString() {
+		return getClass().getName();
+	}
+
 }

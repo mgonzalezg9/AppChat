@@ -1,6 +1,9 @@
 package umu.tds.apps.AppChat;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.rmi.ConnectException;
 
 import javax.swing.ImageIcon;
 
@@ -18,8 +21,8 @@ public class TestPersistenciaUser {
 
 	@Before
 	public void setUp() {
-		adapter = AdaptadorUserTDS.getInstancia();
 		u = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
+		adapter = AdaptadorUserTDS.getInstancia();
 	}
 
 	/**
@@ -39,17 +42,18 @@ public class TestPersistenciaUser {
 		registerUser();
 		assertTrue(adapter.recuperarUsuario(u.getCodigo()) == null);
 	}
-	
+
 	/**
 	 * Prueba que funcione la modificación de un usuario
 	 */
 	@Test
 	public void modifyUser() {
 		registerUser();
-		
+
 		String newName = "Aitor Menta";
 		u.setName(newName);
-		
+
 		assertTrue(adapter.recuperarUsuario(u.getCodigo()).getName().equals(newName));
 	}
+
 }
