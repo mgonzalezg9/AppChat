@@ -27,7 +27,7 @@ public class User {
 			boolean premium, Status estado, List<Group> gruposAdmin, List<Contact> contactos) {
 		setCodigo(0);
 		this.icon = icon;
-		this.name = name;
+		this.setName(name);
 		this.fechaNacimiento = fechaNacimiento;
 		this.numTelefono = numTelefono;
 		this.nick = nick;
@@ -41,13 +41,13 @@ public class User {
 	// QUITAR Construtor solo para pruebas en estadosOld
 	public User(ImageIcon icon, String name) {
 		this.icon = icon;
-		this.name = name;
+		this.setName(name);
 	}
 
 	// QUITAR Construtor solo para pruebas en UserStatusWindow
 	public User(ImageIcon icon, String name, String mensaje, String fecha) {
 		this.icon = icon;
-		this.name = name;
+		this.setName(name);
 		this.estado = Optional.of(new Status(icon, mensaje));
 		this.fechaNacimiento = LocalDate.now();
 	}
@@ -59,6 +59,10 @@ public class User {
 
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public LocalDate getFechaNacimiento() {

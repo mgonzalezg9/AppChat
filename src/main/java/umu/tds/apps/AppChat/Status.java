@@ -3,7 +3,10 @@ package umu.tds.apps.AppChat;
 import javax.swing.ImageIcon;
 
 public class Status {
+	public final static Status NONE = new Status(null, "");
+	
 	// Properties.
+	private int codigo;
 	private ImageIcon img;
 	private String frase;
 	
@@ -20,5 +23,13 @@ public class Status {
 	
 	public String getFrase() {
 		return frase;
+	}
+	
+	public int getCodigo() {
+		return codigo;
+	}
+	
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
 	}
 }
