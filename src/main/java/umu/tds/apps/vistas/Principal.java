@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelListener;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -37,12 +38,16 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+
 import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.User;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -53,6 +58,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 public class Principal extends JFrame {
 	private JPanel contentPane;
@@ -61,8 +67,6 @@ public class Principal extends JFrame {
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
-	private JPanel lastPanelClicked;
-	private static PanelList<User> panelList = null;
 
 	/**
 	 * Launch the application.
@@ -363,50 +367,50 @@ public class Principal extends JFrame {
 			}
 		});
 		popupSettsChat.add(mntmDeleteContact);
-		
-		List<User> usuarios = new LinkedList<User>();
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En luminata", "10/09/2019"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Diego", "XV6", "06/08/2009"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfon", "In github", "21/10/2019"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Alf", "Este es mi estado", "08/01/2010"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Blacknuel", "4nite", "12/05/2017"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
-		usuarios.add(new User(new ImageIcon(ExamplePanelList.class.getResource("/umu/tds/apps/resources/user50.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
-		
-		panelList = new PanelList<User>(70, (Function<User, JPanel>)Principal::supplyPanel, usuarios, usuarios.size());
-		JPanel listaChats = panelList.container;
-		listaChats.setBackground(MAIN_COLOR_LIGHT);
-		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		
-		listaChats.addMouseListener(new MouseAdapter() {
-			@Override
-            public void mouseClicked(MouseEvent e) {
-				final JPanel itemUnderMouse = panelList.getItemUnderMouse(e);
-                if (itemUnderMouse != null) {
-                	if (lastPanelClicked != null)
-                		lastPanelClicked.setBackground(MAIN_COLOR_LIGHT);   		
-
-                	lastPanelClicked = itemUnderMouse;
-                	lastPanelClicked.setBackground(SECONDARY_COLOR);
-                    chat.removeAll();
-    				chat.updateUI();
-                }
-            }
-		});
-		
-		GridBagConstraints gbc_listaChats = new GridBagConstraints();
-		gbc_listaChats.insets = new Insets(0, 0, 0, 5);
-		gbc_listaChats.fill = GridBagConstraints.BOTH;
-		gbc_listaChats.gridx = 0;
-		gbc_listaChats.gridy = 1;
-		contentPane.add(listaChats, gbc_listaChats);
 
 		profilePhoto = new JLabel();
 		profilePhoto.setIcon(new ImageIcon(
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBackground(MAIN_COLOR_LIGHT);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 1;
+		contentPane.add(scrollPane, gbc_scrollPane);
+		
+		// Contactos de ejemplo
+		List<User> usuarios = new LinkedList<User>();
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En luminata", "10/09/2019"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Diego", "XV6", "06/08/2009"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfon", "In github", "21/10/2019"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alf", "Este es mi estado", "08/01/2010"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Blacknuel", "4nite", "12/05/2017"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
+				
+		// Creamos el modelo
+		final DefaultListModel<User> modelContacts = new DefaultListModel();
+		
+		// Rellenamos el modelo
+		for (int i = 0; i < usuarios.size(); i++)
+			modelContacts.add(i, usuarios.get(i));
+		
+		JList<User> list_contacts = new JList(modelContacts);
+		list_contacts.setSelectedIndex(0);
+		list_contacts.setBackground(MAIN_COLOR_LIGHT);
+		list_contacts.setCellRenderer(createListRenderer());
+		list_contacts.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting())
+				System.out.println(list_contacts.getSelectedValue().getName());
+		});		
+		
+		scrollPane.setViewportView(list_contacts);
 
 		JPanel chatPersonal = new JPanel();
 		chatPersonal.setBackground(CHAT_COLOR);
@@ -550,60 +554,73 @@ public class Principal extends JFrame {
 		writeText.add(lblSend, gbc_lblSend);
 	}
 	
-	// Cremos el panel correspondiente a un elemento de la lista.
-    private static JPanel supplyPanel(User contacto) {
-        // Creamos el panel
-        final JPanel panel = new JPanel();
-        GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_contentPane);
-        
-		// Creamos los componentes del panel y se los añadimos.
-		JLabel icon = new JLabel("");
-		icon.setIcon(contacto.getIcon());
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.gridheight = 2;
-		gbc_label.insets = new Insets(0, 0, 0, 5);
-		gbc_label.gridx = 0;
-		gbc_label.gridy = 0;
-		panel.add(icon, gbc_label);
-		
-		JLabel lblNombre = new JLabel(contacto.getName());
-		lblNombre.setForeground(TEXT_COLOR_LIGHT);
-		GridBagConstraints gbc_lblDiego = new GridBagConstraints();
-		gbc_lblDiego.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDiego.gridx = 1;
-		gbc_lblDiego.gridy = 0;
-		panel.add(lblNombre, gbc_lblDiego);
-		
-		JLabel lblFecha = new JLabel(contacto.getFechaNacimiento().toString());
-		lblFecha.setForeground(TEXT_COLOR_LIGHT);
-		GridBagConstraints gbc_label_1 = new GridBagConstraints();
-		gbc_label_1.insets = new Insets(0, 0, 5, 0);
-		gbc_label_1.gridx = 3;
-		gbc_label_1.gridy = 0;
-		panel.add(lblFecha, gbc_label_1);
-		
-		JLabel lblUltimoMensaje = new JLabel(contacto.getEstado().getFrase());
-		lblUltimoMensaje.setForeground(TEXT_COLOR_LIGHT);
-		GridBagConstraints gbc_lblFsad = new GridBagConstraints();
-		gbc_lblFsad.anchor = GridBagConstraints.WEST;
-		gbc_lblFsad.gridwidth = 3;
-		gbc_lblFsad.insets = new Insets(0, 0, 0, 5);
-		gbc_lblFsad.gridx = 1;
-		gbc_lblFsad.gridy = 1;
-		panel.add(lblUltimoMensaje, gbc_lblFsad);
+	private ListSelectionListener createListSelectionListener(JList<User> listaUsuarios) {
+		 return e -> {
+			 if (!e.getValueIsAdjusting()) {
+				 System.out.println(listaUsuarios.getSelectedValue().getName());
+			 }
+		 };
+	}
 	
-        
-        panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        panel.setBackground(MAIN_COLOR_LIGHT);
-
-        // Devolvemos un elemento de la lista.
-        return panel;
-    }
+	private static ListCellRenderer<? super User> createListRenderer() {
+		return new DefaultListCellRenderer() {
+			private Color background = new Color(0, 100, 255, 15);
+			private Color defaultBackground = (Color) UIManager.get("List.background");
+			
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {			
+				User contacto = (User) value;
+				
+				JPanel panel = new JPanel();
+				GridBagLayout gbl_contentPane = new GridBagLayout();
+				gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0};
+				gbl_contentPane.rowHeights = new int[]{10, 26, 5, 10, 0};
+				gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+				gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+				panel.setLayout(gbl_contentPane);
+				
+				JLabel label = new JLabel("");
+				label.setIcon(contacto.getIcon());
+				GridBagConstraints gbc_label = new GridBagConstraints();
+				gbc_label.anchor = GridBagConstraints.SOUTH;
+				gbc_label.gridheight = 2;
+				gbc_label.insets = new Insets(0, 0, 5, 5);
+				gbc_label.gridx = 0;
+				gbc_label.gridy = 1;
+				panel.add(label, gbc_label);
+				
+				JLabel lblNewLabel = new JLabel(contacto.getName());
+				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
+				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+				gbc_lblNewLabel.gridx = 1;
+				gbc_lblNewLabel.gridy = 1;
+				panel.add(lblNewLabel, gbc_lblNewLabel);
+				
+				JLabel lblNewLabel_1 = new JLabel(contacto.getFechaNacimiento().toString());
+				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
+				gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
+				gbc_lblNewLabel_1.gridx = 2;
+				gbc_lblNewLabel_1.gridy = 1;
+				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+				
+				JLabel lblEsteHaSido = new JLabel(contacto.getEstado().getFrase());
+				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
+				gbc_lblEsteHaSido.gridwidth = 2;
+				gbc_lblEsteHaSido.anchor = GridBagConstraints.WEST;
+				gbc_lblEsteHaSido.insets = new Insets(0, 0, 5, 5);
+				gbc_lblEsteHaSido.gridx = 1;
+				gbc_lblEsteHaSido.gridy = 2;
+				panel.add(lblEsteHaSido, gbc_lblEsteHaSido);
+				
+				panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+			    panel.setBackground((isSelected) ? SECONDARY_COLOR : MAIN_COLOR_LIGHT);
+				
+				return panel;
+			}
+		};
+	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
