@@ -1,6 +1,6 @@
 package umu.tds.apps.AppChat;
 
-public class FixedDiscount implements Discount {
+public class FixedDiscount extends Discount {
 
 	@Override
 	public double calcDescuento() {
