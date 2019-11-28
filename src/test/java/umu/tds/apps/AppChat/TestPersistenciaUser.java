@@ -16,12 +16,12 @@ import umu.tds.apps.persistencia.UserDAO;
  * Unit test for AppChat.
  */
 public class TestPersistenciaUser {
-	private User u;
+	private User usuario;
 	private UserDAO adapter;
 
 	@BeforeClass
 	public void setUp() {
-		u = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
+		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
 		adapter = AdaptadorUserTDS.getInstancia();
 	}
 
@@ -30,8 +30,8 @@ public class TestPersistenciaUser {
 	 */
 	@Test
 	public void registerUser() {
-		adapter.registrarUsuario(u);
-		assertTrue(adapter.recuperarUsuario(u.getCodigo()).equals(u));
+		adapter.registrarUsuario(usuario);
+		assertTrue(adapter.recuperarUsuario(usuario.getCodigo()).equals(usuario));
 	}
 
 	/**
@@ -39,9 +39,9 @@ public class TestPersistenciaUser {
 	 */
 	@Test
 	public void deleteUser() {
-		adapter.registrarUsuario(u);
-		adapter.borrarUsuario(u);
-		assertTrue(adapter.recuperarUsuario(u.getCodigo()) == null);
+		adapter.registrarUsuario(usuario);
+		adapter.borrarUsuario(usuario);
+		assertTrue(adapter.recuperarUsuario(usuario.getCodigo()) == null);
 	}
 
 	/**
@@ -52,9 +52,10 @@ public class TestPersistenciaUser {
 		registerUser();
 
 		String newName = "Aitor Menta";
-		u.setName(newName);
+		usuario.setName(newName);
+		adapter.modificarUsuario(usuario);
 
-		assertTrue(adapter.recuperarUsuario(u.getCodigo()).getName().equals(newName));
+		assertTrue(adapter.recuperarUsuario(usuario.getCodigo()).getName().equals(newName));
 	}
 	
 	/**
@@ -64,7 +65,7 @@ public class TestPersistenciaUser {
 	public void getAllUsers() {
 		registerUser();
 
-		assertTrue(adapter.recuperarTodosUsuarios().contains(u));
+		assertTrue(adapter.recuperarTodosUsuarios().contains(usuario));
 	}
 
 }

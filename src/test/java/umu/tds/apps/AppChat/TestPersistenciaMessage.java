@@ -14,14 +14,14 @@ import umu.tds.apps.persistencia.AdaptadorMessageTDS;
 import umu.tds.apps.persistencia.MessageDAO;
 
 public class TestPersistenciaMessage {
-	private User u;
-	private Message m;
+	private User usuario;
+	private Message mensaje;
 	private MessageDAO adapter;
 
 	@BeforeClass
 	public void setUp() {
-		u = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
-		m = new Message("Pasar los test", LocalDate.now(), u, new IndividualContact("Alberto", new LinkedList<>(), 0, u));
+		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
+		mensaje = new Message("Pasar los test", LocalDate.now(), usuario, new IndividualContact("Alberto", new LinkedList<>(), 0, usuario));
 		adapter = AdaptadorMessageTDS.getInstancia();
 	}
 
@@ -30,8 +30,8 @@ public class TestPersistenciaMessage {
 	 */
 	@Test
 	public void registerMessage() {
-		adapter.registrarMensaje(m);
-		assertTrue(adapter.recuperarMensaje(u.getCodigo()).equals(m));
+		adapter.registrarMensaje(mensaje);
+		assertTrue(adapter.recuperarMensaje(usuario.getCodigo()).equals(mensaje));
 	}
 
 	/**
@@ -39,9 +39,9 @@ public class TestPersistenciaMessage {
 	 */
 	@Test
 	public void deleteMessage() {
-		adapter.registrarMensaje(m);
-		adapter.borrarMensaje(m);
-		assertTrue(adapter.recuperarMensaje(u.getCodigo()) == null);
+		registerMessage();
+		adapter.borrarMensaje(mensaje);
+		assertTrue(adapter.recuperarMensaje(usuario.getCodigo()) == null);
 	}
 
 	/**
@@ -52,9 +52,10 @@ public class TestPersistenciaMessage {
 		registerMessage();
 
 		String text = "Si esta nublado llueve";
-		m.setTexto(text);
+		mensaje.setTexto(text);
+		adapter.modificarMensaje(mensaje);
 
-		assertTrue(adapter.recuperarMensaje(u.getCodigo()).getTexto().equals(text));
+		assertTrue(adapter.recuperarMensaje(usuario.getCodigo()).getTexto().equals(text));
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class TestPersistenciaMessage {
 	public void getAllMessages() {
 		registerMessage();
 
-		assertTrue(adapter.recuperarTodosMensajes().contains(m));
+		assertTrue(adapter.recuperarTodosMensajes().contains(mensaje));
 	}
 
 }

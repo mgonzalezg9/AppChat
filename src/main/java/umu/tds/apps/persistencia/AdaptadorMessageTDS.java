@@ -1,18 +1,27 @@
 package umu.tds.apps.persistencia;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.swing.ImageIcon;
 
 import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.ServicioPersistencia;
 import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.Discount;
 import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.AppChat.Message;
+import umu.tds.apps.AppChat.Normal;
+import umu.tds.apps.AppChat.Premium;
+import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
+import umu.tds.apps.AppChat.UserRol;
 
 public class AdaptadorMessageTDS implements MessageDAO {
 	private static AdaptadorMessageTDS unicaInstancia = null;
@@ -62,7 +71,7 @@ public class AdaptadorMessageTDS implements MessageDAO {
 				new Propiedad("hora", mensaje.getHora().toString()),
 				new Propiedad("emoticono", String.valueOf(mensaje.getEmoticono())),
 				new Propiedad("receptor", String.valueOf(mensaje.getReceptor().getCodigo())),
-				new Propiedad("togrupo", String.valueOf(grupo)),
+				new Propiedad("togroup", String.valueOf(grupo)),
 				new Propiedad("emisor", String.valueOf(mensaje.getEmisor().getCodigo())))));
 
 		// Registrar entidad usuario
@@ -91,22 +100,66 @@ public class AdaptadorMessageTDS implements MessageDAO {
 		servPersistencia.eliminarPropiedadEntidad(eMensaje, "emoticono");
 		servPersistencia.anadirPropiedadEntidad(eMensaje, "emoticono", String.valueOf(mensaje.getEmoticono()));
 		servPersistencia.eliminarPropiedadEntidad(eMensaje, "receptor");
-		servPersistencia.anadirPropiedadEntidad(eMensaje, "receptor", String.valueOf(mensaje.getReceptor().getCodigo()));
+		servPersistencia.anadirPropiedadEntidad(eMensaje, "receptor",
+				String.valueOf(mensaje.getReceptor().getCodigo()));
 		servPersistencia.eliminarPropiedadEntidad(eMensaje, "emisor");
 		servPersistencia.anadirPropiedadEntidad(eMensaje, "emisor", String.valueOf(mensaje.getEmisor().getCodigo()));
-		
+
 		boolean grupo = false;
 		if (mensaje.getReceptor() instanceof Group) {
 			grupo = true;
 		}
-		servPersistencia.eliminarPropiedadEntidad(eMensaje, "togrupo");
-		servPersistencia.anadirPropiedadEntidad(eMensaje, "togrupo", String.valueOf(grupo));
+		servPersistencia.eliminarPropiedadEntidad(eMensaje, "togroup");
+		servPersistencia.anadirPropiedadEntidad(eMensaje, "togroup", String.valueOf(grupo));
 	}
 
 	@Override
 	public Message recuperarMensaje(int codigo) {
-		// TODO Auto-generated method stub
-		return null;
+		// Si la entidad esta en el pool la devuelve directamente
+		if (PoolDAO.getInstancia().contiene(codigo))
+			return (Message) PoolDAO.getInstancia().getObjeto(codigo);
+
+		// si no, la recupera de la base de datos
+		// recuperar entidad
+		Entidad eMensaje = servPersistencia.recuperarEntidad(codigo);
+
+		// recuperar propiedades que no son objetos
+		// fecha
+		String texto = servPersistencia.recuperarPropiedadEntidad(eMensaje, "texto");
+		LocalDate hora = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eMensaje, "hora"));
+		int emoticono = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eMensaje, "emoticono"));
+		Contact receptor = null;
+		Boolean toGroup = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "togroup"));
+		User emisor = null;
+
+		Message mensaje = new Message(texto, emoticono, hora);
+		mensaje.setCodigo(codigo);
+
+		// Metemos el usuario en el pool antes de llamar a otros
+		// adaptadores
+		PoolDAO.getInstancia().addObjeto(codigo, mensaje);
+
+		// recuperar propiedades que son objetos llamando a adaptadores
+		// mensaje
+		// Usuario emisor
+		AdaptadorUserTDS adaptadorU = AdaptadorUserTDS.getInstancia();
+		int codigoUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eMensaje, "emisor"));
+		emisor = adaptadorU.recuperarUsuario(codigoUsuario);
+		mensaje.setEmisor(emisor);
+
+		// Contacto o grupo receptor
+		int codigoContacto = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eMensaje, "receptor"));
+		if (toGroup) {
+			AdaptadorGroupTDS adaptadorG = AdaptadorGroupTDS.getInstancia();
+			receptor = adaptadorG.recuperarGrupo(codigoContacto);
+		} else {
+			AdaptadorIndividualContactTDS adaptadorC = AdaptadorIndividualContactTDS.getInstancia();
+			receptor = adaptadorC.recuperarContacto(codigoContacto);
+		}
+		mensaje.setReceptor(receptor);
+
+		// devolver el objeto mensaje con todo
+		return mensaje;
 	}
 
 	@Override
@@ -132,7 +185,7 @@ public class AdaptadorMessageTDS implements MessageDAO {
 			}
 		});
 	}
-	
+
 	private void registrarSiNoExistenContactosoGrupos(Contact contacto) {
 		LinkedList<Contact> contactos = new LinkedList<>();
 		contactos.add(contacto);
