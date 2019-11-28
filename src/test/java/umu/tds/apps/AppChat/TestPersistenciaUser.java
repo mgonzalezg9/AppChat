@@ -16,11 +16,11 @@ import umu.tds.apps.persistencia.UserDAO;
  * Unit test for AppChat.
  */
 public class TestPersistenciaUser {
-	private User usuario;
-	private UserDAO adapter;
+	private static User usuario;
+	private static UserDAO adapter;
 
 	@BeforeClass
-	public void setUp() {
+	public static void setUp() {
 		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
 		adapter = AdaptadorUserTDS.getInstancia();
 	}

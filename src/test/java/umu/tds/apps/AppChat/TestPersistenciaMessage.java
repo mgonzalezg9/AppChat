@@ -14,12 +14,12 @@ import umu.tds.apps.persistencia.AdaptadorMessageTDS;
 import umu.tds.apps.persistencia.MessageDAO;
 
 public class TestPersistenciaMessage {
-	private User usuario;
-	private Message mensaje;
-	private MessageDAO adapter;
+	private static User usuario;
+	private static Message mensaje;
+	private static MessageDAO adapter;
 
 	@BeforeClass
-	public void setUp() {
+	public static void setUp() {
 		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
 		mensaje = new Message("Pasar los test", LocalDate.now(), usuario, new IndividualContact("Alberto", new LinkedList<>(), 0, usuario));
 		adapter = AdaptadorMessageTDS.getInstancia();
