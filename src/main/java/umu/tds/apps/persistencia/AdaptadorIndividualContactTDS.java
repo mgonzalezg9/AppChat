@@ -36,7 +36,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 	}
 
 	@Override
-	public User recuperarContacto(int codigo) {
+	public IndividualContact recuperarContacto(int codigo) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -10,6 +10,6 @@ public interface IndividualContactDAO {
 	public void registrarContacto(IndividualContact contact);
 	public void borrarContacto(IndividualContact contact);
 	public void modificarContacto(IndividualContact contact);
-	public User recuperarContacto(int codigo);
+	public IndividualContact recuperarContacto(int codigo);
 	public List<IndividualContact> recuperarTodosContactos();
 }

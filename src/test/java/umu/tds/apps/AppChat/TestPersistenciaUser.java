@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.rmi.ConnectException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
@@ -54,6 +56,18 @@ public class TestPersistenciaUser {
 		u.setName(newName);
 
 		assertTrue(adapter.recuperarUsuario(u.getCodigo()).getName().equals(newName));
+	}
+	
+	/**
+	 * Prueba que funcione la recuperación de todos los usuarios
+	 */
+	@Test
+	public void getAllUsers() {
+		registerUser();
+		List<User> lista = new LinkedList<>();
+		lista.add(u);
+
+		assertTrue(adapter.recuperarTodosUsuarios().equals(lista));
 	}
 
 }

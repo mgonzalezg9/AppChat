@@ -9,5 +9,5 @@ public interface UserDAO {
 	public void borrarUsuario(User user);
 	public void modificarUsuario(User user);
 	public User recuperarUsuario(int codigo);
-	public List<User> recuperarTodosClientes();
+	public List<User> recuperarTodosUsuarios();
 }

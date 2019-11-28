@@ -1,17 +1,14 @@
 package umu.tds.apps.persistencia;
 
-import java.rmi.ConnectException;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringTokenizer;
 
 import javax.swing.ImageIcon;
-
-import com.sun.xml.internal.ws.api.pipe.ThrowableContainerPropertySet;
 
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
@@ -61,7 +58,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		registrarSiNoExistenGrupos(user.getGruposAdmin());
 
 		// registrar contactos del usuario
-		registrarSiNoExistenContactos(user.getContactos());
+		registrarSiNoExistenContactosoGrupos(user.getContactos());
 
 		// Atributos propios del usuario
 		eUsuario.setNombre("usuario");
@@ -199,7 +196,8 @@ public class AdaptadorUserTDS implements UserDAO {
 			usuario.addGrupoAdmin(g);
 
 		// Contactos que el usuario tiene
-		List<IndividualContact> contactos = obtenerContactosDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUser, "contactos"));
+		List<IndividualContact> contactos = obtenerContactosDesdeCodigos(
+				servPersistencia.recuperarPropiedadEntidad(eUser, "contactos"));
 
 		for (IndividualContact c : contactos)
 			usuario.addContacto(c);
@@ -215,9 +213,14 @@ public class AdaptadorUserTDS implements UserDAO {
 	}
 
 	@Override
-	public List<User> recuperarTodosClientes() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> recuperarTodosUsuarios() {
+		List<User> usuarios = new LinkedList<>();
+		List<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
+
+		for (Entidad eUsuario : eUsuarios) {
+			usuarios.add(recuperarUsuario(eUsuario.getId()));
+		}
+		return usuarios;
 	}
 
 	// -------------------Funciones auxiliares-----------------------------
@@ -259,7 +262,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		grupos.stream().forEach(g -> adaptadorGA.registrarGrupo(g));
 	}
 
-	private void registrarSiNoExistenContactos(List<Contact> contactos) {
+	private void registrarSiNoExistenContactosoGrupos(List<Contact> contactos) {
 		AdaptadorIndividualContactTDS adaptadorContactos = AdaptadorIndividualContactTDS.getInstancia();
 		AdaptadorGroupTDS adaptadorGrupos = AdaptadorGroupTDS.getInstancia();
 		contactos.stream().forEach(c -> {
@@ -272,13 +275,23 @@ public class AdaptadorUserTDS implements UserDAO {
 	}
 
 	private List<Group> obtenerGruposDesdeCodigos(String codigos) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Group> grupos = new LinkedList<Group>();
+		StringTokenizer strTok = new StringTokenizer(codigos, " ");
+		AdaptadorGroupTDS adaptadorG = AdaptadorGroupTDS.getInstancia();
+		while (strTok.hasMoreTokens()) {
+			grupos.add(adaptadorG.recuperarGrupo(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return grupos;
 	}
-	
-	private List<IndividualContact> obtenerContactosDesdeCodigos(String recuperarPropiedadEntidad) {
-		// TODO Auto-generated method stub
-		return null;
+
+	private List<IndividualContact> obtenerContactosDesdeCodigos(String codigos) {
+		List<IndividualContact> contactos = new LinkedList<>();
+		StringTokenizer strTok = new StringTokenizer(codigos, " ");
+		AdaptadorIndividualContactTDS adaptadorC = AdaptadorIndividualContactTDS.getInstancia();
+		while (strTok.hasMoreTokens()) {
+			contactos.add(adaptadorC.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return contactos;
 	}
 
 }
