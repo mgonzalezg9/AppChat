@@ -1,27 +1,25 @@
 package umu.tds.apps.AppChat;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.rmi.ConnectException;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import umu.tds.apps.persistencia.AdaptadorUserTDS;
+import umu.tds.apps.persistencia.UserDAO;
 
 /**
  * Unit test for AppChat.
  */
 public class TestPersistenciaUser {
 	private User u;
-	private AdaptadorUserTDS adapter;
+	private UserDAO adapter;
 
-	@Before
+	@BeforeClass
 	public void setUp() {
 		u = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
 		adapter = AdaptadorUserTDS.getInstancia();
@@ -41,7 +39,8 @@ public class TestPersistenciaUser {
 	 */
 	@Test
 	public void deleteUser() {
-		registerUser();
+		adapter.registrarUsuario(u);
+		adapter.borrarUsuario(u);
 		assertTrue(adapter.recuperarUsuario(u.getCodigo()) == null);
 	}
 
@@ -64,10 +63,8 @@ public class TestPersistenciaUser {
 	@Test
 	public void getAllUsers() {
 		registerUser();
-		List<User> lista = new LinkedList<>();
-		lista.add(u);
 
-		assertTrue(adapter.recuperarTodosUsuarios().equals(lista));
+		assertTrue(adapter.recuperarTodosUsuarios().contains(u));
 	}
 
 }
