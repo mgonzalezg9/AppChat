@@ -74,7 +74,7 @@ public class AdaptadorUserTDS implements UserDAO {
 				new Propiedad("rolusuario", user.getRol().toString()))));
 
 		// Registrar entidad usuario
-		servPersistencia.registrarEntidad(eUsuario);
+		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 
 		// Identificador unico
 		user.setCodigo(eUsuario.getId());
@@ -100,7 +100,11 @@ public class AdaptadorUserTDS implements UserDAO {
 		}
 
 		eUser = servPersistencia.recuperarEntidad(user.getCodigo());
-		servPersistencia.borrarEntidad(eUser);
+
+		// Si esta en el Pool tambien se borra del pool
+		if (PoolDAO.getInstancia().contiene(user.getCodigo())) {
+			PoolDAO.getInstancia().removeObjeto(user.getCodigo());
+		}
 	}
 
 	@Override
@@ -138,7 +142,7 @@ public class AdaptadorUserTDS implements UserDAO {
 	@Override
 	public User recuperarUsuario(int codigo) {
 		// Si la entidad esta en el pool la devuelve directamente
-		if (PoolDAO.getInstancia().contiene(codigo))
+		if (PoolDAO.getInstancia().contiene(codigo)) 
 			return (User) PoolDAO.getInstancia().getObjeto(codigo);
 
 		// si no, la recupera de la base de datos
@@ -184,10 +188,13 @@ public class AdaptadorUserTDS implements UserDAO {
 		// recuperar propiedades que son objetos llamando a adaptadores
 		// cliente
 		AdaptadorStatusTDS adaptadorEstado = AdaptadorStatusTDS.getInstancia();
-		int codigoEstado = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUser, "estado"));
+		String codigoEstado = servPersistencia.recuperarPropiedadEntidad(eUser, "estado");
+		Status estado = null;
+		if (!codigoEstado.isEmpty()) {
+			estado = adaptadorEstado.recuperarEstado(Integer.parseInt(codigoEstado));
+		}
+		usuario.setEstado(Optional.ofNullable(estado));
 
-		Status s = adaptadorEstado.recuperarEstado(codigoEstado);
-		usuario.setEstado(Optional.ofNullable(s));
 		// Grupos que el usuario administra
 		List<Group> gruposAdmin = obtenerGruposDesdeCodigos(
 				servPersistencia.recuperarPropiedadEntidad(eUser, "gruposadmin"));

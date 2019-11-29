@@ -1,8 +1,8 @@
 package umu.tds.apps.AppChat;
 
 import static org.junit.Assert.assertTrue;
-import java.util.LinkedList;
-import java.util.List;
+
+import java.time.LocalDate;
 
 import javax.swing.ImageIcon;
 
@@ -21,7 +21,8 @@ public class TestPersistenciaUser {
 
 	@BeforeClass
 	public static void setUp() {
-		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
+		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
+				"", "nick", true, new Premium(new YoungDiscount()));
 		adapter = AdaptadorUserTDS.getInstancia();
 	}
 
@@ -47,6 +48,7 @@ public class TestPersistenciaUser {
 	/**
 	 * Prueba que funcione la modificación de un usuario
 	 */
+
 	@Test
 	public void modifyUser() {
 		registerUser();
@@ -57,7 +59,7 @@ public class TestPersistenciaUser {
 
 		assertTrue(adapter.recuperarUsuario(usuario.getCodigo()).getName().equals(newName));
 	}
-	
+
 	/**
 	 * Prueba que funcione la recuperación de todos los usuarios
 	 */
