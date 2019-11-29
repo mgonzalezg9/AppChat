@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Group extends Contact {
 	// Properties
-	private int codigo;
 	private List<IndividualContact> contactos;
 	private User admin;
 	

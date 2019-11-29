@@ -6,7 +6,7 @@ public class IndividualContact extends Contact {
 	// Properties.
 	private int movil;
 	private User usuario;
-	
+
 	// Constructor.
 	public IndividualContact(String nombre, List<Message> mensajes, int movil, User usuario) {
 		super(nombre, mensajes);
@@ -21,5 +21,10 @@ public class IndividualContact extends Contact {
 
 	public User getUsuario() {
 		return usuario;
+	}
+	
+	// Setters.
+	public void setUsuario(User usuario) {
+		this.usuario = usuario;
 	}
 }

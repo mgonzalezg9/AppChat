@@ -110,7 +110,6 @@ public class AdaptadorGroupTDS implements GroupDAO {
 		Entidad eGroup = servPersistencia.recuperarEntidad(codigo);
 
 		// recuperar propiedades que no son objetos
-		// fecha
 		String nombre = null;
 		nombre = servPersistencia.recuperarPropiedadEntidad(eGroup, "nombre");
 
@@ -118,6 +117,8 @@ public class AdaptadorGroupTDS implements GroupDAO {
 		group.setCodigo(codigo);
 
 		// Metemos al grupo en el pool antes de llamar a otros adaptadores
+		PoolDAO.getInstancia().addObjeto(codigo, group);
+		
 		// Mensajes que el grupo tiene
 		List<Message> mensajes = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGroup, "mensajesRecibidos"));
 		for (Message m : mensajes)
@@ -129,7 +130,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 			group.addIntegrante(c);
 
 		// Obtener admin
-		group.cambiarAdmin(obtenerUsuarioDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eGroup, "grupos")));
+		group.cambiarAdmin(obtenerUsuarioDesdeCodigo(servPersistencia.recuperarPropiedadEntidad(eGroup, "grupos")));
 
 		// Devolvemos el objeto grupo
 		return group;
@@ -194,7 +195,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 		return contactos;
 	}
 	
-	private User obtenerUsuarioDesdeCodigos(String codigo) {
+	private User obtenerUsuarioDesdeCodigo(String codigo) {
 		AdaptadorUserTDS adaptadorUsuarios = AdaptadorUserTDS.getInstancia();
 		return adaptadorUsuarios.recuperarUsuario(Integer.valueOf(codigo));
 	}
