@@ -86,7 +86,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 	public void modificarGrupo(Group group) {
 		Entidad eGroup = servPersistencia.recuperarEntidad(group.getCodigo());
 
-		// Se da el cambiazo a las propiedades del usuario
+		// Se da el cambiazo a las propiedades del grupo
 		servPersistencia.eliminarPropiedadEntidad(eGroup, "nombre");
 		servPersistencia.anadirPropiedadEntidad(eGroup, "nombre", group.getNombre());
 		servPersistencia.eliminarPropiedadEntidad(eGroup, "mensajesRecibidos");

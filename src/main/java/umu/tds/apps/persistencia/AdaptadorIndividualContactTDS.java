@@ -82,7 +82,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 	public void modificarContacto(IndividualContact contact) {
 		Entidad eContact = servPersistencia.recuperarEntidad(contact.getCodigo());
 
-		// Se da el cambiazo a las propiedades del usuario
+		// Se da el cambiazo a las propiedades del contacto
 		servPersistencia.eliminarPropiedadEntidad(eContact, "nombre");
 		servPersistencia.anadirPropiedadEntidad(eContact, "nombre", contact.getNombre());
 		servPersistencia.eliminarPropiedadEntidad(eContact, "movil");
@@ -114,7 +114,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		IndividualContact contact = new IndividualContact(nombre, new LinkedList<Message>(), Integer.valueOf(movil), null);
 		contact.setCodigo(codigo);
 
-		// Metemos al grupo en el pool antes de llamar a otros adaptadores
+		// Metemos al contacto en el pool antes de llamar a otros adaptadores
 		PoolDAO.getInstancia().addObjeto(codigo, contact);
 		
 		// Mensajes que el contacto tiene
@@ -125,7 +125,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		// Obtener usuario del contacto
 		contact.setUsuario(obtenerUsuarioDesdeCodigo(servPersistencia.recuperarPropiedadEntidad(eContact, "usuario")));
 
-		// Devolvemos el objeto grupo
+		// Devolvemos el objeto contacto
 		return contact;
 	}
 
