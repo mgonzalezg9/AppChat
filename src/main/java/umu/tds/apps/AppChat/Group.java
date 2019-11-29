@@ -5,30 +5,35 @@ import java.util.List;
 public class Group extends Contact {
 	// Properties
 	private int codigo;
-	private List<Contact> contactos;
+	private List<IndividualContact> contactos;
 	private User admin;
 	
 	// Constructor.
-	public Group(String nombre, List<Message> mensajes, List<Contact> contactos, User admin) {
+	public Group(String nombre, List<Message> mensajes, List<IndividualContact> contactos, User admin) {
 		super(nombre, mensajes);
 		this.contactos = contactos;
 		this.admin = admin;
 	}
 	
 	//Getters
-	public List<Contact> getContactos() {
+	public List<IndividualContact> getContactos() {
 		return contactos;
 	}
 
 	public User getAdmin() {
 		return admin;
 	}
-
-	public int getCodigo() {
-		return codigo;
+	
+	// Methods
+	public void addMensaje(Message m) {
+		super.addMensaje(m);
 	}
 	
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
+	public void addIntegrante(IndividualContact c) {
+		contactos.add(c);
+	}
+	
+	public void cambiarAdmin(User u) {
+		admin = u;
 	}
 }

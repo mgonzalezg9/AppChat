@@ -24,11 +24,16 @@ public abstract class Contact {
 	public List<Message> getMensajes() {
 		return mensajes;
 	}
-
+	
+	public void addMensaje(Message m) {
+		mensajes.add(m);
+	}
+	
 	public int getCodigo() {
 		return codigo;
 	}
-
+	
+	// Setters
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
