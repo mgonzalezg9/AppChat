@@ -20,6 +20,10 @@ public abstract class Contact {
 	public String getNombre() {
 		return nombre;
 	}
+	
+	public void setNombre(String nombre) { // Generado para los test
+		this.nombre = nombre;
+	}
 
 	public List<Message> getMensajes() {
 		return mensajes;
