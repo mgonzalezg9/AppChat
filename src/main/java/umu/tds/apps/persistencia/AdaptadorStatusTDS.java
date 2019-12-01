@@ -11,8 +11,6 @@ import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
-import umu.tds.apps.AppChat.IndividualContact;
-import umu.tds.apps.AppChat.Message;
 import umu.tds.apps.AppChat.Status;
 
 public class AdaptadorStatusTDS implements StatusDAO {
@@ -31,7 +29,7 @@ public class AdaptadorStatusTDS implements StatusDAO {
 
 	@Override
 	public void registrarEstado(Status status) {
-		Entidad eStatus = new Entidad();
+		Entidad eStatus;
 		boolean existe = true;
 
 		// Si la entidad está registrada no la registra de nuevo
@@ -44,6 +42,7 @@ public class AdaptadorStatusTDS implements StatusDAO {
 			return;
 
 		// Atributos propios del contacto
+		eStatus = new Entidad();
 		eStatus.setNombre("estado");
 		eStatus.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("mensaje", status.getFrase()),
 				new Propiedad("imagen", status.getImg().getDescription()))));
