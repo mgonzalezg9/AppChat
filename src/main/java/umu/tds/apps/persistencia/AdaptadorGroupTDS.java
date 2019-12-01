@@ -61,7 +61,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 				new Propiedad("admin", String.valueOf(group.getAdmin().getCodigo())))));
 
 		// Registrar entidad usuario
-		servPersistencia.registrarEntidad(eGroup);
+		eGroup = servPersistencia.registrarEntidad(eGroup);
 
 		// Identificador unico
 		group.setCodigo(eGroup.getId());
@@ -130,7 +130,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 			group.addIntegrante(c);
 
 		// Obtener admin
-		group.cambiarAdmin(obtenerUsuarioDesdeCodigo(servPersistencia.recuperarPropiedadEntidad(eGroup, "grupos")));
+		group.cambiarAdmin(obtenerUsuarioDesdeCodigo(servPersistencia.recuperarPropiedadEntidad(eGroup, "admin")));
 
 		// Devolvemos el objeto grupo
 		return group;

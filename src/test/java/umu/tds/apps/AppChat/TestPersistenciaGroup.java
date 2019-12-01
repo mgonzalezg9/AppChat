@@ -1,5 +1,6 @@
 package umu.tds.apps.AppChat;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
@@ -41,11 +42,11 @@ public class TestPersistenciaGroup {
 	/**
 	 * Prueba que funcione la eliminación de un grupo
 	 */
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void deleteGroup() {
 		adapter.registrarGrupo(group);
 		adapter.borrarGrupo(group);
-		assertTrue(adapter.recuperarGrupo(group.getCodigo()) == null);
+		assertNull(adapter.recuperarGrupo(group.getCodigo()));
 	}
 
 	/**

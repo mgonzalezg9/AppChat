@@ -57,7 +57,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 				new Propiedad("usuario", String.valueOf(contact.getUsuario().getCodigo())))));
 
 		// Registrar entidad usuario
-		servPersistencia.registrarEntidad(eContact);
+		eContact = servPersistencia.registrarEntidad(eContact);
 
 		// Identificador unico
 		contact.setCodigo(eContact.getId());
@@ -158,11 +158,14 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 	}
 
 	private List<Message> obtenerMensajesDesdeCodigos(String codigos) {
+		System.out.println("Voy a sacar los mensajes:");
 		List<Message> mensajes = new LinkedList<>();
 		StringTokenizer strTok = new StringTokenizer(codigos, " ");
 		AdaptadorMessageTDS adaptadorMensajes = AdaptadorMessageTDS.getInstancia();
 		while (strTok.hasMoreTokens()) {
-			mensajes.add(adaptadorMensajes.recuperarMensaje(Integer.valueOf((String) strTok.nextElement())));
+			String code = (String) strTok.nextElement();
+			System.out.println(code + " ");
+			mensajes.add(adaptadorMensajes.recuperarMensaje(Integer.valueOf(code)));
 		}
 		return mensajes;
 	}

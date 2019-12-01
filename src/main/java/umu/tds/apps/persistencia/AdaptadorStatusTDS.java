@@ -48,7 +48,7 @@ public class AdaptadorStatusTDS implements StatusDAO {
 				new Propiedad("imagen", status.getImg().getDescription()))));
 
 		// Registrar entidad usuario
-		servPersistencia.registrarEntidad(eStatus);
+		eStatus = servPersistencia.registrarEntidad(eStatus);
 
 		// Identificador unico
 		status.setCodigo(eStatus.getId());

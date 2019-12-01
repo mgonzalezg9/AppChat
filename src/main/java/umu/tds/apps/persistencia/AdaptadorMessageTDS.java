@@ -123,6 +123,7 @@ public class AdaptadorMessageTDS implements MessageDAO {
 
 		// si no, la recupera de la base de datos
 		// recuperar entidad
+		System.out.println(codigo);
 		Entidad eMensaje = servPersistencia.recuperarEntidad(codigo);
 		
 		// recuperar propiedades que no son objetos

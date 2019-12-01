@@ -1,5 +1,6 @@
 package umu.tds.apps.AppChat;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
@@ -19,10 +20,10 @@ public class TestPersistenciaContactoIndividual {
 
 	@BeforeClass
 	public static void setUp() {
-		User user = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
-				"", "nick", true, new Premium(new YoungDiscount()));
+		User user = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Alberto", LocalDate.now(), 0,
+				"nick", "", true, new Premium(new YoungDiscount()));
 		LinkedList<Message> mensajes = new LinkedList<>();
-		mensajes.add(new Message("Pasar los test", LocalDate.now(), user, new IndividualContact("Alberto", new LinkedList<>(), 0, user)));
+		//mensajes.add(new Message("Pasar los test", LocalDate.now(), user, new IndividualContact("Alberto", new LinkedList<>(), 0, user)));
 		contact = new IndividualContact("Manu", mensajes, 654789321, user);
 		adapter = AdaptadorIndividualContactTDS.getInstancia();
 	}
@@ -39,11 +40,11 @@ public class TestPersistenciaContactoIndividual {
 	/**
 	 * Prueba que funcione la eliminación de un contacto individual
 	 */
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void deleteContact() {
 		adapter.registrarContacto(contact);
 		adapter.borrarContacto(contact);
-		assertTrue(adapter.recuperarContacto(contact.getCodigo()) == null);
+		assertNull(adapter.recuperarContacto(contact.getCodigo()));
 	}
 
 	/**

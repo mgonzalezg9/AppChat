@@ -68,7 +68,7 @@ public class Status {
 		if (img == null) {
 			if (other.img != null)
 				return false;
-		} else if (!img.equals(other.img))
+		} else if (!img.getDescription().equals(((ImageIcon) other.getImg()).getDescription()))
 			return false;
 		return true;
 	}

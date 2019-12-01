@@ -158,21 +158,15 @@ public class AdaptadorUserTDS implements UserDAO {
 
 		// recuperar propiedades que no son objetos
 		// fecha
-		String nombre = null;
-		LocalDate fechaNacimiento = null;
-		int telefono = 0;
-		String nick = null;
-		String password = null;
-		ImageIcon img = null;
-		Boolean premium = false;
+		String nombre = servPersistencia.recuperarPropiedadEntidad(eUser, "nombre");
+		LocalDate fechaNacimiento = LocalDate
+				.parse(servPersistencia.recuperarPropiedadEntidad(eUser, "fechanacimiento"));
+		int telefono = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUser, "telefono"));
+		String nick = servPersistencia.recuperarPropiedadEntidad(eUser, "nick");
+		String password = servPersistencia.recuperarPropiedadEntidad(eUser, "password");
+		ImageIcon img = new ImageIcon(servPersistencia.recuperarPropiedadEntidad(eUser, "imagen"));
+		Boolean premium = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eUser, "premium"));
 		UserRol rol = null;
-		nombre = servPersistencia.recuperarPropiedadEntidad(eUser, "nombre");
-		fechaNacimiento = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUser, "fechanacimiento"));
-		telefono = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUser, "telefono"));
-		nick = servPersistencia.recuperarPropiedadEntidad(eUser, "nick");
-		password = servPersistencia.recuperarPropiedadEntidad(eUser, "password");
-		img = new ImageIcon(servPersistencia.recuperarPropiedadEntidad(eUser, "imagen"));
-		premium = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eUser, "premium"));
 
 		String rolString = servPersistencia.recuperarPropiedadEntidad(eUser, "rolusuario");
 		if (rolString.equals(Normal.class.getName())) {
@@ -238,6 +232,29 @@ public class AdaptadorUserTDS implements UserDAO {
 	}
 
 	// -------------------Funciones auxiliares-----------------------------
+	private void registrarSiNoExisteEstado(Optional<Status> estado) {
+		if (estado.isPresent()) {
+			AdaptadorStatusTDS.getInstancia().registrarEstado(estado.get());
+		}
+	}
+
+	private void registrarSiNoExistenGrupos(List<Group> grupos) {
+		AdaptadorGroupTDS adaptadorGA = AdaptadorGroupTDS.getInstancia();
+		grupos.stream().forEach(g -> adaptadorGA.registrarGrupo(g));
+	}
+
+	private void registrarSiNoExistenContactosoGrupos(List<Contact> contactos) {
+		AdaptadorIndividualContactTDS adaptadorContactos = AdaptadorIndividualContactTDS.getInstancia();
+		AdaptadorGroupTDS adaptadorGrupos = AdaptadorGroupTDS.getInstancia();
+		contactos.stream().forEach(c -> {
+			if (c instanceof IndividualContact) {
+				adaptadorContactos.registrarContacto((IndividualContact) c);
+			} else {
+				adaptadorGrupos.registrarGrupo((Group) c);
+			}
+		});
+	}
+
 	private String obtenerCodigosGruposAdmin(List<Group> gruposAdmin) {
 		String grupos = "";
 		for (Group grupo : gruposAdmin) {
@@ -269,29 +286,6 @@ public class AdaptadorUserTDS implements UserDAO {
 		} else {
 			return "";
 		}
-	}
-
-	private void registrarSiNoExisteEstado(Optional<Status> estado) {
-		if (estado.isPresent()) {
-			AdaptadorStatusTDS.getInstancia().registrarEstado(estado.get());
-		}
-	}
-
-	private void registrarSiNoExistenGrupos(List<Group> grupos) {
-		AdaptadorGroupTDS adaptadorGA = AdaptadorGroupTDS.getInstancia();
-		grupos.stream().forEach(g -> adaptadorGA.registrarGrupo(g));
-	}
-
-	private void registrarSiNoExistenContactosoGrupos(List<Contact> contactos) {
-		AdaptadorIndividualContactTDS adaptadorContactos = AdaptadorIndividualContactTDS.getInstancia();
-		AdaptadorGroupTDS adaptadorGrupos = AdaptadorGroupTDS.getInstancia();
-		contactos.stream().forEach(c -> {
-			if (c instanceof IndividualContact) {
-				adaptadorContactos.registrarContacto((IndividualContact) c);
-			} else {
-				adaptadorGrupos.registrarGrupo((Group) c);
-			}
-		});
 	}
 
 	private List<Group> obtenerGruposDesdeCodigos(String codigos) {

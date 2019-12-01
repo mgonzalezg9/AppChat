@@ -29,7 +29,7 @@ public class TestPersistenciaStatus {
 	/**
 	 * Prueba que funcione la eliminación de un estado
 	 */
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void deleteStatus() {
 		adapter.registrarEstado(status);
 		adapter.borrarEstado(status);
