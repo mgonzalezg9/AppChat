@@ -60,6 +60,9 @@ public class AdaptadorUserTDS implements UserDAO {
 		// registrar contactos del usuario
 		registrarSiNoExistenContactosoGrupos(user.getContactos());
 
+		// registrar estado del usuario
+		registrarSiNoExisteEstado(user.getEstado());
+
 		// Atributos propios del usuario
 		eUsuario.setNombre("usuario");
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("nombre", user.getName()),
@@ -67,7 +70,7 @@ public class AdaptadorUserTDS implements UserDAO {
 				new Propiedad("telefono", String.valueOf(user.getNumTelefono())), new Propiedad("nick", user.getNick()),
 				new Propiedad("password", user.getPassword()), new Propiedad("imagen", user.getIcon().getDescription()),
 				new Propiedad("premium", String.valueOf(user.isPremium())),
-				new Propiedad("estado", obtenerCodigosEstado(user.getEstado().orElse(Status.NONE))),
+				new Propiedad("estado", obtenerCodigosEstado(user.getEstado())),
 				new Propiedad("gruposadmin", obtenerCodigosGruposAdmin(user.getGruposAdmin())),
 				new Propiedad("contactos", obtenerCodigosContactoIndividual(user.getContactos())),
 				new Propiedad("grupos", obtenerCodigosGrupo(user.getContactos())),
@@ -84,9 +87,10 @@ public class AdaptadorUserTDS implements UserDAO {
 	public void borrarUsuario(User user) {
 		// Se borran los elementos de las tablas que lo componen (Contactos y Grupos
 		// administrados)
-		Entidad eUser;
+		Entidad eUser = servPersistencia.recuperarEntidad(user.getCodigo());
 		AdaptadorIndividualContactTDS adaptadorC = AdaptadorIndividualContactTDS.getInstancia();
 		AdaptadorGroupTDS adaptadorG = AdaptadorGroupTDS.getInstancia();
+		AdaptadorStatusTDS adaptadorS = AdaptadorStatusTDS.getInstancia();
 
 		for (Contact chat : user.getContactos()) {
 			if (chat instanceof IndividualContact) {
@@ -99,8 +103,11 @@ public class AdaptadorUserTDS implements UserDAO {
 			adaptadorG.borrarGrupo(grupoAdmin);
 		}
 
-		eUser = servPersistencia.recuperarEntidad(user.getCodigo());
+		if (user.getEstado().isPresent()) {
+			adaptadorS.borrarEstado(user.getEstado().get());
+		}
 
+		servPersistencia.borrarEntidad(eUser);
 		// Si esta en el Pool tambien se borra del pool
 		if (PoolDAO.getInstancia().contiene(user.getCodigo())) {
 			PoolDAO.getInstancia().removeObjeto(user.getCodigo());
@@ -127,7 +134,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		servPersistencia.eliminarPropiedadEntidad(eUser, "premium");
 		servPersistencia.anadirPropiedadEntidad(eUser, "premium", String.valueOf(user.isPremium()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "estado");
-		servPersistencia.anadirPropiedadEntidad(eUser, "estado", user.getEstado().toString());
+		servPersistencia.anadirPropiedadEntidad(eUser, "estado", obtenerCodigosEstado(user.getEstado()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "gruposadmin");
 		servPersistencia.anadirPropiedadEntidad(eUser, "gruposadmin", obtenerCodigosGruposAdmin(user.getGruposAdmin()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "contactos");
@@ -142,7 +149,7 @@ public class AdaptadorUserTDS implements UserDAO {
 	@Override
 	public User recuperarUsuario(int codigo) {
 		// Si la entidad esta en el pool la devuelve directamente
-		if (PoolDAO.getInstancia().contiene(codigo)) 
+		if (PoolDAO.getInstancia().contiene(codigo))
 			return (User) PoolDAO.getInstancia().getObjeto(codigo);
 
 		// si no, la recupera de la base de datos
@@ -255,12 +262,18 @@ public class AdaptadorUserTDS implements UserDAO {
 				.trim();
 	}
 
-	private String obtenerCodigosEstado(Status s) {
-		// Si tiene estado obtenemos la
-		if (s.equals(Status.NONE)) {
-			return "";
+	private String obtenerCodigosEstado(Optional<Status> estado) {
+		// Si tiene estado obtenemos el codigo
+		if (estado.isPresent()) {
+			return String.valueOf(estado.get().getCodigo());
 		} else {
-			return String.valueOf(s.getCodigo());
+			return "";
+		}
+	}
+
+	private void registrarSiNoExisteEstado(Optional<Status> estado) {
+		if (estado.isPresent()) {
+			AdaptadorStatusTDS.getInstancia().registrarEstado(estado.get());
 		}
 	}
 

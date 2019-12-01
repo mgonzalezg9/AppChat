@@ -1,8 +1,10 @@
 package umu.tds.apps.AppChat;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import javax.swing.ImageIcon;
 
@@ -23,6 +25,8 @@ public class TestPersistenciaUser {
 	public static void setUp() {
 		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
 				"", "nick", true, new Premium(new YoungDiscount()));
+		// usuario.setEstado(Optional.of(new Status(new
+		// ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Pizzaaa <3")));
 		adapter = AdaptadorUserTDS.getInstancia();
 	}
 
@@ -38,17 +42,16 @@ public class TestPersistenciaUser {
 	/**
 	 * Prueba que funcione la eliminación de un usuario
 	 */
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void deleteUser() {
 		adapter.registrarUsuario(usuario);
 		adapter.borrarUsuario(usuario);
-		assertTrue(adapter.recuperarUsuario(usuario.getCodigo()) == null);
+		assertNull(adapter.recuperarUsuario(usuario.getCodigo()));
 	}
 
 	/**
 	 * Prueba que funcione la modificación de un usuario
 	 */
-
 	@Test
 	public void modifyUser() {
 		registerUser();
