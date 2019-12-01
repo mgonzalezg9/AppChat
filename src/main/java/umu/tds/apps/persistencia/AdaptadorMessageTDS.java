@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 
 import beans.Entidad;
 import beans.Propiedad;
+import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Discount;
@@ -28,6 +29,7 @@ public class AdaptadorMessageTDS implements MessageDAO {
 	private static ServicioPersistencia servPersistencia;
 
 	private AdaptadorMessageTDS() {
+		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 
 	public static AdaptadorMessageTDS getInstancia() {
@@ -37,13 +39,13 @@ public class AdaptadorMessageTDS implements MessageDAO {
 	}
 
 	@Override
-	public void registrarMensaje(Message mensaje) {
+	public void registrarMensaje(Message message) {
 		Entidad eMensaje = new Entidad();
 		boolean existe = true;
 
 		// Si la entidad está registrada no la registra de nuevo
 		try {
-			eMensaje = servPersistencia.recuperarEntidad(mensaje.getCodigo());
+			eMensaje = servPersistencia.recuperarEntidad(message.getCodigo());
 		} catch (NullPointerException e) {
 			existe = false;
 		}
@@ -53,32 +55,32 @@ public class AdaptadorMessageTDS implements MessageDAO {
 
 		// registrar primero los atributos que son objetos
 		// registrar usuario emisor del mensaje
-		registrarSiNoExisteUsuario(mensaje.getEmisor());
+		registrarSiNoExisteUsuario(message.getEmisor());
 
 		// registrar contacto receptor del mensaje
-		registrarSiNoExistenContactosoGrupos(mensaje.getReceptor());
+		registrarSiNoExistenContactosoGrupos(message.getReceptor());
 
 		// Atributos propios del usuario
 		eMensaje.setNombre("mensaje");
 
 		// Se guarda el grupo receptor o el contacto, segun convenga
 		boolean grupo = false;
-		if (mensaje.getReceptor() instanceof Group) {
+		if (message.getReceptor() instanceof Group) {
 			grupo = true;
 		}
 
-		eMensaje.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("texto", mensaje.getTexto()),
-				new Propiedad("hora", mensaje.getHora().toString()),
-				new Propiedad("emoticono", String.valueOf(mensaje.getEmoticono())),
-				new Propiedad("receptor", String.valueOf(mensaje.getReceptor().getCodigo())),
+		eMensaje.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("texto", message.getTexto()),
+				new Propiedad("hora", message.getHora().toString()),
+				new Propiedad("emoticono", String.valueOf(message.getEmoticono())),
+				new Propiedad("receptor", String.valueOf(message.getReceptor().getCodigo())),
 				new Propiedad("togroup", String.valueOf(grupo)),
-				new Propiedad("emisor", String.valueOf(mensaje.getEmisor().getCodigo())))));
+				new Propiedad("emisor", String.valueOf(message.getEmisor().getCodigo())))));
 
-		// Registrar entidad usuario
-		servPersistencia.registrarEntidad(eMensaje);
+		// Registrar entidad mensaje
+		eMensaje = servPersistencia.registrarEntidad(eMensaje);
 
 		// Identificador unico
-		mensaje.setCodigo(eMensaje.getId());
+		message.setCodigo(eMensaje.getId());
 	}
 
 	@Override
@@ -122,7 +124,7 @@ public class AdaptadorMessageTDS implements MessageDAO {
 		// si no, la recupera de la base de datos
 		// recuperar entidad
 		Entidad eMensaje = servPersistencia.recuperarEntidad(codigo);
-
+		
 		// recuperar propiedades que no son objetos
 		// fecha
 		String texto = servPersistencia.recuperarPropiedadEntidad(eMensaje, "texto");

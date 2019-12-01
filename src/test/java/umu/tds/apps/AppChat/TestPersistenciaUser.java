@@ -24,7 +24,7 @@ public class TestPersistenciaUser {
 	@BeforeClass
 	public static void setUp() {
 		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
-				"", "nick", true, new Premium(new YoungDiscount()));
+				"nick", "1234", true, new Premium(new YoungDiscount()));
 		// usuario.setEstado(Optional.of(new Status(new
 		// ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Pizzaaa <3")));
 		adapter = AdaptadorUserTDS.getInstancia();

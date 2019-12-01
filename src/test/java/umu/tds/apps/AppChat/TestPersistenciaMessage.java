@@ -20,8 +20,10 @@ public class TestPersistenciaMessage {
 
 	@BeforeClass
 	public static void setUp() {
-		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manolo", "Arbertoooo", "");
-		mensaje = new Message("Pasar los test", LocalDate.now(), usuario, new IndividualContact("Alberto", new LinkedList<>(), 0, usuario));
+		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
+				"nick", "1234", true, new Premium(new YoungDiscount()));
+		mensaje = new Message("Pasar los test", LocalDate.now(), usuario,
+				new IndividualContact("Alberto", new LinkedList<>(), 0, usuario));
 		adapter = AdaptadorMessageTDS.getInstancia();
 	}
 
@@ -31,17 +33,17 @@ public class TestPersistenciaMessage {
 	@Test
 	public void registerMessage() {
 		adapter.registrarMensaje(mensaje);
-		assertTrue(adapter.recuperarMensaje(usuario.getCodigo()).equals(mensaje));
+		assertTrue(adapter.recuperarMensaje(mensaje.getCodigo()).equals(mensaje));
 	}
 
 	/**
 	 * Prueba que funcione la eliminación de un mensaje
 	 */
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void deleteMessage() {
 		registerMessage();
 		adapter.borrarMensaje(mensaje);
-		assertTrue(adapter.recuperarMensaje(usuario.getCodigo()) == null);
+		assertNull(adapter.recuperarMensaje(mensaje.getCodigo()));
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class TestPersistenciaMessage {
 		mensaje.setTexto(text);
 		adapter.modificarMensaje(mensaje);
 
-		assertTrue(adapter.recuperarMensaje(usuario.getCodigo()).getTexto().equals(text));
+		assertTrue(adapter.recuperarMensaje(mensaje.getCodigo()).getTexto().equals(text));
 	}
 
 	/**
