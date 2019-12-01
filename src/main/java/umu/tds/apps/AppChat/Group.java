@@ -35,4 +35,43 @@ public class Group extends Contact {
 	public void cambiarAdmin(User u) {
 		admin = u;
 	}
+	
+	
+	// hashCode y equals
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((admin == null) ? 0 : admin.hashCode());
+		result = prime * result + ((contactos == null) ? 0 : contactos.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Group other = (Group) obj;
+		if (admin == null) {
+			if (other.admin != null)
+				return false;
+		} else if (!admin.equals(other.admin))
+			return false;
+		if (contactos == null) {
+			if (other.contactos != null)
+				return false;
+		} else if (!contactos.equals(other.contactos))
+			return false;
+		return true;
+	}
+	
+	// toString
+	@Override
+	public String toString() {
+		return "Group [contactos=" + contactos + ", admin=" + admin + "]";
+	}
 }
