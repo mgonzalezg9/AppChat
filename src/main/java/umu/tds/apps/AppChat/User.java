@@ -144,6 +144,10 @@ public class User {
 	public void setRol(UserRol rol) {
 		this.rol = rol;
 	}
+	
+	public void setIcon(ImageIcon icon) {
+		this.icon = icon;
+	}
 
 	public void addGrupoAdmin(Group g) {
 		gruposAdmin.add(g);

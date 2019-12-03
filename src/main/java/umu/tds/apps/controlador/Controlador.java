@@ -80,31 +80,30 @@ public class Controlador {
 		return false;
 	}
 
-	
-	
-	
 	public String getNombreUsuario() {
-		return nickname;
+		return usuarioActual.getName();
 	}
 
 	public String getSaludo() {
-		return saludo;
+		return usuarioActual.getSaludo();
 	}
 
 	public void setSaludo(String saludo) {
-		Controlador.saludo = saludo;
+		usuarioActual.setSaludo(saludo);
 	}
 
 	public List<ImageIcon> getImagenesUsuario() {
-		return imagenes;
+		List<ImageIcon> images = new LinkedList<>();
+		images.add(usuarioActual.getIcon());
+		return images;
 	}
 
 	public void addImagenUsuario(ImageIcon image) {
-		imagenes.add(image);
+		usuarioActual.setIcon(image);
 	}
 
 	public ImageIcon removeImagenUsuario(int pos) {
-		return imagenes.remove(pos);
+		return usuarioActual.getIcon(); // FIXME
 	}
 
 	public boolean deleteChat() {
