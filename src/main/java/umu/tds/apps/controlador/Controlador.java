@@ -16,23 +16,33 @@ import umu.tds.apps.vistas.Login;
 import umu.tds.apps.AppChat.*;
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
+import umu.tds.apps.persistencia.GroupDAO;
+import umu.tds.apps.persistencia.IndividualContactDAO;
+import umu.tds.apps.persistencia.MessageDAO;
+import umu.tds.apps.persistencia.StatusDAO;
+import umu.tds.apps.persistencia.UserDAO;
 import umu.tds.apps.vistas.UserSettings;
 
 public class Controlador {
-	// Eliminar
-	private static List<ImageIcon> imagenes = new ArrayList<>();
-	private static String nickname = "Manuelillo";
-	private static String saludo = "Hola amigos del mundo!";
-	
+	// Instancia del controlador.
 	private static Controlador unicaInstancia = null;
-	private FactoriaDAO factoria;
+	
+	// Adaptadores
+	private GroupDAO adaptadorGrupo;
+	private IndividualContactDAO adaptadorContactoIndividual;
+	private MessageDAO adaptadorMensaje;
+	private UserDAO adaptadorUsuario;
+	private StatusDAO adaptadorEstado;
+
+	// Catálogos
+	private UsersCatalogue catalogoUsuarios;
+	
+	// Nuestro usuario.
+	private User usuarioActual;
 
 	private Controlador() {
-		try {
-			factoria = FactoriaDAO.getInstancia();
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
+		inicializarAdaptadores(); // debe ser la primera linea para evitar error de sincronización
+		inicializarCatalogos();
 	}
 
 	// Aplicamos el patrón Singleton.
@@ -43,12 +53,36 @@ public class Controlador {
 			unicaInstancia = new Controlador();
 		return unicaInstancia;
 	}
+	
+	// Inicializamos los adaptadores
+	private void inicializarAdaptadores() {
+		FactoriaDAO factoria = null;
+		try {
+			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		
+		adaptadorGrupo = factoria.getGrupoDAO();
+		adaptadorContactoIndividual = factoria.getContactoIndividualDAO();
+		adaptadorMensaje = factoria.getMensajeDAO();
+		adaptadorUsuario = factoria.getUserDAO();
+		adaptadorEstado = factoria.getEstadoDAO();
+	}
 
-	public boolean iniciarSesion(String dni, char[] password) {
+	// Inicializamos los catálogos
+	private void inicializarCatalogos() {
+		catalogoUsuarios = UsersCatalogue.getUnicaInstancia();
+	}
+
+	public boolean iniciarSesion(String nick, String password) {
 		// TODO
 		return false;
 	}
 
+	
+	
+	
 	public String getNombreUsuario() {
 		return nickname;
 	}

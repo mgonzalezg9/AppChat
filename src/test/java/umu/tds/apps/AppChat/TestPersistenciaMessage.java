@@ -21,7 +21,7 @@ public class TestPersistenciaMessage {
 	@BeforeClass
 	public static void setUp() {
 		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
-				"nick", "1234", true, new Premium(new YoungDiscount()));
+				"nick", "1234", true, new Premium(new YoungDiscount()), "Este es mi saludo");
 		mensaje = new Message("Pasar los test", LocalDate.now(), usuario,
 				new IndividualContact("Alberto", new LinkedList<>(), 0, usuario));
 		adapter = AdaptadorMessageTDS.getInstancia();

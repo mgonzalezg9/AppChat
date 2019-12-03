@@ -18,6 +18,7 @@ public class User {
 	private String nick;
 	private String password;
 	private boolean premium;
+	private String saludo;
 	private Optional<Status> estado;
 	private List<Group> gruposAdmin;
 	private List<Contact> contactos;
@@ -25,7 +26,7 @@ public class User {
 
 	// Constructor
 	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
-			boolean premium, UserRol rol) {
+			boolean premium, UserRol rol, String saludo) {
 		super();
 		this.icon = icon;
 		this.name = name;
@@ -38,10 +39,11 @@ public class User {
 		this.contactos = new LinkedList<>();
 		this.estado = Optional.empty();
 		this.rol = rol;
+		this.saludo = saludo;
 	}
 
 	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
-			boolean premium, Status estado, List<Group> gruposAdmin, List<Contact> contactos) {
+			boolean premium, Status estado, String saludo, List<Group> gruposAdmin, List<Contact> contactos) {
 		setCodigo(0);
 		this.icon = icon;
 		this.setName(name);
@@ -51,6 +53,7 @@ public class User {
 		this.password = password;
 		this.premium = premium;
 		this.setEstado(Optional.ofNullable(estado));
+		this.saludo = saludo;
 		this.gruposAdmin = gruposAdmin;
 		this.contactos = contactos;
 	}
@@ -77,9 +80,17 @@ public class User {
 	public String getName() {
 		return name;
 	}
+	
+	public String getSaludo() {
+		return saludo;
+	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setSaludo(String saludo) {
+		this.saludo = saludo;
 	}
 
 	public LocalDate getFechaNacimiento() {
@@ -146,6 +157,15 @@ public class User {
 		contactos.add(g);
 	}
 
+	
+	@Override
+	public String toString() {
+		return "User [codigo=" + codigo + ", icon=" + icon + ", name=" + name + ", fechaNacimiento=" + fechaNacimiento
+				+ ", numTelefono=" + numTelefono + ", nick=" + nick + ", password=" + password + ", premium=" + premium
+				+ ", saludo=" + saludo + ", estado=" + estado + ", gruposAdmin=" + gruposAdmin + ", contactos="
+				+ contactos + ", rol=" + rol + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -162,6 +182,7 @@ public class User {
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + (premium ? 1231 : 1237);
 		result = prime * result + ((rol == null) ? 0 : rol.hashCode());
+		result = prime * result + ((saludo == null) ? 0 : saludo.hashCode());
 		return result;
 	}
 
@@ -173,51 +194,65 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-
-		User otroUsuario = (User) obj;
-		if (codigo != otroUsuario.codigo) {
+		User other = (User) obj;
+		if (codigo != other.codigo)
 			return false;
-		}
-
-		if (!contactos.equals(otroUsuario.contactos)) {
+		if (contactos == null) {
+			if (other.contactos != null)
+				return false;
+		} else if (!contactos.equals(other.contactos))
 			return false;
-		}
-		if (!estado.equals(otroUsuario.estado)) {
+		if (estado == null) {
+			if (other.estado != null)
+				return false;
+		} else if (!estado.equals(other.estado))
 			return false;
-		}
-		if (!fechaNacimiento.equals(otroUsuario.fechaNacimiento)) {
+		if (fechaNacimiento == null) {
+			if (other.fechaNacimiento != null)
+				return false;
+		} else if (!fechaNacimiento.equals(other.fechaNacimiento))
 			return false;
-		}
-		if (!gruposAdmin.equals(otroUsuario.gruposAdmin)) {
+		if (gruposAdmin == null) {
+			if (other.gruposAdmin != null)
+				return false;
+		} else if (!gruposAdmin.equals(other.gruposAdmin))
 			return false;
-		}
-		if (!icon.getDescription().equals(otroUsuario.icon.getDescription())) {
+		if (icon == null) {
+			if (other.icon != null)
+				return false;
+		} else if (!icon.equals(other.icon))
 			return false;
-		}
-		if (!name.equals(otroUsuario.name)) {
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
 			return false;
-		}
-		if (!nick.equals(otroUsuario.nick)) {
+		if (nick == null) {
+			if (other.nick != null)
+				return false;
+		} else if (!nick.equals(other.nick))
 			return false;
-		}
-		if (numTelefono != otroUsuario.numTelefono) {
+		if (numTelefono != other.numTelefono)
 			return false;
-		}
-		if (!password.equals(otroUsuario.password)) {
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
 			return false;
-		}
-		if (premium != otroUsuario.premium) {
+		if (premium != other.premium)
 			return false;
-		}
+		if (rol == null) {
+			if (other.rol != null)
+				return false;
+		} else if (!rol.equals(other.rol))
+			return false;
+		if (saludo == null) {
+			if (other.saludo != null)
+				return false;
+		} else if (!saludo.equals(other.saludo))
+			return false;
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "User [codigo=" + codigo + ", icon=" + icon + ", name=" + name + ", fechaNacimiento=" + fechaNacimiento
-				+ ", numTelefono=" + numTelefono + ", nick=" + nick + ", password=" + password + ", premium=" + premium
-				+ ", estado=" + estado + ", gruposAdmin=" + gruposAdmin + ", contactos=" + contactos + ", rol=" + rol
-				+ "]";
-	}
+	
 
 }

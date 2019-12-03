@@ -74,7 +74,8 @@ public class AdaptadorUserTDS implements UserDAO {
 				new Propiedad("gruposadmin", obtenerCodigosGruposAdmin(user.getGruposAdmin())),
 				new Propiedad("contactos", obtenerCodigosContactoIndividual(user.getContactos())),
 				new Propiedad("grupos", obtenerCodigosGrupo(user.getContactos())),
-				new Propiedad("rolusuario", user.getRol().toString()))));
+				new Propiedad("rolusuario", user.getRol().toString()),
+				new Propiedad("saludo", user.getSaludo()))));
 
 		// Registrar entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -148,6 +149,8 @@ public class AdaptadorUserTDS implements UserDAO {
 		servPersistencia.anadirPropiedadEntidad(eUser, "grupos", obtenerCodigosGrupo(user.getContactos()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "rolusuario");
 		servPersistencia.anadirPropiedadEntidad(eUser, "rolusuario", user.getRol().toString());
+		servPersistencia.eliminarPropiedadEntidad(eUser, "saludo");
+		servPersistencia.anadirPropiedadEntidad(eUser, "saludo", user.getSaludo());
 	}
 
 	@Override
@@ -170,6 +173,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		String password = servPersistencia.recuperarPropiedadEntidad(eUser, "password");
 		ImageIcon img = new ImageIcon(servPersistencia.recuperarPropiedadEntidad(eUser, "imagen"));
 		Boolean premium = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eUser, "premium"));
+		String saludo = servPersistencia.recuperarPropiedadEntidad(eUser, "saludo");
 		UserRol rol = null;
 
 		String rolString = servPersistencia.recuperarPropiedadEntidad(eUser, "rolusuario");
@@ -181,9 +185,9 @@ public class AdaptadorUserTDS implements UserDAO {
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		}
+		} 
 
-		User usuario = new User(img, nombre, fechaNacimiento, telefono, nick, password, premium, rol);
+		User usuario = new User(img, nombre, fechaNacimiento, telefono, nick, password, premium, rol, saludo);
 		usuario.setCodigo(codigo);
 
 		// Metemos el usuario en el pool antes de llamar a otros
