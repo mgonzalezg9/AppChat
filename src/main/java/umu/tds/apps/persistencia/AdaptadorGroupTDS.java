@@ -65,6 +65,9 @@ public class AdaptadorGroupTDS implements GroupDAO {
 
 		// Identificador unico
 		group.setCodigo(eGroup.getId());
+		
+		// Guardamos en el pool
+		PoolDAO.getInstancia().addObjeto(group.getCodigo(), group);
 	}
 
 	@Override
@@ -80,6 +83,10 @@ public class AdaptadorGroupTDS implements GroupDAO {
 
 		eGroup = servPersistencia.recuperarEntidad(group.getCodigo());
 		servPersistencia.borrarEntidad(eGroup);
+		
+		// Si está en el pool, borramos del pool
+		if (PoolDAO.getInstancia().contiene(group.getCodigo()))
+			PoolDAO.getInstancia().removeObjeto(group.getCodigo());
 	}
 
 	@Override

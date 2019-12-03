@@ -61,6 +61,9 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 
 		// Identificador unico
 		contact.setCodigo(eContact.getId());
+		
+		// Guardamos en el pool
+		PoolDAO.getInstancia().addObjeto(contact.getCodigo(), contact);
 	}
 
 	@Override
@@ -76,6 +79,10 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 
 		eContact = servPersistencia.recuperarEntidad(contact.getCodigo());
 		servPersistencia.borrarEntidad(eContact);
+		
+		// Si está en el pool, borramos del pool
+		if (PoolDAO.getInstancia().contiene(contact.getCodigo()))
+			PoolDAO.getInstancia().removeObjeto(contact.getCodigo());
 	}
 
 	@Override
@@ -158,13 +165,11 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 	}
 
 	private List<Message> obtenerMensajesDesdeCodigos(String codigos) {
-		System.out.println("Voy a sacar los mensajes:");
 		List<Message> mensajes = new LinkedList<>();
 		StringTokenizer strTok = new StringTokenizer(codigos, " ");
 		AdaptadorMessageTDS adaptadorMensajes = AdaptadorMessageTDS.getInstancia();
 		while (strTok.hasMoreTokens()) {
 			String code = (String) strTok.nextElement();
-			System.out.println(code + " ");
 			mensajes.add(adaptadorMensajes.recuperarMensaje(Integer.valueOf(code)));
 		}
 		return mensajes;

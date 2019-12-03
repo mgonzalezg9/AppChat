@@ -81,6 +81,9 @@ public class AdaptadorMessageTDS implements MessageDAO {
 
 		// Identificador unico
 		message.setCodigo(eMensaje.getId());
+		
+		// Guardamos en el pool
+		PoolDAO.getInstancia().addObjeto(message.getCodigo(), message);
 	}
 
 	@Override
@@ -88,6 +91,10 @@ public class AdaptadorMessageTDS implements MessageDAO {
 		// Se borran los elementos de las tablas que lo componen (Usuario y Contacto)
 		Entidad eMensaje = servPersistencia.recuperarEntidad(mensaje.getCodigo());
 		servPersistencia.borrarEntidad(eMensaje);
+		
+		// Si está en el pool, borramos del pool
+		if (PoolDAO.getInstancia().contiene(mensaje.getCodigo()))
+			PoolDAO.getInstancia().removeObjeto(mensaje.getCodigo());
 	}
 
 	@Override
@@ -123,7 +130,6 @@ public class AdaptadorMessageTDS implements MessageDAO {
 
 		// si no, la recupera de la base de datos
 		// recuperar entidad
-		System.out.println(codigo);
 		Entidad eMensaje = servPersistencia.recuperarEntidad(codigo);
 		
 		// recuperar propiedades que no son objetos

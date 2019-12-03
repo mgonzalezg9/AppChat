@@ -81,6 +81,9 @@ public class AdaptadorUserTDS implements UserDAO {
 
 		// Identificador unico
 		user.setCodigo(eUsuario.getId());
+		
+		// Guardamos en el pool
+		PoolDAO.getInstancia().addObjeto(user.getCodigo(), user);
 	}
 
 	@Override
@@ -108,6 +111,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		}
 
 		servPersistencia.borrarEntidad(eUser);
+		
 		// Si esta en el Pool tambien se borra del pool
 		if (PoolDAO.getInstancia().contiene(user.getCodigo())) {
 			PoolDAO.getInstancia().removeObjeto(user.getCodigo());

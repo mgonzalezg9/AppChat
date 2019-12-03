@@ -52,12 +52,18 @@ public class AdaptadorStatusTDS implements StatusDAO {
 
 		// Identificador unico
 		status.setCodigo(eStatus.getId());
+		
+		// Guardamos en el pool
+		PoolDAO.getInstancia().addObjeto(status.getCodigo(), status);
 	}
 
 	@Override
 	public void borrarEstado(Status status) {
 		Entidad eStatus = servPersistencia.recuperarEntidad(status.getCodigo());
 		servPersistencia.borrarEntidad(eStatus);
+		// Si está en el pool, borramos del pool
+		if (PoolDAO.getInstancia().contiene(status.getCodigo()))
+			PoolDAO.getInstancia().removeObjeto(status.getCodigo());
 	}
 
 	@Override
