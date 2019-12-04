@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 public class User {
 	// Properties
 	private int codigo;
-	private ImageIcon icon;
+	private List<ImageIcon> profilePhotos;
 	private String name;
 	private LocalDate fechaNacimiento;
 	private int numTelefono;
@@ -24,73 +24,45 @@ public class User {
 	private List<Contact> contactos;
 	private UserRol rol;
 
-	// Constructor
+	// Constructores
 	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
 			boolean premium, UserRol rol, String saludo) {
-		super();
-		this.icon = icon;
+		this(icon, name, fechaNacimiento, numTelefono, nick, password, premium, null, saludo, new LinkedList<>(),
+				new LinkedList<>());
+	}
+
+	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
+			boolean premium, Status estado, String saludo, List<Group> gruposAdmin, List<Contact> contactos) {
+		this.codigo = 0;
+		this.profilePhotos = new LinkedList<>();
+		this.profilePhotos.add(icon);
 		this.name = name;
 		this.fechaNacimiento = fechaNacimiento;
 		this.numTelefono = numTelefono;
 		this.nick = nick;
 		this.password = password;
 		this.premium = premium;
-		this.gruposAdmin = new LinkedList<>();
-		this.contactos = new LinkedList<>();
-		this.estado = Optional.empty();
-		this.rol = rol;
-		this.saludo = saludo;
-	}
-
-	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
-			boolean premium, Status estado, String saludo, List<Group> gruposAdmin, List<Contact> contactos) {
-		setCodigo(0);
-		this.icon = icon;
-		this.setName(name);
-		this.fechaNacimiento = fechaNacimiento;
-		this.numTelefono = numTelefono;
-		this.nick = nick;
-		this.password = password;
-		this.premium = premium;
-		this.setEstado(Optional.ofNullable(estado));
+		this.estado = Optional.ofNullable(estado);
 		this.saludo = saludo;
 		this.gruposAdmin = gruposAdmin;
 		this.contactos = contactos;
 	}
 
-	// QUITAR Construtor solo para pruebas en estadosOld
-	public User(ImageIcon icon, String name) {
-		this.icon = icon;
-		this.setName(name);
-	}
-
-	// QUITAR Construtor solo para pruebas en UserStatusWindow
-	public User(ImageIcon icon, String name, String mensaje, String fecha) {
-		this.icon = icon;
-		this.setName(name);
-		this.setEstado(Optional.of(new Status(icon, mensaje)));
-		this.fechaNacimiento = LocalDate.now();
-	}
-
 	// Getters
-	public ImageIcon getIcon() {
-		return icon;
+	public List<ImageIcon> getProfilePhotos() {
+		return profilePhotos;
+	}
+
+	public ImageIcon getProfilePhoto() {
+		return profilePhotos.get(profilePhotos.size() - 1);
 	}
 
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getSaludo() {
 		return saludo;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void setSaludo(String saludo) {
-		this.saludo = saludo;
 	}
 
 	public LocalDate getFechaNacimiento() {
@@ -117,10 +89,6 @@ public class User {
 		return estado;
 	}
 
-	public void setEstado(Optional<Status> estado) {
-		this.estado = estado;
-	}
-
 	public List<Group> getGruposAdmin() {
 		return gruposAdmin;
 	}
@@ -133,20 +101,41 @@ public class User {
 		return codigo;
 	}
 
+	public UserRol getRol() {
+		return rol;
+	}
+
+	// Setters
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
 
-	public UserRol getRol() {
-		return rol;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSaludo(String saludo) {
+		this.saludo = saludo;
+	}
+
+	public void setPremium() {
+		premium = true;
+	}
+
+	public void setEstado(Optional<Status> estado) {
+		this.estado = estado;
 	}
 
 	public void setRol(UserRol rol) {
 		this.rol = rol;
 	}
-	
-	public void setIcon(ImageIcon icon) {
-		this.icon = icon;
+
+	public void addProfilePhoto(ImageIcon icon) {
+		this.profilePhotos.add(icon);
+	}
+
+	public ImageIcon removeProfilePhoto(int pos) {
+		return this.profilePhotos.remove(pos);
 	}
 
 	public void addGrupoAdmin(Group g) {
@@ -161,13 +150,13 @@ public class User {
 		contactos.add(g);
 	}
 
-	
+	// Metodos de test
 	@Override
 	public String toString() {
-		return "User [codigo=" + codigo + ", icon=" + icon + ", name=" + name + ", fechaNacimiento=" + fechaNacimiento
-				+ ", numTelefono=" + numTelefono + ", nick=" + nick + ", password=" + password + ", premium=" + premium
-				+ ", saludo=" + saludo + ", estado=" + estado + ", gruposAdmin=" + gruposAdmin + ", contactos="
-				+ contactos + ", rol=" + rol + "]";
+		return "User [codigo=" + codigo + ", icon=" + profilePhotos + ", name=" + name + ", fechaNacimiento="
+				+ fechaNacimiento + ", numTelefono=" + numTelefono + ", nick=" + nick + ", password=" + password
+				+ ", premium=" + premium + ", saludo=" + saludo + ", estado=" + estado + ", gruposAdmin=" + gruposAdmin
+				+ ", contactos=" + contactos + ", rol=" + rol + "]";
 	}
 
 	@Override
@@ -179,7 +168,7 @@ public class User {
 		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((fechaNacimiento == null) ? 0 : fechaNacimiento.hashCode());
 		result = prime * result + ((gruposAdmin == null) ? 0 : gruposAdmin.hashCode());
-		result = prime * result + ((icon == null) ? 0 : icon.hashCode());
+		result = prime * result + ((profilePhotos == null) ? 0 : profilePhotos.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((nick == null) ? 0 : nick.hashCode());
 		result = prime * result + numTelefono;
@@ -221,10 +210,10 @@ public class User {
 				return false;
 		} else if (!gruposAdmin.equals(other.gruposAdmin))
 			return false;
-		if (icon == null) {
-			if (other.icon != null)
+		if (profilePhotos == null) {
+			if (other.profilePhotos != null)
 				return false;
-		} else if (!icon.equals(other.icon))
+		} else if (!profilePhotos.equals(other.profilePhotos))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -257,6 +246,4 @@ public class User {
 			return false;
 		return true;
 	}
-	
-
 }

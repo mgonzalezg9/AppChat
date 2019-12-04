@@ -22,7 +22,7 @@ import umu.tds.apps.persistencia.UserDAO;
 public class Controlador {
 	// Instancia del controlador.
 	private static Controlador unicaInstancia = null;
-	
+
 	// Adaptadores
 	private GroupDAO adaptadorGrupo;
 	private IndividualContactDAO adaptadorContactoIndividual;
@@ -32,7 +32,7 @@ public class Controlador {
 
 	// Catálogos
 	private UsersCatalogue catalogoUsuarios;
-	
+
 	// Nuestro usuario.
 	private User usuarioActual;
 
@@ -49,7 +49,7 @@ public class Controlador {
 			unicaInstancia = new Controlador();
 		return unicaInstancia;
 	}
-	
+
 	// Inicializamos los adaptadores
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
@@ -58,7 +58,7 @@ public class Controlador {
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
-		
+
 		adaptadorGrupo = factoria.getGrupoDAO();
 		adaptadorContactoIndividual = factoria.getContactoIndividualDAO();
 		adaptadorMensaje = factoria.getMensajeDAO();
@@ -71,17 +71,28 @@ public class Controlador {
 		catalogoUsuarios = UsersCatalogue.getUnicaInstancia();
 	}
 
-	public boolean iniciarSesion(String nick, String password) { // MANUELITO
-		// TODO Comprobar el usuario y devolver si es correcto o no. INICIO EL USUARIO ACTUAL.
+	public boolean iniciarSesion(String nick, String password) {
+		User cliente = catalogoUsuarios.getUsuario(nick);
+
+		// Si la password esta bien inicia sesion
+		if (cliente.getPassword().equals(password)) {
+			usuarioActual = cliente;
+			return true;
+		}
 		return false;
 	}
-	
-	public boolean crearCuenta(String User, String password, String email, String name, int numTelefono, LocalDate fechaNacimiento) { // ALFONSITO
+
+	public boolean crearCuenta(String User, String password, String email, String name, int numTelefono,
+			LocalDate fechaNacimiento) { // ALFONSITO
 		// TODO Registro el usuario. Devuelvo false si el nick ya está en uso
 		return false;
 	}
 
-	public String getNombreUsuario() { 
+	public User getUsuarioActual() {
+		return usuarioActual;
+	}
+
+	public String getNombreUsuario() {
 		return usuarioActual.getName();
 	}
 
@@ -96,122 +107,102 @@ public class Controlador {
 	public List<ImageIcon> getImagenesUsuario() { // MANUELITO
 		// TODO obtener todas la imagenes del usuario
 		List<ImageIcon> images = new LinkedList<>();
-		images.add(usuarioActual.getIcon());
+		images.add(usuarioActual.getProfilePhotos());
 		return images;
 	}
 
 	public void addImagenUsuario(ImageIcon image) { // MANUELITO
 		// TODO añadir una imagen al conjunto de imágenes del usuario
-		usuarioActual.setIcon(image);
+		usuarioActual.addProfilePhoto(image);
 	}
 
-	public ImageIcon removeImagenUsuario(int pos) { // MANUELITO
-		// TODO borrar una imagen del usuario
-		return usuarioActual.getIcon(); // FIXME
-	}
-	
-	public List<Contact> obtenerMisContactos () { // ALFONSITO
+	public List<Contact> obtenerMisContactos() { // ALFONSITO
 		// TODO devuelvo mi lista de contactos. Saco el código del usuario actual.
-		
+
 		return new LinkedList<Contact>();
 	}
-	
-	public Message obtenerUltimoMensaje (Contact contacto) { // ALFONSITO
+
+	public Message obtenerUltimoMensaje(Contact contacto) { // ALFONSITO
 		// TODO devuelvo el último mensaje con ese contacto.
-		
+
 		return null;
 	}
-	
-	public List<Message> obtenerMensajes (Contact contacto) { // ALFONSITO
-		// TODO devuelvo mi lista de mensajes con ese contacto. Saco el código del contacto del que me pasan.
-		
+
+	public List<Message> obtenerMensajes(Contact contacto) { // ALFONSITO
+		// TODO devuelvo mi lista de mensajes con ese contacto. Saco el código del
+		// contacto del que me pasan.
+
 		return new LinkedList<Message>();
 	}
-	
-	public Status obtenerEstado (Contact contacto) { // MANUELITO
-		// TODO devuelvo el estado de ese contacto, si tiene.
-		
-		return null;
-	}
-	
-	public boolean crearContacto (ImageIcon imagen, String nombre, int numTelefono) { // ALFONSITO.
+
+	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) { // ALFONSITO.
 		// TODO creo el contacto. Da error si tiene como nombre el de otro ya creado.
-		
+
 		return false;
 	}
-	
-	public void crearGrupo (String nombre, List<IndividualContact> participantes) { // ALFONSITO
+
+	public void crearGrupo(String nombre, List<IndividualContact> participantes) { // ALFONSITO
 		// TODO creo el grupo. EL USUARIO ACTUAL ES EL ADMINISTRADOR
 	}
-	
-	public List<Group> obtenerMisGruposAdministrados () { // ALFONSITO
+
+	public List<Group> obtenerMisGruposAdministrados() { // ALFONSITO
 		// TODO devuelvo una lista de mis grupos. Saco el código del usuario actual.
-		
+
 		return new LinkedList<Group>();
 	}
-	
-	public List<IndividualContact> obtenerContactosDelGrupo (Group grupo) { // ALFONSITO
-		// TODO devuelvo una lista de los contactos de mi grupo. Saco el código del usuario actual.
-		
+
+	public List<IndividualContact> obtenerContactosDelGrupo(Group grupo) { // ALFONSITO
+		// TODO devuelvo una lista de los contactos de mi grupo. Saco el código del
+		// usuario actual.
+
 		return new LinkedList<IndividualContact>();
 	}
-	
-	public String obtenerNombreContacto (Contact contacto) {
+
+	public String obtenerNombreContacto(Contact contacto) {
 		return contacto.getNombre();
 	}
-	
-	public ImageIcon obtenerImagenContacto (IndividualContact contacto) {
-		return contacto.getUsuario().getIcon();
+
+	public ImageIcon obtenerImagenContacto(IndividualContact contacto) {
+		return contacto.getUsuario().getProfilePhotos();
 	}
-	
-	public int obtenerNumTelefonoContacto (IndividualContact contacto) {
+
+	public int obtenerNumTelefonoContacto(IndividualContact contacto) {
 		return contacto.getMovil();
 	}
-	
-	public String obtenerNombreGrupo (Group grupo) {
+
+	public String obtenerNombreGrupo(Group grupo) {
 		return grupo.getNombre();
 	}
-	
-	public List<String> obtenerNombresGrupos (IndividualContact contacto) { // ALFONSITO
-		//TODO devuelvo una lista con los nombres de los grupos en los que se usuario y yo estamos.
+
+	public List<String> obtenerNombresGrupos(IndividualContact contacto) { // ALFONSITO
+		// TODO devuelvo una lista con los nombres de los grupos en los que se usuario y
+		// yo estamos.
 		return new LinkedList<String>();
 	}
-	
-	public void hacerPremium () { // MANUELITO
-		//TODO hacer premium al usuario actual.
+
+	public void hacerPremium() { // MANUELITO
+		// TODO Ponerle algun descuento segun convenga
+		usuarioActual.setPremium();
 	}
-	
-	public void cerrarSesion () { // MANUELITO
-		//TODO cerrar la sesión. QUITAR EL USUARIO ACTUAL.
+
+	public void cerrarSesion() { // MANUELITO
+		usuarioActual = null;
 	}
-	
-	public List<Message> buscarMensajes (String emisor, LocalDate fechaInicio, LocalDate fechaFin, String text) { // MANUELITO
-		//TODO obtener los mensaje que cumplan el filtro (predicado)
-		
+
+	public List<Message> buscarMensajes(String emisor, LocalDate fechaInicio, LocalDate fechaFin, String text) { // MANUELITO
+		// TODO obtener los mensaje que cumplan el filtro (predicado)
+
 		return null;
 	}
 
-	public boolean deleteChat () {
-		//TODO PREGUNTAR SI borrar los mensajes de la base de datos.
-		return false;
-	}
-	
-	public boolean deleteContact (Contact c) { // ALFONSITO
-		//TODO borrar el contacto de la base de datos.
+	public boolean deleteChat() {
+		// TODO PREGUNTAR SI borrar los mensajes de la base de datos.
 		return false;
 	}
 
-	public Status getEstado(User u) {
-		if (new Random().nextInt(2) == 0) {
-			return new Status(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")),
-					"Flying");
-		} else
-			return new Status(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/fire_120x120.png")),
-					"Fuegooo");
-	}
-
-	public User getUsuario() {
-		return new User(new ImageIcon(), "");
+	public boolean deleteContact(Contact c) { // ALFONSITO
+		// TODO borrar el contacto de la base de datos.
+		return false;
 	}
 
 	public static List<BubbleText> getChat(User u, JPanel chat) {

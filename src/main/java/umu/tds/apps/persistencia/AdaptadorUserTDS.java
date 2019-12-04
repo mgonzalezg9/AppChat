@@ -68,7 +68,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("nombre", user.getName()),
 				new Propiedad("fechanacimiento", user.getFechaNacimiento().toString()),
 				new Propiedad("telefono", String.valueOf(user.getNumTelefono())), new Propiedad("nick", user.getNick()),
-				new Propiedad("password", user.getPassword()), new Propiedad("imagen", user.getIcon().getDescription()),
+				new Propiedad("password", user.getPassword()), new Propiedad("imagen", user.getProfilePhotos().getDescription()),
 				new Propiedad("premium", String.valueOf(user.isPremium())),
 				new Propiedad("estado", obtenerCodigosEstado(user.getEstado())),
 				new Propiedad("gruposadmin", obtenerCodigosGruposAdmin(user.getGruposAdmin())),
@@ -135,7 +135,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		servPersistencia.eliminarPropiedadEntidad(eUser, "password");
 		servPersistencia.anadirPropiedadEntidad(eUser, "password", user.getPassword());
 		servPersistencia.eliminarPropiedadEntidad(eUser, "imagen");
-		servPersistencia.anadirPropiedadEntidad(eUser, "imagen", user.getIcon().toString());
+		servPersistencia.anadirPropiedadEntidad(eUser, "imagen", user.getProfilePhotos().toString());
 		servPersistencia.eliminarPropiedadEntidad(eUser, "premium");
 		servPersistencia.anadirPropiedadEntidad(eUser, "premium", String.valueOf(user.isPremium()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "estado");
