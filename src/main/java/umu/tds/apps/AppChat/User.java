@@ -21,17 +21,18 @@ public class User {
 	private Optional<Status> estado;
 	private List<Group> gruposAdmin;
 	private List<Contact> contactos;
-	private Discount descuento;
+	private Optional<Discount> descuento;
 
 	// Constructores
 	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
-			boolean premium, UserRol rol, String saludo) {
+			boolean premium, Discount descuento, String saludo) {
 		this(icon, name, fechaNacimiento, numTelefono, nick, password, premium, null, saludo, new LinkedList<>(),
-				new LinkedList<>());
+				new LinkedList<>(), descuento);
 	}
 
 	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
-			boolean premium, Status estado, String saludo, List<Group> gruposAdmin, List<Contact> contactos) {
+			boolean premium, Status estado, String saludo, List<Group> gruposAdmin, List<Contact> contactos,
+			Discount descuento) {
 		this.codigo = 0;
 		this.profilePhotos = new LinkedList<>();
 		this.profilePhotos.add(icon);
@@ -45,6 +46,7 @@ public class User {
 		this.saludo = saludo;
 		this.gruposAdmin = gruposAdmin;
 		this.contactos = contactos;
+		this.descuento = Optional.ofNullable(descuento);
 	}
 
 	// Getters
@@ -100,7 +102,7 @@ public class User {
 		return codigo;
 	}
 
-	public Discount getDescuento() {
+	public Optional<Discount> getDescuento() {
 		return descuento;
 	}
 
@@ -126,7 +128,7 @@ public class User {
 	}
 
 	public void setDescuento(Discount descuento) {
-		this.descuento = descuento;
+		this.descuento = Optional.ofNullable(descuento);
 	}
 
 	public void addProfilePhoto(ImageIcon icon) {

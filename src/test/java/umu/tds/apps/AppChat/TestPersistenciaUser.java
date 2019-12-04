@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.swing.ImageIcon;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,10 +24,10 @@ public class TestPersistenciaUser {
 
 	@BeforeClass
 	public static void setUp() {
-		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
-				"nick", "1234", true, new Premium(new YoungDiscount()), "Este es mi saludo");
-		// usuario.setEstado(Optional.of(new Status(new
-		// ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Pizzaaa <3")));
+		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manuel", LocalDate.now(), 0,
+				"mrblacknuel", "1234", true, new YoungDiscount(), null);
+		usuario.setEstado(Optional.of(
+				new Status(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Buscadme en Telegram")));
 		adapter = AdaptadorUserTDS.getInstancia();
 	}
 
@@ -44,7 +45,7 @@ public class TestPersistenciaUser {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void deleteUser() {
-		adapter.registrarUsuario(usuario);
+		registerUser();
 		adapter.borrarUsuario(usuario);
 		assertNull(adapter.recuperarUsuario(usuario.getCodigo()));
 	}
@@ -72,5 +73,12 @@ public class TestPersistenciaUser {
 
 		assertTrue(adapter.recuperarTodosUsuarios().contains(usuario));
 	}
-
+	
+	@AfterClass
+	public static void tearDown() {
+		try {
+			adapter.borrarUsuario(usuario);
+		} catch (NullPointerException e) {
+		}
+	}
 }

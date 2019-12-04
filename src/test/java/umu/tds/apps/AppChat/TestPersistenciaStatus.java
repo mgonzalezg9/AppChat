@@ -2,6 +2,8 @@ package umu.tds.apps.AppChat;
 
 import static org.junit.Assert.assertTrue;
 import javax.swing.ImageIcon;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import umu.tds.apps.persistencia.AdaptadorStatusTDS;
@@ -31,7 +33,7 @@ public class TestPersistenciaStatus {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void deleteStatus() {
-		adapter.registrarEstado(status);
+		registerStatus();
 		adapter.borrarEstado(status);
 		assertTrue(adapter.recuperarEstado(status.getCodigo()) == null);
 	}
@@ -59,5 +61,13 @@ public class TestPersistenciaStatus {
 		registerStatus();
 
 		assertTrue(adapter.recuperarTodosEstados().contains(status));
+	}
+	
+	@AfterClass
+	public static void tearDown() {
+		try {
+			adapter.borrarEstado(status);
+		} catch (NullPointerException e) {
+		}
 	}
 }

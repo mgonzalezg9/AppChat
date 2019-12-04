@@ -18,11 +18,8 @@ import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Discount;
 import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
-import umu.tds.apps.AppChat.Normal;
-import umu.tds.apps.AppChat.Premium;
 import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
-import umu.tds.apps.AppChat.UserRol;
 
 public class AdaptadorUserTDS implements UserDAO {
 	private static ServicioPersistencia servPersistencia;
@@ -68,13 +65,16 @@ public class AdaptadorUserTDS implements UserDAO {
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("nombre", user.getName()),
 				new Propiedad("fechanacimiento", user.getFechaNacimiento().toString()),
 				new Propiedad("telefono", String.valueOf(user.getNumTelefono())), new Propiedad("nick", user.getNick()),
-				new Propiedad("password", user.getPassword()), new Propiedad("imagen", user.getProfilePhotos().getDescription()),
+				new Propiedad("password", user.getPassword()),
+				new Propiedad("imagenes", obtenerPathImagenes(user.getProfilePhotos())),
 				new Propiedad("premium", String.valueOf(user.isPremium())),
 				new Propiedad("estado", obtenerCodigosEstado(user.getEstado())),
 				new Propiedad("gruposadmin", obtenerCodigosGruposAdmin(user.getGruposAdmin())),
 				new Propiedad("contactos", obtenerCodigosContactoIndividual(user.getContactos())),
 				new Propiedad("grupos", obtenerCodigosGrupo(user.getContactos())),
-				new Propiedad("rolusuario", user.getDescuento().toString()),
+				// Si tiene un descuento se guarda en BD
+				new Propiedad("descuento",
+						user.getDescuento().isPresent() ? user.getDescuento().get().getClass().getName() : ""),
 				new Propiedad("saludo", user.getSaludo()))));
 
 		// Registrar entidad usuario
@@ -82,7 +82,7 @@ public class AdaptadorUserTDS implements UserDAO {
 
 		// Identificador unico
 		user.setCodigo(eUsuario.getId());
-		
+
 		// Guardamos en el pool
 		PoolDAO.getInstancia().addObjeto(user.getCodigo(), user);
 	}
@@ -112,7 +112,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		}
 
 		servPersistencia.borrarEntidad(eUser);
-		
+
 		// Si esta en el Pool tambien se borra del pool
 		if (PoolDAO.getInstancia().contiene(user.getCodigo())) {
 			PoolDAO.getInstancia().removeObjeto(user.getCodigo());
@@ -134,8 +134,8 @@ public class AdaptadorUserTDS implements UserDAO {
 		servPersistencia.anadirPropiedadEntidad(eUser, "nick", user.getNick());
 		servPersistencia.eliminarPropiedadEntidad(eUser, "password");
 		servPersistencia.anadirPropiedadEntidad(eUser, "password", user.getPassword());
-		servPersistencia.eliminarPropiedadEntidad(eUser, "imagen");
-		servPersistencia.anadirPropiedadEntidad(eUser, "imagen", user.getProfilePhotos().toString());
+		servPersistencia.eliminarPropiedadEntidad(eUser, "imagenes");
+		servPersistencia.anadirPropiedadEntidad(eUser, "imagenes", obtenerPathImagenes(user.getProfilePhotos()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "premium");
 		servPersistencia.anadirPropiedadEntidad(eUser, "premium", String.valueOf(user.isPremium()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "estado");
@@ -147,8 +147,9 @@ public class AdaptadorUserTDS implements UserDAO {
 				obtenerCodigosContactoIndividual(user.getContactos()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "grupos");
 		servPersistencia.anadirPropiedadEntidad(eUser, "grupos", obtenerCodigosGrupo(user.getContactos()));
-		servPersistencia.eliminarPropiedadEntidad(eUser, "rolusuario");
-		servPersistencia.anadirPropiedadEntidad(eUser, "rolusuario", user.getDescuento().toString());
+		servPersistencia.eliminarPropiedadEntidad(eUser, "descuento");
+		servPersistencia.anadirPropiedadEntidad(eUser, "descuento",
+				user.getDescuento().isPresent() ? user.getDescuento().get().getClass().getName() : "");
 		servPersistencia.eliminarPropiedadEntidad(eUser, "saludo");
 		servPersistencia.anadirPropiedadEntidad(eUser, "saludo", user.getSaludo());
 	}
@@ -174,20 +175,17 @@ public class AdaptadorUserTDS implements UserDAO {
 		ImageIcon img = new ImageIcon(servPersistencia.recuperarPropiedadEntidad(eUser, "imagen"));
 		Boolean premium = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eUser, "premium"));
 		String saludo = servPersistencia.recuperarPropiedadEntidad(eUser, "saludo");
-		UserRol rol = null;
-
-		String rolString = servPersistencia.recuperarPropiedadEntidad(eUser, "rolusuario");
-		if (rolString.equals(Normal.class.getName())) {
-			rol = new Normal();
-		} else {
+		String descuento = servPersistencia.recuperarPropiedadEntidad(eUser, "descuento");
+		Discount descuentoOpt = null;
+		if (!descuento.isEmpty()) {
 			try {
-				rol = new Premium((Discount) Class.forName(rolString).newInstance());
+				descuentoOpt = (Discount) Class.forName(descuento).newInstance();
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		} 
+		}
 
-		User usuario = new User(img, nombre, fechaNacimiento, telefono, nick, password, premium, rol, saludo);
+		User usuario = new User(img, nombre, fechaNacimiento, telefono, nick, password, premium, descuentoOpt, saludo);
 		usuario.setCodigo(codigo);
 
 		// Metemos el usuario en el pool antes de llamar a otros
@@ -205,8 +203,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		usuario.setEstado(Optional.ofNullable(estado));
 
 		// Grupos que el usuario administra
-		List<Group> gruposAdmin = obtenerGruposDesdeCodigos(
-				servPersistencia.recuperarPropiedadEntidad(eUser, "gruposadmin"));
+		List<Group> gruposAdmin = obtenerGruposDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUser, "gruposadmin"));
 
 		for (Group g : gruposAdmin)
 			usuario.addGrupoAdmin(g);
@@ -314,6 +311,10 @@ public class AdaptadorUserTDS implements UserDAO {
 			contactos.add(adaptadorC.recuperarContacto(Integer.valueOf((String) strTok.nextElement())));
 		}
 		return contactos;
+	}
+
+	private String obtenerPathImagenes(List<ImageIcon> imagenes) {
+		return imagenes.stream().map(i -> String.valueOf(i.getDescription())).reduce("", (l, c) -> l + c + " ").trim();
 	}
 
 }

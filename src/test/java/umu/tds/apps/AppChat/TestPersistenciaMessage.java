@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,8 +21,8 @@ public class TestPersistenciaMessage {
 
 	@BeforeClass
 	public static void setUp() {
-		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
-				"nick", "1234", true, new Premium(new YoungDiscount()), "Este es mi saludo");
+		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manuel", LocalDate.now(), 0,
+				"mrblacknuel", "1234", true, new YoungDiscount(), null);
 		mensaje = new Message("Pasar los test", LocalDate.now(), usuario,
 				new IndividualContact("Alberto", new LinkedList<>(), 0, usuario));
 		adapter = AdaptadorMessageTDS.getInstancia();
@@ -70,4 +71,11 @@ public class TestPersistenciaMessage {
 		assertTrue(adapter.recuperarTodosMensajes().contains(mensaje));
 	}
 
+	@AfterClass
+	public static void tearDown() {
+		try {
+			adapter.borrarMensaje(mensaje);
+		} catch (NullPointerException e) {
+		}
+	}
 }

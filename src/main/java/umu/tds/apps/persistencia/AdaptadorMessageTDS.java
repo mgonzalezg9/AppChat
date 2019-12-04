@@ -5,24 +5,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-
-import javax.swing.ImageIcon;
 
 import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import umu.tds.apps.AppChat.Contact;
-import umu.tds.apps.AppChat.Discount;
 import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.AppChat.Message;
-import umu.tds.apps.AppChat.Normal;
-import umu.tds.apps.AppChat.Premium;
-import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
-import umu.tds.apps.AppChat.UserRol;
 
 public class AdaptadorMessageTDS implements MessageDAO {
 	private static AdaptadorMessageTDS unicaInstancia = null;

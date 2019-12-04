@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,10 +21,11 @@ public class TestPersistenciaGroup {
 
 	@BeforeClass
 	public static void setUp() {
-		User user = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manu", LocalDate.now(), 0,
-				"", "nick", true, new Premium(new YoungDiscount()), "Este es mi saludo");
+		User user = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manuel", LocalDate.now(),
+				0, "mrblacknuel", "1234", true, new YoungDiscount(), null);
 		LinkedList<Message> mensajes = new LinkedList<>();
-		mensajes.add(new Message("Pasar los test", LocalDate.now(), user, new IndividualContact("Alberto", new LinkedList<>(), 0, user)));
+		mensajes.add(new Message("Pasar los test", LocalDate.now(), user,
+				new IndividualContact("Alberto", new LinkedList<>(), 0, user)));
 		LinkedList<IndividualContact> contactos = new LinkedList<>();
 		contactos.add(new IndividualContact("Manu", mensajes, 654789321, user));
 		group = new Group("Juernes de fiesta", mensajes, contactos, user);
@@ -72,5 +74,13 @@ public class TestPersistenciaGroup {
 		registerGroup();
 
 		assertTrue(adapter.recuperarTodosGrupos().contains(group));
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		try {
+			adapter.borrarGrupo(group);
+		} catch (NullPointerException e) {
+		}
 	}
 }
