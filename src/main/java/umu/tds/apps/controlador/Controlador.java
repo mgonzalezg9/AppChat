@@ -104,31 +104,24 @@ public class Controlador {
 		usuarioActual.setSaludo(saludo);
 	}
 
-	public List<ImageIcon> getImagenesUsuario() { // MANUELITO
-		// TODO obtener todas la imagenes del usuario
-		List<ImageIcon> images = new LinkedList<>();
-		images.add(usuarioActual.getProfilePhotos());
-		return images;
-	}
-
 	public void addImagenUsuario(ImageIcon image) { // MANUELITO
 		// TODO añadir una imagen al conjunto de imágenes del usuario
 		usuarioActual.addProfilePhoto(image);
 	}
 
-	public List<Contact> obtenerMisContactos() { // ALFONSITO
+	public List<Contact> getContactosUsuarioActual() { // ALFONSITO
 		// TODO devuelvo mi lista de contactos. Saco el código del usuario actual.
 
 		return new LinkedList<Contact>();
 	}
 
-	public Message obtenerUltimoMensaje(Contact contacto) { // ALFONSITO
+	public Message getUltimoMensaje(Contact contacto) { // ALFONSITO
 		// TODO devuelvo el último mensaje con ese contacto.
 
 		return null;
 	}
 
-	public List<Message> obtenerMensajes(Contact contacto) { // ALFONSITO
+	public List<Message> getMensajes(Contact contacto) { // ALFONSITO
 		// TODO devuelvo mi lista de mensajes con ese contacto. Saco el código del
 		// contacto del que me pasan.
 
@@ -145,36 +138,20 @@ public class Controlador {
 		// TODO creo el grupo. EL USUARIO ACTUAL ES EL ADMINISTRADOR
 	}
 
-	public List<Group> obtenerMisGruposAdministrados() { // ALFONSITO
+	public List<Group> getGruposAdminUsuarioActual() { // ALFONSITO
 		// TODO devuelvo una lista de mis grupos. Saco el código del usuario actual.
 
 		return new LinkedList<Group>();
 	}
 
-	public List<IndividualContact> obtenerContactosDelGrupo(Group grupo) { // ALFONSITO
+	public List<IndividualContact> getContactos(Group grupo) { // ALFONSITO
 		// TODO devuelvo una lista de los contactos de mi grupo. Saco el código del
 		// usuario actual.
 
 		return new LinkedList<IndividualContact>();
 	}
 
-	public String obtenerNombreContacto(Contact contacto) {
-		return contacto.getNombre();
-	}
-
-	public ImageIcon obtenerImagenContacto(IndividualContact contacto) {
-		return contacto.getUsuario().getProfilePhotos();
-	}
-
-	public int obtenerNumTelefonoContacto(IndividualContact contacto) {
-		return contacto.getMovil();
-	}
-
-	public String obtenerNombreGrupo(Group grupo) {
-		return grupo.getNombre();
-	}
-
-	public List<String> obtenerNombresGrupos(IndividualContact contacto) { // ALFONSITO
+	public List<String> getNombresGrupo(IndividualContact contacto) { // ALFONSITO
 		// TODO devuelvo una lista con los nombres de los grupos en los que se usuario y
 		// yo estamos.
 		return new LinkedList<String>();

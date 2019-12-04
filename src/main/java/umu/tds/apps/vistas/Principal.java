@@ -581,7 +581,7 @@ public class Principal extends JFrame {
 				panel.setLayout(gbl_contentPane);
 				
 				JLabel label = new JLabel("");
-				label.addProfilePhoto(contacto.getProfilePhotos());
+				label.setIcon(contacto.getProfilePhoto());
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
 				gbc_label.gridheight = 2;

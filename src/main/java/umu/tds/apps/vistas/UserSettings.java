@@ -2,7 +2,6 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,7 +14,6 @@ import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
 import java.util.List;
-import java.util.ResourceBundle.Control;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 
@@ -24,7 +22,6 @@ import javax.swing.JOptionPane;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.TexturePaint;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -32,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -92,7 +88,7 @@ class Carrousel {
 	}
 
 	public void removeImagen(int op) {
-		Controlador.getInstancia().removeImagenUsuario(op);
+		Controlador.getInstancia().getUsuarioActual().removeProfilePhoto(op);
 		if (imagenes.size() > 0)
 			desplazar(-1);
 		else {
@@ -112,7 +108,7 @@ class Carrousel {
 }
 
 public class UserSettings extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Carrousel car;
 	private JTextArea txtrRespetandoElNnn;
@@ -167,7 +163,6 @@ public class UserSettings extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(MAIN_COLOR_LIGHT);
-		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
@@ -182,7 +177,7 @@ public class UserSettings extends JFrame {
 		button_3.setBackground(SECONDARY_COLOR);
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int size = Controlador.getInstancia().getImagenesUsuario().size();
+				int size = Controlador.getInstancia().getUsuarioActual().getProfilePhotos().size();
 				String[] elems = new String[size];
 
 				for (int i = 0; i < elems.length; i++) {
@@ -221,7 +216,7 @@ public class UserSettings extends JFrame {
 		panel_1.add(carrousel);
 
 		// Creamos un objeto carrousel para administrarlo
-		car = new Carrousel(profilePhoto, Controlador.getInstancia().getImagenesUsuario(), carrousel);
+		car = new Carrousel(profilePhoto, Controlador.getInstancia().getUsuarioActual().getProfilePhotos(), carrousel);
 		panel_1.add(button_1);
 
 		JButton button_2 = new JButton("+");

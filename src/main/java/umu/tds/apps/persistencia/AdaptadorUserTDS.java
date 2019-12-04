@@ -74,7 +74,7 @@ public class AdaptadorUserTDS implements UserDAO {
 				new Propiedad("gruposadmin", obtenerCodigosGruposAdmin(user.getGruposAdmin())),
 				new Propiedad("contactos", obtenerCodigosContactoIndividual(user.getContactos())),
 				new Propiedad("grupos", obtenerCodigosGrupo(user.getContactos())),
-				new Propiedad("rolusuario", user.getRol().toString()),
+				new Propiedad("rolusuario", user.getDescuento().toString()),
 				new Propiedad("saludo", user.getSaludo()))));
 
 		// Registrar entidad usuario
@@ -148,7 +148,7 @@ public class AdaptadorUserTDS implements UserDAO {
 		servPersistencia.eliminarPropiedadEntidad(eUser, "grupos");
 		servPersistencia.anadirPropiedadEntidad(eUser, "grupos", obtenerCodigosGrupo(user.getContactos()));
 		servPersistencia.eliminarPropiedadEntidad(eUser, "rolusuario");
-		servPersistencia.anadirPropiedadEntidad(eUser, "rolusuario", user.getRol().toString());
+		servPersistencia.anadirPropiedadEntidad(eUser, "rolusuario", user.getDescuento().toString());
 		servPersistencia.eliminarPropiedadEntidad(eUser, "saludo");
 		servPersistencia.anadirPropiedadEntidad(eUser, "saludo", user.getSaludo());
 	}

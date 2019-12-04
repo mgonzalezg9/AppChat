@@ -1,7 +1,6 @@
 package umu.tds.apps.AppChat;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +21,7 @@ public class User {
 	private Optional<Status> estado;
 	private List<Group> gruposAdmin;
 	private List<Contact> contactos;
-	private UserRol rol;
+	private Discount descuento;
 
 	// Constructores
 	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
@@ -101,8 +100,8 @@ public class User {
 		return codigo;
 	}
 
-	public UserRol getRol() {
-		return rol;
+	public Discount getDescuento() {
+		return descuento;
 	}
 
 	// Setters
@@ -126,8 +125,8 @@ public class User {
 		this.estado = estado;
 	}
 
-	public void setRol(UserRol rol) {
-		this.rol = rol;
+	public void setDescuento(Discount descuento) {
+		this.descuento = descuento;
 	}
 
 	public void addProfilePhoto(ImageIcon icon) {
@@ -156,7 +155,7 @@ public class User {
 		return "User [codigo=" + codigo + ", icon=" + profilePhotos + ", name=" + name + ", fechaNacimiento="
 				+ fechaNacimiento + ", numTelefono=" + numTelefono + ", nick=" + nick + ", password=" + password
 				+ ", premium=" + premium + ", saludo=" + saludo + ", estado=" + estado + ", gruposAdmin=" + gruposAdmin
-				+ ", contactos=" + contactos + ", rol=" + rol + "]";
+				+ ", contactos=" + contactos + ", rol=" + descuento + "]";
 	}
 
 	@Override
@@ -174,7 +173,7 @@ public class User {
 		result = prime * result + numTelefono;
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + (premium ? 1231 : 1237);
-		result = prime * result + ((rol == null) ? 0 : rol.hashCode());
+		result = prime * result + ((descuento == null) ? 0 : descuento.hashCode());
 		result = prime * result + ((saludo == null) ? 0 : saludo.hashCode());
 		return result;
 	}
@@ -234,10 +233,10 @@ public class User {
 			return false;
 		if (premium != other.premium)
 			return false;
-		if (rol == null) {
-			if (other.rol != null)
+		if (descuento == null) {
+			if (other.descuento != null)
 				return false;
-		} else if (!rol.equals(other.rol))
+		} else if (!descuento.equals(other.descuento))
 			return false;
 		if (saludo == null) {
 			if (other.saludo != null)

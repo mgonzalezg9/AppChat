@@ -26,6 +26,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Optional;
 import java.awt.Font;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.MouseAdapter;
@@ -106,9 +107,11 @@ public class Estados extends JFrame {
 				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
 				panel_2.setBackground(SECONDARY_COLOR);
 				list.clearSelection();
-				Status s = Controlador.getInstancia().getEstado(Controlador.getInstancia().getUsuario());
-				lblEstadoSeleccionado.setIcon(s.getImg());
-				lblFraseProfunda.setText(s.getFrase());
+				Optional<Status> s = Controlador.getInstancia().getUsuarioActual().getEstado();
+				if (s.isPresent()) {
+					lblEstadoSeleccionado.setIcon(s.get().getImg());
+					lblFraseProfunda.setText(s.get().getFrase());
+				}
 			}
 		});
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -195,9 +198,12 @@ public class Estados extends JFrame {
 				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 				panel_2.setBackground(MAIN_COLOR);
 				User u = (User) list.getSelectedValue();
-				Status s = Controlador.getInstancia().getEstado(u);
-				lblFraseProfunda.setText(s.getFrase());
-				lblEstadoSeleccionado.setIcon(s.getImg());
+				Optional<Status> s = Controlador.getInstancia().getUsuarioActual().getEstado();
+				if (s.isPresent()) {
+					lblFraseProfunda.setText(s.get().getFrase());
+					lblEstadoSeleccionado.setIcon(s.get().getImg());
+				}
+				
 			}
 
 			@Override

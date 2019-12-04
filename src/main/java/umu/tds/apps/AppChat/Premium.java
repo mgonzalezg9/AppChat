@@ -8,7 +8,7 @@ public class Premium extends UserRol {
 	}
 	
 	public double realizarPago() {
-		return descuento.calcDescuento();
+		return descuento.getDescuento();
 	}
 	
 	@Override
