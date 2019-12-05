@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -82,9 +84,17 @@ public class Controlador {
 		return false;
 	}
 
-	public boolean crearCuenta(String User, String password, String email, String name, int numTelefono,
-			LocalDate fechaNacimiento) { // ALFONSITO
-		// TODO Registro el usuario. Devuelvo false si el nick ya está en uso
+	// Registro el usuario. Devuelvo false si el nick ya está en uso
+	public boolean crearCuenta(ImageIcon imagen, String nick, String password, String email, String name, int numTelefono,
+			LocalDate fechaNacimiento) {
+		User u = catalogoUsuarios.getUsuario(nick);
+		if (u != null) {
+			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password,
+					false, null, null);
+			catalogoUsuarios.addUsuario(nuevoUsuario);
+			adaptadorUsuario.registrarUsuario(nuevoUsuario);
+			return true;
+		}
 		return false;
 	}
 
@@ -92,15 +102,7 @@ public class Controlador {
 		return usuarioActual;
 	}
 
-	public String getNombreUsuario() {
-		return usuarioActual.getName();
-	}
-
-	public String getSaludo() {
-		return usuarioActual.getSaludo();
-	}
-
-	public void setSaludo(String saludo) {
+	public void setSaludoUsuario(String saludo) {
 		usuarioActual.setSaludo(saludo);
 	}
 
@@ -109,23 +111,38 @@ public class Controlador {
 		usuarioActual.addProfilePhoto(image);
 	}
 
-	public List<Contact> getContactosUsuarioActual() { // ALFONSITO
-		// TODO devuelvo mi lista de contactos. Saco el código del usuario actual.
-
-		return new LinkedList<Contact>();
+	// Devuelvo mi lista de contactos.
+	public List<Contact> getContactosUsuarioActual() {
+		User u = catalogoUsuarios.getUsuario(usuarioActual.getCodigo());
+		return u.getContactos();
 	}
 
-	public Message getUltimoMensaje(Contact contacto) { // ALFONSITO
-		// TODO devuelvo el último mensaje con ese contacto.
-
-		return null;
+	// Devuelvo el último mensaje con ese contacto.
+	public Message getUltimoMensaje(Contact contacto) {
+		if (contacto.getMensajes().isEmpty())
+			return null;
+		return contacto.getMensajes().get(contacto.getMensajes().size() - 1);
 	}
 
-	public List<Message> getMensajes(Contact contacto) { // ALFONSITO
-		// TODO devuelvo mi lista de mensajes con ese contacto. Saco el código del
-		// contacto del que me pasan.
-
-		return new LinkedList<Message>();
+	// Devuelvo mi lista de mensajes con ese contacto
+	public List<Message> getMensajes(Contact contacto) {
+		List<Message> mensajesEnviados = new LinkedList<>();
+		List<Message> mensajesRecibidos = new LinkedList<>();
+		List<Message> todosLosMensajes = new LinkedList<>();
+		// Obtengo los mensajes que he enviado a ese grupo o contacto individual
+		mensajesEnviados = contacto.getMensajes();
+		
+		if (contacto instanceof Group) {
+			mensajesRecibidos = ((Group) contacto).getMensajesRecibidos();
+		} else {
+			mensajesRecibidos = ((IndividualContact) contacto).getMensajesRecibidos(usuarioActual);
+		}
+		
+		
+		mensajesEnviados.addAll(mensajesRecibidos);
+		return Stream.concat(mensajesEnviados.stream(), mensajesRecibidos.stream())
+				.sorted((m1, m2) -> m1.getHora().compareTo(m2.getHora()))
+				.collect(Collectors.toList());
 	}
 
 	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) { // ALFONSITO.
