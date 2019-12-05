@@ -2,10 +2,8 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,45 +12,32 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Label;
-import java.awt.TextField;
 import java.awt.Toolkit;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelListener;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 
 import tds.BubbleText;
-import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
-import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.time.LocalDate;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
@@ -62,6 +47,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 public class Principal extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel chat;
 	private JLabel profilePhoto;
@@ -86,11 +72,11 @@ public class Principal extends JFrame {
 	}
 
 	private void sendMessage(JPanel panel, JTextField textField) throws IllegalArgumentException {
+		Controlador.getInstancia().enviarMensaje();
+		
 		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
 		chat.add(burbuja);
 		textField.setText(null);
-
-		// TODO Conectar con persistencia
 	}
 
 	private void sendIcon(JPanel panel, int iconID) throws IllegalArgumentException {
@@ -317,7 +303,6 @@ public class Principal extends JFrame {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(MAIN_COLOR);
-		FlowLayout flowLayout_3 = (FlowLayout) panel.getLayout();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.NORTHEAST;
 		gbc_panel.gridx = 1;
@@ -372,7 +357,7 @@ public class Principal extends JFrame {
 		profilePhoto = new JLabel();
 		profilePhoto.setIcon(new ImageIcon(
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -381,36 +366,28 @@ public class Principal extends JFrame {
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
-		
+
 		// Contactos de ejemplo
 		List<User> usuarios = new LinkedList<User>();
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfonsito", "Probando los estados", "23/11/2019"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En luminata", "10/09/2019"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Diego", "XV6", "06/08/2009"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alfon", "In github", "21/10/2019"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Alf", "Este es mi estado", "08/01/2010"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Manuel", "En el fiestódromo", "09/10/2015"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Blacknuel", "4nite", "12/05/2017"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Joseliko", "Guild Wars 2", "10/10/2010"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Arberto", "Madremía Arberto", "25/07/2005"));
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")), "Oscarizado", "Tortas fritas everywhere", "11/08/1973"));
-				
+		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")),
+				"Alfonso Info", LocalDate.now(), 0, "Alf", "1234", false, null, null));
+
 		// Creamos el modelo
-		final DefaultListModel<User> modelContacts = new DefaultListModel();
-		
+		final DefaultListModel<User> modelContacts = new DefaultListModel<>();
+
 		// Rellenamos el modelo
 		for (int i = 0; i < usuarios.size(); i++)
 			modelContacts.add(i, usuarios.get(i));
-		
-		JList<User> list_contacts = new JList(modelContacts);
+
+		JList<User> list_contacts = new JList<>(modelContacts);
 		list_contacts.setSelectedIndex(0);
 		list_contacts.setBackground(MAIN_COLOR_LIGHT);
 		list_contacts.setCellRenderer(createListRenderer());
 		list_contacts.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting())
 				System.out.println(list_contacts.getSelectedValue().getName());
-		});		
-		
+		});
+
 		scrollPane.setViewportView(list_contacts);
 
 		JPanel chatPersonal = new JPanel();
@@ -554,32 +531,33 @@ public class Principal extends JFrame {
 		gbc_lblSend.gridy = 0;
 		writeText.add(lblSend, gbc_lblSend);
 	}
-	
+
 	private ListSelectionListener createListSelectionListener(JList<User> listaUsuarios) {
-		 return e -> {
-			 if (!e.getValueIsAdjusting()) {
-				 System.out.println(listaUsuarios.getSelectedValue().getName());
-			 }
-		 };
+		return e -> {
+			if (!e.getValueIsAdjusting()) {
+				System.out.println(listaUsuarios.getSelectedValue().getName());
+			}
+		};
 	}
-	
+
 	private static ListCellRenderer<? super User> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			private Color background = new Color(0, 100, 255, 15);
 			private Color defaultBackground = (Color) UIManager.get("List.background");
-			
+
 			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {			
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
 				User contacto = (User) value;
-				
+
 				JPanel panel = new JPanel();
 				GridBagLayout gbl_contentPane = new GridBagLayout();
-				gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0};
-				gbl_contentPane.rowHeights = new int[]{10, 26, 5, 10, 0};
-				gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-				gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+				gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
+				gbl_contentPane.rowHeights = new int[] { 10, 26, 5, 10, 0 };
+				gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 				panel.setLayout(gbl_contentPane);
-				
+
 				JLabel label = new JLabel("");
 				label.setIcon(contacto.getProfilePhoto());
 				GridBagConstraints gbc_label = new GridBagConstraints();
@@ -589,7 +567,7 @@ public class Principal extends JFrame {
 				gbc_label.gridx = 0;
 				gbc_label.gridy = 1;
 				panel.add(label, gbc_label);
-				
+
 				JLabel lblNewLabel = new JLabel(contacto.getName());
 				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
@@ -597,7 +575,7 @@ public class Principal extends JFrame {
 				gbc_lblNewLabel.gridx = 1;
 				gbc_lblNewLabel.gridy = 1;
 				panel.add(lblNewLabel, gbc_lblNewLabel);
-				
+
 				JLabel lblNewLabel_1 = new JLabel(contacto.getFechaNacimiento().toString());
 				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
@@ -605,7 +583,7 @@ public class Principal extends JFrame {
 				gbc_lblNewLabel_1.gridx = 2;
 				gbc_lblNewLabel_1.gridy = 1;
 				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
-				
+
 				JLabel lblEsteHaSido = new JLabel(contacto.getEstado().orElse(new Status(null, "")).getFrase());
 				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
 				gbc_lblEsteHaSido.gridwidth = 2;
@@ -614,10 +592,10 @@ public class Principal extends JFrame {
 				gbc_lblEsteHaSido.gridx = 1;
 				gbc_lblEsteHaSido.gridy = 2;
 				panel.add(lblEsteHaSido, gbc_lblEsteHaSido);
-				
+
 				panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-			    panel.setBackground((isSelected) ? SECONDARY_COLOR : MAIN_COLOR_LIGHT);
-				
+				panel.setBackground((isSelected) ? SECONDARY_COLOR : MAIN_COLOR_LIGHT);
+
 				return panel;
 			}
 		};

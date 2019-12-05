@@ -92,12 +92,11 @@ public class Controlador {
 	}
 
 	// Registro el usuario. Devuelvo false si el nick ya está en uso
-	public boolean crearCuenta(ImageIcon imagen, String nick, String password, String email, String name, int numTelefono,
-			LocalDate fechaNacimiento) {
+	public boolean crearCuenta(ImageIcon imagen, String nick, String password, String email, String name,
+			int numTelefono, LocalDate fechaNacimiento) {
 		User u = catalogoUsuarios.getUsuario(nick);
 		if (u != null) {
-			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password,
-					false, null, null);
+			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password, false, null, null);
 			catalogoUsuarios.addUsuario(nuevoUsuario);
 			adaptadorUsuario.registrarUsuario(nuevoUsuario);
 			return true;
@@ -138,18 +137,16 @@ public class Controlador {
 		List<Message> todosLosMensajes = new LinkedList<>();
 		// Obtengo los mensajes que he enviado a ese grupo o contacto individual
 		mensajesEnviados = contacto.getMensajes();
-		
+
 		if (contacto instanceof Group) {
 			mensajesRecibidos = ((Group) contacto).getMensajesRecibidos();
 		} else {
 			mensajesRecibidos = ((IndividualContact) contacto).getMensajesRecibidos(usuarioActual);
 		}
-		
-		
+
 		mensajesEnviados.addAll(mensajesRecibidos);
 		return Stream.concat(mensajesEnviados.stream(), mensajesRecibidos.stream())
-				.sorted((m1, m2) -> m1.getHora().compareTo(m2.getHora()))
-				.collect(Collectors.toList());
+				.sorted((m1, m2) -> m1.getHora().compareTo(m2.getHora())).collect(Collectors.toList());
 	}
 
 	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) { // ALFONSITO.
@@ -192,24 +189,23 @@ public class Controlador {
 
 	public List<Message> buscarMensajes(String emisor, LocalDate fechaInicio, LocalDate fechaFin, String text) { // MANUELITO
 		// Recupero los mensajes que he enviado
-		List<Message> enviados = usuarioActual.getContactos().stream()
-			.flatMap(c -> c.getMensajes().stream())
-			.collect(Collectors.toList());
-		
+		List<Message> enviados = usuarioActual.getContactos().stream().flatMap(c -> c.getMensajes().stream())
+				.collect(Collectors.toList());
+
 		// Recupero los mensajes que he recibido
-		List<Message> recibidos = usuarioActual.getContactos().stream()
-				.flatMap(c -> {
-					List<Message> m;
-					if (c instanceof IndividualContact) 
-						m = c.getMensajesRecibidos(usuarioActual);
-					else 
-						m = c.getMensajesRecibidos();
-					return m.stream();
-				})
-				.collect(Collectors.toList());
-		
+		List<Message> recibidos = usuarioActual.getContactos().stream().flatMap(c -> {
+			List<Message> m;
+			if (c instanceof IndividualContact)
+				m = ((IndividualContact) c).getMensajesRecibidos(usuarioActual);
+			else
+				m = ((Group) c).getMensajesRecibidos();
+			return m.stream();
+		}).collect(Collectors.toList());
+
 		return Stream.concat(recibidos.stream(), enviados.stream())
-				.collect(Collectors.toList());
+				.filter(m -> emisor == null || m.getEmisor().getName().equals(emisor))
+				.filter(m -> emisor == null || m.getHora().isAfter(fechaInicio) && m.getHora().isBefore(fechaFin))
+				.filter(m -> emisor == null || m.getTexto().contains(text)).collect(Collectors.toList());
 	}
 
 	public boolean deleteChat() {
@@ -220,6 +216,10 @@ public class Controlador {
 	public boolean deleteContact(Contact c) { // ALFONSITO
 		// TODO borrar el contacto de la base de datos.
 		return false;
+	}
+	
+	public void enviarMensaje() { // MANUELITO
+		
 	}
 
 	public static List<BubbleText> getChat(User u, JPanel chat) {

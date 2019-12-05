@@ -1,6 +1,5 @@
 package umu.tds.apps.vistas;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import static umu.tds.apps.vistas.Theme.*;
 
@@ -18,7 +17,7 @@ import javax.swing.JTextField;
 import java.awt.FlowLayout;
 
 public class CreateContact extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
