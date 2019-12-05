@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -134,13 +135,13 @@ public class Controlador {
 	public List<Message> getMensajes(Contact contacto) {
 		List<Message> mensajesEnviados = new LinkedList<>();
 		List<Message> mensajesRecibidos = new LinkedList<>();
-		List<Message> todosLosMensajes = new LinkedList<>();
+		
 		// Obtengo los mensajes que he enviado a ese grupo o contacto individual
-		mensajesEnviados = contacto.getMensajes();
-
 		if (contacto instanceof Group) {
+			mensajesEnviados = ((Group) contacto).getMensajesAdmin();
 			mensajesRecibidos = ((Group) contacto).getMensajesRecibidos();
 		} else {
+			mensajesEnviados = contacto.getMensajes();
 			mensajesRecibidos = ((IndividualContact) contacto).getMensajesRecibidos(usuarioActual);
 		}
 
@@ -149,33 +150,43 @@ public class Controlador {
 				.sorted((m1, m2) -> m1.getHora().compareTo(m2.getHora())).collect(Collectors.toList());
 	}
 
-	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) { // ALFONSITO.
-		// TODO creo el contacto. Da error si tiene como nombre el de otro ya creado.
-
+	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
+	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) {
+		boolean existeContacto = usuarioActual.getContactos().stream()
+				.filter(c -> c instanceof IndividualContact)
+				.map(c -> (IndividualContact) c)
+				.anyMatch(c -> c.getNombre().equals(nombre));
+		
+		if (existeContacto)  {
+			IndividualContact nuevoContacto = new IndividualContact(nombre, new LinkedList<Message>(), numTelefono, usuarioActual);
+			usuarioActual.addContacto(nuevoContacto);
+			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
+			return true;
+		}
 		return false;
 	}
 
-	public void crearGrupo(String nombre, List<IndividualContact> participantes) { // ALFONSITO
-		// TODO creo el grupo. EL USUARIO ACTUAL ES EL ADMINISTRADOR
+	// Creo el grupo.
+	public void crearGrupo(String nombre, List<IndividualContact> participantes) {
+		Group nuevoGrupo = new Group(nombre, new LinkedList<Message>(), participantes, usuarioActual);
+		usuarioActual.addGrupo(nuevoGrupo);
+		usuarioActual.addGrupoAdmin(nuevoGrupo);
+		adaptadorGrupo.registrarGrupo(nuevoGrupo);
 	}
 
-	public List<Group> getGruposAdminUsuarioActual() { // ALFONSITO
-		// TODO devuelvo una lista de mis grupos. Saco el código del usuario actual.
-
-		return new LinkedList<Group>();
+	public List<Group> getGruposAdminUsuarioActual() {
+		// Devuelvo una lista de mis grupos. Saco el código del usuario actual.
+		return usuarioActual.getGruposAdmin();
 	}
 
-	public List<IndividualContact> getContactos(Group grupo) { // ALFONSITO
-		// TODO devuelvo una lista de los contactos de mi grupo. Saco el código del
-		// usuario actual.
-
-		return new LinkedList<IndividualContact>();
-	}
-
-	public List<String> getNombresGrupo(IndividualContact contacto) { // ALFONSITO
-		// TODO devuelvo una lista con los nombres de los grupos en los que se usuario y
-		// yo estamos.
-		return new LinkedList<String>();
+	// Devuelvo una lista con los nombres de los grupos en los que se usuario y yo estamos.
+	public List<String> getNombresGrupo(IndividualContact contacto) {
+		return usuarioActual.getContactos().stream()
+			.filter(c -> c instanceof Group)
+			.map(c -> (Group) c)
+			.filter(g -> g.getContactos().stream().anyMatch(c -> c.getNombre().equals(contacto.getNombre())))
+			.map(g -> g.getNombre())
+			.collect(Collectors.toList());
 	}
 
 	public void hacerPremium() { // MANUELITO
@@ -208,14 +219,14 @@ public class Controlador {
 				.filter(m -> emisor == null || m.getTexto().contains(text)).collect(Collectors.toList());
 	}
 
-	public boolean deleteChat() {
-		// TODO PREGUNTAR SI borrar los mensajes de la base de datos.
-		return false;
-	}
-
-	public boolean deleteContact(Contact c) { // ALFONSITO
-		// TODO borrar el contacto de la base de datos.
-		return false;
+	// Borramos el contacto
+	public void deleteContact(Contact c) {
+		usuarioActual.removeContact(c);
+		if (c instanceof IndividualContact) {
+			adaptadorContactoIndividual.borrarContacto((IndividualContact) c);
+		} else {
+			adaptadorGrupo.borrarGrupo((Group) c);
+		}
 	}
 	
 	public void enviarMensaje() { // MANUELITO
