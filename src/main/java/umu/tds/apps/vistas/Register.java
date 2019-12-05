@@ -7,7 +7,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -40,6 +42,10 @@ import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ActionEvent;
 
 public class Register extends JFrame {
 
@@ -188,6 +194,16 @@ public class Register extends JFrame {
 		contentPane.add(lblUser, gbc_lblUser);
 
 		textFieldUser = new JTextField();
+		textFieldUser.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldUser.setBackground(MAIN_COLOR);
+			}
+		});
+		textFieldUser.setForeground(TEXT_COLOR_LIGHT);
+		textFieldUser.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldUser.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldUser.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textFieldUser = new GridBagConstraints();
 		gbc_textFieldUser.gridwidth = 2;
 		gbc_textFieldUser.anchor = GridBagConstraints.SOUTH;
@@ -207,7 +223,11 @@ public class Register extends JFrame {
 		gbc_lblPassword.gridy = 3;
 		contentPane.add(lblPassword, gbc_lblPassword);
 
-		textFieldPassword = new JTextField();
+		textFieldPassword = new JPasswordField();
+		textFieldPassword.setForeground(TEXT_COLOR_LIGHT);
+		textFieldPassword.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldPassword.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldPassword.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textFieldPassword = new GridBagConstraints();
 		gbc_textFieldPassword.gridwidth = 2;
 		gbc_textFieldPassword.insets = new Insets(0, 0, 5, 5);
@@ -226,7 +246,11 @@ public class Register extends JFrame {
 		gbc_lblConfirmPassword.gridy = 4;
 		contentPane.add(lblConfirmPassword, gbc_lblConfirmPassword);
 
-		textFieldConfPassword = new JTextField();
+		textFieldConfPassword = new JPasswordField();
+		textFieldConfPassword.setForeground(TEXT_COLOR_LIGHT);
+		textFieldConfPassword.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldConfPassword.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldConfPassword.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textFieldConfPassword = new GridBagConstraints();
 		gbc_textFieldConfPassword.gridwidth = 2;
 		gbc_textFieldConfPassword.anchor = GridBagConstraints.NORTH;
@@ -247,6 +271,10 @@ public class Register extends JFrame {
 		contentPane.add(lblEmail, gbc_lblEmail);
 
 		textFieldEmail = new JTextField();
+		textFieldEmail.setForeground(TEXT_COLOR_LIGHT);
+		textFieldEmail.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldEmail.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldEmail.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textFieldEmail = new GridBagConstraints();
 		gbc_textFieldEmail.gridwidth = 2;
 		gbc_textFieldEmail.insets = new Insets(0, 0, 5, 5);
@@ -266,6 +294,10 @@ public class Register extends JFrame {
 		contentPane.add(lblName, gbc_lblName);
 
 		textFieldName = new JTextField();
+		textFieldName.setForeground(TEXT_COLOR_LIGHT);
+		textFieldName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldName.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldName.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textFieldName = new GridBagConstraints();
 		gbc_textFieldName.gridwidth = 2;
 		gbc_textFieldName.insets = new Insets(0, 0, 5, 5);
@@ -285,6 +317,10 @@ public class Register extends JFrame {
 		contentPane.add(lblPhoneNumber, gbc_lblPhoneNumber);
 
 		textFieldPNumber = new JTextField();
+		textFieldPNumber.setForeground(TEXT_COLOR_LIGHT);
+		textFieldPNumber.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldPNumber.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldPNumber.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textFieldPNumber = new GridBagConstraints();
 		gbc_textFieldPNumber.gridwidth = 2;
 		gbc_textFieldPNumber.insets = new Insets(0, 0, 5, 5);
@@ -304,6 +340,12 @@ public class Register extends JFrame {
 		contentPane.add(lblBirthDate, gbc_lblBirthDate);
 
 		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.getDateEditor().getUiComponent().setBackground(MAIN_COLOR);
+		dateChooser.getDateEditor().getUiComponent().setForeground(MAIN_COLOR);
+		dateChooser.getDateEditor().getUiComponent().setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		dateChooser.setForeground(MAIN_COLOR);
+		dateChooser.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		dateChooser.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 		gbc_dateChooser.gridwidth = 2;
 		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
@@ -313,21 +355,29 @@ public class Register extends JFrame {
 		contentPane.add(dateChooser, gbc_dateChooser);
 
 		JButton btnNewButton = new JButton("CREATE ACCOUNT");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// Registra al usuario
-				Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()), textFieldUser.getText(),
+				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()), textFieldUser.getText(),
 						textFieldPassword.getText(), textFieldEmail.getText(), textFieldName.getText(),
 						Integer.parseInt(textFieldPNumber.getText()),
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				
+				if (!creada) {
+					textFieldUser.setBackground(WRONG_INPUT_COLOR);
+				} else {
+					// Cierra la ventana actual
+					Register.this.setVisible(false);
 
-				// Cierra la ventana actual
-				Register.this.setVisible(false);
-
-				// Abre la nueva ventana
-				JFrame principalWindow = new Principal();
-				principalWindow.setVisible(true);
+					// Abre la nueva ventana
+					JFrame principalWindow = new Principal();
+					principalWindow.setVisible(true);
+				}
 			}
 		});
 		btnNewButton.setBackground(SECONDARY_COLOR);
