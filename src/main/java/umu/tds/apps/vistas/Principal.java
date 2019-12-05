@@ -342,7 +342,7 @@ public class Principal extends JFrame {
 		mntmDeleteContact.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Controlador.getInstancia().deleteChat()) {
+				if (/* FIXME */ true) {
 					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {

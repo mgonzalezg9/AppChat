@@ -96,7 +96,7 @@ public class Controlador {
 	public boolean crearCuenta(ImageIcon imagen, String nick, String password, String email, String name,
 			int numTelefono, LocalDate fechaNacimiento) {
 		User u = catalogoUsuarios.getUsuario(nick);
-		if (u != null) {
+		if (u == null) {
 			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password, false, null, null);
 			catalogoUsuarios.addUsuario(nuevoUsuario);
 			adaptadorUsuario.registrarUsuario(nuevoUsuario);
@@ -227,6 +227,14 @@ public class Controlador {
 		} else {
 			adaptadorGrupo.borrarGrupo((Group) c);
 		}
+	}
+	
+	public void addEstado() {	// ALFONSITO
+		
+	}
+	
+	public List<Status> getEstados(List<Contact> contactos) {	// ALFONSITO 
+		return null;
 	}
 	
 	public void enviarMensaje() { // MANUELITO
