@@ -149,11 +149,12 @@ public class Controlador {
 
 	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
 	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) {
-		Optional<IndividualContact> contacto = usuarioActual.getContactos().stream()
+		boolean existeContacto = usuarioActual.getContactos().stream()
 				.filter(c -> c instanceof IndividualContact)
 				.map(c -> (IndividualContact) c)
-				.filter(c -> c.getNombre().equals(nombre)).findAny();
-		if (!contacto.isPresent())  {
+				.anyMatch(c -> c.getNombre().equals(nombre));
+		
+		if (existeContacto)  {
 			IndividualContact nuevoContacto = new IndividualContact(nombre, new LinkedList<Message>(), numTelefono, usuarioActual);
 			usuarioActual.addContacto(nuevoContacto);
 			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
@@ -170,23 +171,19 @@ public class Controlador {
 		adaptadorGrupo.registrarGrupo(nuevoGrupo);
 	}
 
-	public List<Group> getGruposAdminUsuarioActual() { // ALFONSITO
-		// TODO devuelvo una lista de mis grupos. Saco el código del usuario actual.
-
-		return new LinkedList<Group>();
+	public List<Group> getGruposAdminUsuarioActual() {
+		// Devuelvo una lista de mis grupos. Saco el código del usuario actual.
+		return usuarioActual.getGruposAdmin();
 	}
 
-	public List<IndividualContact> getContactos(Group grupo) { // ALFONSITO
-		// TODO devuelvo una lista de los contactos de mi grupo. Saco el código del
-		// usuario actual.
-
-		return new LinkedList<IndividualContact>();
-	}
-
-	public List<String> getNombresGrupo(IndividualContact contacto) { // ALFONSITO
-		// TODO devuelvo una lista con los nombres de los grupos en los que se usuario y
-		// yo estamos.
-		return new LinkedList<String>();
+	// Devuelvo una lista con los nombres de los grupos en los que se usuario y yo estamos.
+	public List<String> getNombresGrupo(IndividualContact contacto) {
+		return usuarioActual.getContactos().stream()
+			.filter(c -> c instanceof Group)
+			.map(c -> (Group) c)
+			.filter(g -> g.getContactos().stream().anyMatch(c -> c.getNombre().equals(contacto.getNombre())))
+			.map(g -> g.getNombre())
+			.collect(Collectors.toList());
 	}
 
 	public void hacerPremium() { // MANUELITO
@@ -204,14 +201,14 @@ public class Controlador {
 		return null;
 	}
 
-	public boolean deleteChat() {
-		// TODO PREGUNTAR SI borrar los mensajes de la base de datos.
-		return false;
-	}
-
-	public boolean deleteContact(Contact c) { // ALFONSITO
-		// TODO borrar el contacto de la base de datos.
-		return false;
+	// Borramos el contacto
+	public void deleteContact(Contact c) {
+		usuarioActual.removeContact(c);
+		if (c instanceof IndividualContact) {
+			adaptadorContactoIndividual.borrarContacto((IndividualContact) c);
+		} else {
+			adaptadorGrupo.borrarGrupo((Group) c);
+		}
 	}
 
 	public static List<BubbleText> getChat(User u, JPanel chat) {

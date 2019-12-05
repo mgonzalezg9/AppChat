@@ -135,6 +135,7 @@ public class User {
 		this.profilePhotos.add(icon);
 	}
 
+	// Methods
 	public ImageIcon removeProfilePhoto(int pos) {
 		return this.profilePhotos.remove(pos);
 	}
@@ -149,6 +150,13 @@ public class User {
 
 	public void addGrupo(Group g) {
 		contactos.add(g);
+	}
+	
+	public void removeContact(Contact c) {
+		contactos.remove(c);
+		if (c instanceof Group && ((Group)c).getAdmin().getCodigo() == this.codigo) {
+			gruposAdmin.remove((Group)c);
+		}
 	}
 
 	// Metodos de test
