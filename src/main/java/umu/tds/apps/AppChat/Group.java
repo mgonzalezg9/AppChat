@@ -1,6 +1,7 @@
 package umu.tds.apps.AppChat;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Group extends Contact {
 	// Properties
@@ -34,6 +35,16 @@ public class Group extends Contact {
 	
 	public void cambiarAdmin(User u) {
 		admin = u;
+	}
+	
+	public List<Message> getMensajesRecibidos () {
+		return this.contactos.stream()
+				.flatMap(c -> c.getUsuario().getContactos().stream())
+				.filter(c -> c instanceof Group)
+				.map(c -> (Group) c)
+				.filter(g -> g.getCodigo() == this.getCodigo())
+				.flatMap(g -> g.getMensajes().stream())
+				.collect(Collectors.toList());
 	}
 	
 	

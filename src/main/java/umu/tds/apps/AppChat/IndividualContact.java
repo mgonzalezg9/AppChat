@@ -1,6 +1,8 @@
 package umu.tds.apps.AppChat;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IndividualContact extends Contact {
 	// Properties.
@@ -26,6 +28,16 @@ public class IndividualContact extends Contact {
 	// Setters.
 	public void setUsuario(User usuario) {
 		this.usuario = usuario;
+	}
+	
+	// Methods
+	public List<Message> getMensajesRecibidos (User usuario) {
+		return this.usuario.getContactos().stream()
+				.filter(c -> c instanceof IndividualContact)
+				.map(c -> (IndividualContact) c)
+				.filter(c -> c.getUsuario().getNick().equals(usuario.getNick()))
+				.flatMap(c -> c.getMensajes().stream())
+				.collect(Collectors.toList());
 	}
 	
 	// HashCode y equals
