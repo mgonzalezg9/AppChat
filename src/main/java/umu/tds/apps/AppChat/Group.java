@@ -47,6 +47,12 @@ public class Group extends Contact {
 				.collect(Collectors.toList());
 	}
 	
+	public List<Message> getMensajesAdmin() {
+		return this.admin.getGruposAdmin().stream()
+				.filter(g -> g.getCodigo() == this.getCodigo())
+				.flatMap(g -> g.getMensajes().stream())
+				.collect(Collectors.toList());
+	}
 	
 	// hashCode y equals
 	@Override

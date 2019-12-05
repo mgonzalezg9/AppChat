@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -128,13 +129,14 @@ public class Controlador {
 	public List<Message> getMensajes(Contact contacto) {
 		List<Message> mensajesEnviados = new LinkedList<>();
 		List<Message> mensajesRecibidos = new LinkedList<>();
-		List<Message> todosLosMensajes = new LinkedList<>();
 		// Obtengo los mensajes que he enviado a ese grupo o contacto individual
-		mensajesEnviados = contacto.getMensajes();
+		
 		
 		if (contacto instanceof Group) {
+			mensajesEnviados = ((Group) contacto).getMensajesAdmin();
 			mensajesRecibidos = ((Group) contacto).getMensajesRecibidos();
 		} else {
+			mensajesEnviados = contacto.getMensajes();
 			mensajesRecibidos = ((IndividualContact) contacto).getMensajesRecibidos(usuarioActual);
 		}
 		
@@ -145,14 +147,27 @@ public class Controlador {
 				.collect(Collectors.toList());
 	}
 
-	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) { // ALFONSITO.
-		// TODO creo el contacto. Da error si tiene como nombre el de otro ya creado.
-
+	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
+	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) {
+		Optional<IndividualContact> contacto = usuarioActual.getContactos().stream()
+				.filter(c -> c instanceof IndividualContact)
+				.map(c -> (IndividualContact) c)
+				.filter(c -> c.getNombre().equals(nombre)).findAny();
+		if (!contacto.isPresent())  {
+			IndividualContact nuevoContacto = new IndividualContact(nombre, new LinkedList<Message>(), numTelefono, usuarioActual);
+			usuarioActual.addContacto(nuevoContacto);
+			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
+			return true;
+		}
 		return false;
 	}
 
-	public void crearGrupo(String nombre, List<IndividualContact> participantes) { // ALFONSITO
-		// TODO creo el grupo. EL USUARIO ACTUAL ES EL ADMINISTRADOR
+	// Creo el grupo.
+	public void crearGrupo(String nombre, List<IndividualContact> participantes) {
+		Group nuevoGrupo = new Group(nombre, new LinkedList<Message>(), participantes, usuarioActual);
+		usuarioActual.addGrupo(nuevoGrupo);
+		usuarioActual.addGrupoAdmin(nuevoGrupo);
+		adaptadorGrupo.registrarGrupo(nuevoGrupo);
 	}
 
 	public List<Group> getGruposAdminUsuarioActual() { // ALFONSITO
