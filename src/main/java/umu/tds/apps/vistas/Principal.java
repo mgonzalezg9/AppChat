@@ -29,6 +29,9 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 
 import tds.BubbleText;
+import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.Group;
+import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
 import umu.tds.apps.controlador.Controlador;
@@ -54,6 +57,7 @@ public class Principal extends JFrame {
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
+	private Controlador controlador;
 
 	/**
 	 * Launch the application.
@@ -92,6 +96,7 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
+		controlador = Controlador.getInstancia();
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
@@ -368,24 +373,24 @@ public class Principal extends JFrame {
 		contentPane.add(scrollPane, gbc_scrollPane);
 
 		// Contactos de ejemplo
-		List<User> usuarios = new LinkedList<User>();
-		usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")),
-				"Alfonso Info", LocalDate.now(), 0, "Alf", "1234", false, null, null));
+		List<Contact> contactos = controlador.getContactosUsuarioActual();
+		//usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")),
+				//"Alfonso Info", LocalDate.now(), 0, "Alf", "1234", false, null, null));
 
 		// Creamos el modelo
-		final DefaultListModel<User> modelContacts = new DefaultListModel<>();
+		final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
 
 		// Rellenamos el modelo
-		for (int i = 0; i < usuarios.size(); i++)
-			modelContacts.add(i, usuarios.get(i));
+		for (int i = 0; i < contactos.size(); i++)
+			modelContacts.add(i, contactos.get(i));
 
-		JList<User> list_contacts = new JList<>(modelContacts);
+		JList<Contact> list_contacts = new JList<>(modelContacts);
 		list_contacts.setSelectedIndex(0);
 		list_contacts.setBackground(MAIN_COLOR_LIGHT);
 		list_contacts.setCellRenderer(createListRenderer());
 		list_contacts.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting())
-				System.out.println(list_contacts.getSelectedValue().getName());
+				System.out.println(list_contacts.getSelectedValue().getNombre());
 		});
 
 		scrollPane.setViewportView(list_contacts);
@@ -540,7 +545,7 @@ public class Principal extends JFrame {
 		};
 	}
 
-	private static ListCellRenderer<? super User> createListRenderer() {
+	private static ListCellRenderer<? super Contact> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			private Color background = new Color(0, 100, 255, 15);
 			private Color defaultBackground = (Color) UIManager.get("List.background");
@@ -548,7 +553,14 @@ public class Principal extends JFrame {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
-				User contacto = (User) value;
+				Contact contacto = (Contact) value;
+				IndividualContact contactoIndividual = null;
+				boolean isIndividual = false;
+				
+				if (contacto instanceof IndividualContact) {
+					isIndividual = true;
+					contactoIndividual = (IndividualContact) contacto;
+				}
 
 				JPanel panel = new JPanel();
 				GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -559,7 +571,11 @@ public class Principal extends JFrame {
 				panel.setLayout(gbl_contentPane);
 
 				JLabel label = new JLabel("");
-				label.setIcon(contacto.getProfilePhoto());
+				if (isIndividual) {
+					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());	
+				} else {
+					label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png"))); // ICONO POR DEFECTO PARA LOS GRUPOS
+				}
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
 				gbc_label.gridheight = 2;
@@ -568,7 +584,7 @@ public class Principal extends JFrame {
 				gbc_label.gridy = 1;
 				panel.add(label, gbc_label);
 
-				JLabel lblNewLabel = new JLabel(contacto.getName());
+				JLabel lblNewLabel = new JLabel(contacto.getNombre());
 				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
 				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
@@ -576,7 +592,12 @@ public class Principal extends JFrame {
 				gbc_lblNewLabel.gridy = 1;
 				panel.add(lblNewLabel, gbc_lblNewLabel);
 
-				JLabel lblNewLabel_1 = new JLabel(contacto.getFechaNacimiento().toString());
+				JLabel lblNewLabel_1;
+				if (!contacto.getMensajes().isEmpty()) {
+					lblNewLabel_1 = new JLabel(contacto.getMensajes().get(0).getHora().toString());
+				} else {
+					lblNewLabel_1 = new JLabel("");
+				}
 				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
 				gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
@@ -584,7 +605,12 @@ public class Principal extends JFrame {
 				gbc_lblNewLabel_1.gridy = 1;
 				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
-				JLabel lblEsteHaSido = new JLabel(contacto.getEstado().orElse(new Status(null, "")).getFrase());
+				JLabel lblEsteHaSido;
+				if (!contacto.getMensajes().isEmpty()) {
+					lblEsteHaSido = new JLabel(contacto.getMensajes().get(0).getTexto());
+				} else {
+					lblEsteHaSido = new JLabel("");
+				}
 				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
 				gbc_lblEsteHaSido.gridwidth = 2;
 				gbc_lblEsteHaSido.anchor = GridBagConstraints.WEST;

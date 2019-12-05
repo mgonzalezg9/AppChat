@@ -118,6 +118,8 @@ public class Controlador {
 
 	// Devuelvo mi lista de contactos.
 	public List<Contact> getContactosUsuarioActual() {
+		if (usuarioActual == null)
+			return new LinkedList<Contact>();
 		User u = catalogoUsuarios.getUsuario(usuarioActual.getCodigo());
 		return u.getContactos();
 	}
@@ -149,14 +151,18 @@ public class Controlador {
 	}
 
 	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
-	public boolean crearContacto(ImageIcon imagen, String nombre, int numTelefono) {
-		boolean existeContacto = usuarioActual.getContactos().stream()
-				.filter(c -> c instanceof IndividualContact)
-				.map(c -> (IndividualContact) c)
-				.anyMatch(c -> c.getNombre().equals(nombre));
+	public boolean crearContacto(String nombre, int numTelefono) {
+		boolean existeContacto = false;
+		if (!usuarioActual.getContactos().isEmpty()) {
+			existeContacto = usuarioActual.getContactos().stream()
+					.filter(c -> c instanceof IndividualContact)
+					.map(c -> (IndividualContact) c)
+					.anyMatch(c -> c.getNombre().equals(nombre));
+		}
 		
-		if (existeContacto)  {
-			IndividualContact nuevoContacto = new IndividualContact(nombre, new LinkedList<Message>(), numTelefono, usuarioActual);
+		if (!existeContacto)  {
+			User usuario = catalogoUsuarios.getUsuarios().stream().filter(u -> u.getNumTelefono() == numTelefono).collect(Collectors.toList()).get(0);
+			IndividualContact nuevoContacto = new IndividualContact(nombre, new LinkedList<Message>(), numTelefono, usuario);
 			usuarioActual.addContacto(nuevoContacto);
 			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
 			return true;

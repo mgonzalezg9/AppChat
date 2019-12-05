@@ -6,6 +6,10 @@ import static umu.tds.apps.vistas.Theme.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+
+import umu.tds.apps.controlador.Controlador;
+
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -15,12 +19,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class CreateContact extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField textFieldName;
+	private JTextField textFieldTelf;
 
 	/**
 	 * Launch the application.
@@ -95,14 +101,18 @@ public class CreateContact extends JFrame {
 		gbc_lblName.gridy = 0;
 		panel.add(lblName, gbc_lblName);
 		
-		textField = new JTextField();
+		textFieldName = new JTextField();
+		textFieldName.setForeground(TEXT_COLOR_LIGHT);
+		textFieldName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldName.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldName.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 0);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 0;
-		panel.add(textField, gbc_textField);
-		textField.setColumns(10);
+		panel.add(textFieldName, gbc_textField);
+		textFieldName.setColumns(10);
 		
 		JLabel lblPhoneNumber = new JLabel("Phone number");
 		lblPhoneNumber.setForeground(TEXT_COLOR_LIGHT);
@@ -113,13 +123,17 @@ public class CreateContact extends JFrame {
 		gbc_lblPhoneNumber.gridy = 3;
 		panel.add(lblPhoneNumber, gbc_lblPhoneNumber);
 		
-		textField_1 = new JTextField();
+		textFieldTelf = new JTextField();
+		textFieldTelf.setForeground(TEXT_COLOR_LIGHT);
+		textFieldTelf.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textFieldTelf.setCaretColor(TEXT_COLOR_LIGHT);
+		textFieldTelf.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 1;
 		gbc_textField_1.gridy = 3;
-		panel.add(textField_1, gbc_textField_1);
-		textField_1.setColumns(10);
+		panel.add(textFieldTelf, gbc_textField_1);
+		textFieldTelf.setColumns(10);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(MAIN_COLOR_LIGHT);
@@ -132,6 +146,19 @@ public class CreateContact extends JFrame {
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnAdd = new JButton("ADD");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Creamos el contacto
+				boolean creado = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()));
+				if (!creado) {
+					// No se ha podido crear el usuario
+					
+				} else {
+					// Usuario creado
+					
+				}
+			}
+		});
 		btnAdd.setBackground(SECONDARY_COLOR);
 		panel_2.add(btnAdd);
 	}
