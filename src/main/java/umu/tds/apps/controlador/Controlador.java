@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -72,7 +74,14 @@ public class Controlador {
 	}
 
 	public boolean iniciarSesion(String nick, String password) {
+		if (nick.isEmpty() || password.isEmpty()) {
+			return false;
+		}
+
 		User cliente = catalogoUsuarios.getUsuario(nick);
+
+		if (cliente == null)
+			return false;
 
 		// Si la password esta bien inicia sesion
 		if (cliente.getPassword().equals(password)) {
@@ -167,9 +176,25 @@ public class Controlador {
 	}
 
 	public List<Message> buscarMensajes(String emisor, LocalDate fechaInicio, LocalDate fechaFin, String text) { // MANUELITO
-		// TODO obtener los mensaje que cumplan el filtro (predicado)
-
-		return null;
+		// Recupero los mensajes que he enviado
+		List<Message> enviados = usuarioActual.getContactos().stream()
+			.flatMap(c -> c.getMensajes().stream())
+			.collect(Collectors.toList());
+		
+		// Recupero los mensajes que he recibido
+		List<Message> recibidos = usuarioActual.getContactos().stream()
+				.flatMap(c -> {
+					List<Message> m;
+					if (c instanceof IndividualContact) 
+						m = c.getMensajesRecibidos(usuarioActual);
+					else 
+						m = c.getMensajesRecibidos();
+					return m.stream();
+				})
+				.collect(Collectors.toList());
+		
+		return Stream.concat(recibidos.stream(), enviados.stream())
+				.collect(Collectors.toList());
 	}
 
 	public boolean deleteChat() {
