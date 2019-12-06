@@ -9,6 +9,12 @@ public class Group extends Contact {
 	private User admin;
 
 	// Constructor.
+	public Group(String nombre, List<IndividualContact> contactos, User admin) {
+		super(nombre);
+		this.contactos = contactos;
+		this.admin = admin;
+	}
+
 	public Group(String nombre, List<Message> mensajes, List<IndividualContact> contactos, User admin) {
 		super(nombre, mensajes);
 		this.contactos = contactos;

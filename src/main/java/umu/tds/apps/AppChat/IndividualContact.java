@@ -11,7 +11,13 @@ public class IndividualContact extends Contact {
 	private User usuario;
 
 	// Constructor.
-	public IndividualContact(String nombre, List<Message> mensajes, int movil, User usuario) {
+	public IndividualContact(String nombre, int movil, User usuario) {
+		super(nombre);
+		this.movil = movil;
+		this.usuario = usuario;
+	}
+	
+	public IndividualContact(String nombre, LinkedList<Message> mensajes, int movil, User usuario) {
 		super(nombre, mensajes);
 		this.movil = movil;
 		this.usuario = usuario;

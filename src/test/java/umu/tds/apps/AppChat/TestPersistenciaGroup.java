@@ -26,7 +26,7 @@ public class TestPersistenciaGroup {
 				0, "mrblacknuel", "1234", true, new YoungDiscount(), null);
 		LinkedList<Message> mensajes = new LinkedList<>();
 		mensajes.add(new Message("Pasar los test", LocalDateTime.now(), user,
-				new IndividualContact("Alberto", new LinkedList<>(), 0, user)));
+				new IndividualContact("Alberto", 0, user)));
 		LinkedList<IndividualContact> contactos = new LinkedList<>();
 		contactos.add(new IndividualContact("Manu", mensajes, 654789321, user));
 		group = new Group("Juernes de fiesta", mensajes, contactos, user);

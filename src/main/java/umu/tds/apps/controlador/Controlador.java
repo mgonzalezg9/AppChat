@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -97,7 +98,7 @@ public class Controlador {
 			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password, false, null, null);
 			catalogoUsuarios.addUsuario(nuevoUsuario);
 			adaptadorUsuario.registrarUsuario(nuevoUsuario);
-			return true;
+			return iniciarSesion(nick, password);
 		}
 		return false;
 	}
@@ -155,8 +156,7 @@ public class Controlador {
 		if (!existeContacto) {
 			User usuario = catalogoUsuarios.getUsuarios().stream().filter(u -> u.getNumTelefono() == numTelefono)
 					.collect(Collectors.toList()).get(0);
-			IndividualContact nuevoContacto = new IndividualContact(nombre, new LinkedList<Message>(), numTelefono,
-					usuario);
+			IndividualContact nuevoContacto = new IndividualContact(nombre, numTelefono, usuario);
 			usuarioActual.addContacto(nuevoContacto);
 			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
 			return true;
@@ -194,7 +194,7 @@ public class Controlador {
 		usuarioActual = null;
 	}
 
-	public List<Message> buscarMensajes(String emisor, LocalDateTime fechaInicio, LocalDateTime fechaFin, String text) { 
+	public List<Message> buscarMensajes(String emisor, LocalDateTime fechaInicio, LocalDateTime fechaFin, String text) {
 		// Recupero los mensajes que he enviado
 		List<Message> enviados = usuarioActual.getContactos().stream().flatMap(c -> c.getMensajesEnviados().stream())
 				.collect(Collectors.toList());
@@ -225,8 +225,8 @@ public class Controlador {
 		}
 	}
 
-	public void addEstado() { // ALFONSITO
-
+	public void addEstado(Status estado) { 
+		usuarioActual.setEstado(Optional.of(estado));
 	}
 
 	public List<Status> getEstados(List<Contact> contactos) { // ALFONSITO
@@ -234,19 +234,23 @@ public class Controlador {
 	}
 
 	public void enviarMensaje(Contact contacto, String message) {
-		contacto.sendMessage(new Message(message, 0, LocalDateTime.now()));
+		contacto.sendMessage(new Message(message, LocalDateTime.now(), usuarioActual, contacto));
 	}
 
 	public void enviarMensaje(Contact contacto, int emoji) {
-		contacto.sendMessage(new Message("", emoji, LocalDateTime.now()));
+		contacto.sendMessage(new Message(emoji, LocalDateTime.now(), usuarioActual, contacto));
 	}
 
 	// Devuelve los contactos del usuario actual que tienen un estado
 	public List<Contact> getContactosEstado() {
-		return usuarioActual.getContactos().stream()
-				.filter(c -> c instanceof IndividualContact)
-				.filter(c -> ((IndividualContact) c).getEstado().isPresent())
-				.collect(Collectors.toList());
+		return usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
+				.filter(c -> ((IndividualContact) c).getEstado().isPresent()).collect(Collectors.toList());
 	}
 	
+	public Optional<Contact> getContacto(String nombre) {
+		return getContactosUsuarioActual().stream()
+				.filter(c -> c.getNombre().equals(nombre))
+				.findAny();
+	}
+
 }

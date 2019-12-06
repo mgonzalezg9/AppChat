@@ -84,15 +84,18 @@ public class Principal extends JFrame {
 	}
 
 	private void loadChat(Contact contacto) {
-		Controlador.getInstancia().getMensajes(contacto).stream()
-			.map(m -> {
-				if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
-					return new BubbleText(chat, m.getTexto(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
-				} else {
-					return new BubbleText(chat, m.getTexto(), INCOMING_MESSAGE_COLOR, contacto.getNombre(), BubbleText.RECEIVED);
-				}
-			})
-			.forEach(b -> chat.add(b));
+		if (contacto == null) {
+			return;
+		}
+		
+		Controlador.getInstancia().getMensajes(contacto).stream().map(m -> {
+			if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
+				return new BubbleText(chat, m.getTexto(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
+			} else {
+				return new BubbleText(chat, m.getTexto(), INCOMING_MESSAGE_COLOR, contacto.getNombre(),
+						BubbleText.RECEIVED);
+			}
+		}).forEach(b -> chat.add(b));
 
 	}
 
@@ -432,7 +435,7 @@ public class Principal extends JFrame {
 		chat.setSize(400, 700);
 
 		// Se muestran todas las burbujas de la conversacion actual
-		loadChat(null);
+		loadChat(list_contacts.getSelectedValue());
 
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBorder(null);
