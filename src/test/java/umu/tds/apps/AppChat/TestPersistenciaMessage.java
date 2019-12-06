@@ -3,6 +3,7 @@ package umu.tds.apps.AppChat;
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -23,7 +24,7 @@ public class TestPersistenciaMessage {
 	public static void setUp() {
 		usuario = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manuel", LocalDate.now(), 0,
 				"mrblacknuel", "1234", true, new YoungDiscount(), null);
-		mensaje = new Message("Pasar los test", LocalDate.now(), usuario,
+		mensaje = new Message("Pasar los test", LocalDateTime.now(), usuario,
 				new IndividualContact("Alberto", new LinkedList<>(), 0, usuario));
 		adapter = AdaptadorMessageTDS.getInstancia();
 	}

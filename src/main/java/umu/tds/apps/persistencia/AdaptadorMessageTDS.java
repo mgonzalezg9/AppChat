@@ -1,6 +1,6 @@
 package umu.tds.apps.persistencia;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -127,7 +127,7 @@ public class AdaptadorMessageTDS implements MessageDAO {
 		// recuperar propiedades que no son objetos
 		// fecha
 		String texto = servPersistencia.recuperarPropiedadEntidad(eMensaje, "texto");
-		LocalDate hora = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eMensaje, "hora"));
+		LocalDateTime hora = LocalDateTime.parse(servPersistencia.recuperarPropiedadEntidad(eMensaje, "hora"));
 		int emoticono = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eMensaje, "emoticono"));
 		Contact receptor = null;
 		Boolean toGroup = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, "togroup"));

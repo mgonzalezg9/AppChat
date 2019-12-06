@@ -20,25 +20,27 @@ public abstract class Contact {
 	public String getNombre() {
 		return nombre;
 	}
-	
-	public void setNombre(String nombre) { // Generado para los test
-		this.nombre = nombre;
-	}
 
-	public List<Message> getMensajes() {
+	// Devuelve los mensajes que ese contacto recibe de mi
+	public List<Message> getMensajesEnviados() {
 		return mensajes;
 	}
-	
-	public void addMensaje(Message m) {
-		mensajes.add(m);
-	}
-	
+
 	public int getCodigo() {
 		return codigo;
 	}
-	
+
 	// Setters
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	// Methods
+	public void sendMessage(Message message) {
+		mensajes.add(message);
 	}
 }

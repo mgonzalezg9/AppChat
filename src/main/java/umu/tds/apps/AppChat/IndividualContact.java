@@ -2,6 +2,7 @@ package umu.tds.apps.AppChat;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class IndividualContact extends Contact {
@@ -15,7 +16,7 @@ public class IndividualContact extends Contact {
 		this.movil = movil;
 		this.usuario = usuario;
 	}
-	
+
 	// Getters.
 	public int getMovil() {
 		return movil;
@@ -24,22 +25,25 @@ public class IndividualContact extends Contact {
 	public User getUsuario() {
 		return usuario;
 	}
-	
+
 	// Setters.
 	public void setUsuario(User usuario) {
 		this.usuario = usuario;
 	}
-	
+
 	// Methods
-	public List<Message> getMensajesRecibidos (User usuario) {
-		return this.usuario.getContactos().stream()
-				.filter(c -> c instanceof IndividualContact)
-				.map(c -> (IndividualContact) c)
-				.filter(c -> c.getUsuario().getNick().equals(usuario.getNick()))
-				.flatMap(c -> c.getMensajes().stream())
-				.collect(Collectors.toList());
+	// Devuelve los mensajes que el contacto le envia al usuario pasado como parametro
+	public List<Message> getMensajesEnviados(User usuario) {
+		return this.usuario.getContactos().stream().filter(c -> c instanceof IndividualContact)
+				.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().getNick().equals(usuario.getNick()))
+				.flatMap(c -> c.getMensajesEnviados().stream()).collect(Collectors.toList());
 	}
 	
+	// Devuelve el estado del contacto
+	public Optional<Status> getEstado() {
+		return usuario.getEstado();
+	}
+
 	// HashCode y equals
 	@Override
 	public int hashCode() {
@@ -68,7 +72,7 @@ public class IndividualContact extends Contact {
 			return false;
 		return true;
 	}
-	
+
 	// toString
 	@Override
 	public String toString() {

@@ -44,7 +44,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 
 		// Registramos primero los atributos que son objetos
 		// Registrar los mensajes del contacto
-		registrarSiNoExistenMensajes(contact.getMensajes());
+		registrarSiNoExistenMensajes(contact.getMensajesEnviados());
 
 		// Registramos al usuario correspondiente al contacto si no existe.
 		registrarSiNoExisteUser(contact.getUsuario());
@@ -53,7 +53,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		eContact.setNombre("contacto");
 		eContact.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("nombre", contact.getNombre()),
 				new Propiedad("movil", String.valueOf(contact.getMovil())),
-				new Propiedad("mensajesRecibidos", obtenerCodigosMensajesRecibidos(contact.getMensajes())),
+				new Propiedad("mensajesRecibidos", obtenerCodigosMensajesRecibidos(contact.getMensajesEnviados())),
 				new Propiedad("usuario", String.valueOf(contact.getUsuario().getCodigo())))));
 
 		// Registrar entidad usuario
@@ -73,7 +73,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		Entidad eContact;
 		AdaptadorMessageTDS adaptadorMensaje = AdaptadorMessageTDS.getInstancia();
 
-		for (Message mensaje : contact.getMensajes()) {
+		for (Message mensaje : contact.getMensajesEnviados()) {
 			adaptadorMensaje.borrarMensaje(mensaje);
 		}
 
@@ -96,7 +96,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		servPersistencia.anadirPropiedadEntidad(eContact, "movil", contact.getNombre());
 		servPersistencia.eliminarPropiedadEntidad(eContact, "mensajesRecibidos");
 		servPersistencia.anadirPropiedadEntidad(eContact, "mensajesRecibidos",
-				obtenerCodigosMensajesRecibidos(contact.getMensajes()));
+				obtenerCodigosMensajesRecibidos(contact.getMensajesEnviados()));
 		servPersistencia.eliminarPropiedadEntidad(eContact, "usuario");
 		servPersistencia.anadirPropiedadEntidad(eContact, "usuario", String.valueOf(contact.getUsuario().getCodigo()));
 	}
@@ -127,7 +127,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		// Mensajes que el contacto tiene
 		List<Message> mensajes = obtenerMensajesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eContact, "mensajesRecibidos"));
 		for (Message m : mensajes)
-			contact.addMensaje(m);
+			contact.sendMessage(m);
 
 		// Obtener usuario del contacto
 		contact.setUsuario(obtenerUsuarioDesdeCodigo(servPersistencia.recuperarPropiedadEntidad(eContact, "usuario")));

@@ -1,25 +1,25 @@
 package umu.tds.apps.AppChat;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class Message {
+public class Message implements Comparable<Message> {
 	// Properties.
 	private int codigo;
 	private String texto;
-	private LocalDate hora;
+	private LocalDateTime hora;
 	private int emoticono;
 	private User emisor;
 	private Contact receptor;
 
 	// Constructor.
-	public Message(String texto, LocalDate hora, User emisor, Contact receptor) {
+	public Message(String texto, LocalDateTime hora, User emisor, Contact receptor) {
 		this.texto = texto;
 		this.hora = hora;
 		this.setEmisor(emisor);
 		this.setReceptor(receptor);
 	}
 
-	public Message(int emoticono, LocalDate hora, User emisor, Contact receptor) {
+	public Message(int emoticono, LocalDateTime hora, User emisor, Contact receptor) {
 		this.texto = "";
 		this.hora = hora;
 		this.emoticono = emoticono;
@@ -27,7 +27,7 @@ public class Message {
 		this.setReceptor(receptor);
 	}
 	
-	public Message(String texto, int emoticono, LocalDate hora) {
+	public Message(String texto, int emoticono, LocalDateTime hora) {
 		this.texto = texto;
 		this.emoticono = emoticono;
 		this.hora = hora;
@@ -38,7 +38,7 @@ public class Message {
 		return texto;
 	}
 
-	public LocalDate getHora() {
+	public LocalDateTime getHora() {
 		return hora;
 	}
 
@@ -72,5 +72,10 @@ public class Message {
 
 	public void setEmisor(User emisor) {
 		this.emisor = emisor;
+	}
+
+	@Override
+	public int compareTo(Message o) {
+		return hora.compareTo(o.hora);
 	}
 }

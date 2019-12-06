@@ -7,15 +7,15 @@ public class Group extends Contact {
 	// Properties
 	private List<IndividualContact> contactos;
 	private User admin;
-	
+
 	// Constructor.
 	public Group(String nombre, List<Message> mensajes, List<IndividualContact> contactos, User admin) {
 		super(nombre, mensajes);
 		this.contactos = contactos;
 		this.admin = admin;
 	}
-	
-	//Getters
+
+	// Getters
 	public List<IndividualContact> getContactos() {
 		return contactos;
 	}
@@ -23,37 +23,28 @@ public class Group extends Contact {
 	public User getAdmin() {
 		return admin;
 	}
-	
+
 	// Methods
-	public void addMensaje(Message m) {
-		super.addMensaje(m);
-	}
-	
 	public void addIntegrante(IndividualContact c) {
 		contactos.add(c);
 	}
-	
+
 	public void cambiarAdmin(User u) {
 		admin = u;
 	}
-	
-	public List<Message> getMensajesRecibidos () {
-		return this.contactos.stream()
-				.flatMap(c -> c.getUsuario().getContactos().stream())
-				.filter(c -> c instanceof Group)
-				.map(c -> (Group) c)
-				.filter(g -> g.getCodigo() == this.getCodigo())
-				.flatMap(g -> g.getMensajes().stream())
-				.collect(Collectors.toList());
+
+	// Devuelve los mensajes que han enviado el resto de usuarios por el grupo
+	public List<Message> getMensajesEnviados() {
+		return this.contactos.stream().flatMap(c -> c.getUsuario().getContactos().stream())
+				.filter(c -> c instanceof Group).map(c -> (Group) c).filter(g -> g.getCodigo() == this.getCodigo())
+				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
 	}
-	
+
 	public List<Message> getMensajesAdmin() {
-		return this.admin.getGruposAdmin().stream()
-				.filter(g -> g.getCodigo() == this.getCodigo())
-				.flatMap(g -> g.getMensajes().stream())
-				.collect(Collectors.toList());
+		return this.admin.getGruposAdmin().stream().filter(g -> g.getCodigo() == this.getCodigo())
+				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
 	}
-	
+
 	// hashCode y equals
 	@Override
 	public int hashCode() {
@@ -85,7 +76,7 @@ public class Group extends Contact {
 			return false;
 		return true;
 	}
-	
+
 	// toString
 	@Override
 	public String toString() {

@@ -111,7 +111,7 @@ public class UserSettings extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Carrousel car;
-	private JTextArea txtrRespetandoElNnn;
+	private JTextArea textAreaSaludo;
 	private JFrame frame;
 
 	/**
@@ -245,7 +245,7 @@ public class UserSettings extends JFrame {
 		gbc_panel_4.gridy = 2;
 		contentPane.add(panel_4, gbc_panel_4);
 
-		JLabel lblNewLabel = new JLabel(Controlador.getInstancia().getNombreUsuario());
+		JLabel lblNewLabel = new JLabel(Controlador.getInstancia().getUsuarioActual().getName());
 		lblNewLabel.setForeground(TEXT_COLOR_LIGHT);
 		panel_4.add(lblNewLabel);
 
@@ -270,16 +270,16 @@ public class UserSettings extends JFrame {
 		gbc_scrollPane.gridy = 4;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		txtrRespetandoElNnn = new JTextArea(Controlador.getInstancia().getSaludo());
-		txtrRespetandoElNnn.addKeyListener(new KeyAdapter() {
+		textAreaSaludo = new JTextArea(Controlador.getInstancia().getUsuarioActual().getSaludo());
+		textAreaSaludo.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				Controlador.getInstancia().setSaludo(txtrRespetandoElNnn.getText());
+				//Controlador.getInstancia().setSaludo(txtrRespetandoElNnn.getText());
 			}
 		});
-		scrollPane.setViewportView(txtrRespetandoElNnn);
-		txtrRespetandoElNnn.setPreferredSize(new Dimension(200, 100));
-		txtrRespetandoElNnn.setMinimumSize(new Dimension(10, 25));
+		scrollPane.setViewportView(textAreaSaludo);
+		textAreaSaludo.setPreferredSize(new Dimension(200, 100));
+		textAreaSaludo.setMinimumSize(new Dimension(10, 25));
 	}
 
 }

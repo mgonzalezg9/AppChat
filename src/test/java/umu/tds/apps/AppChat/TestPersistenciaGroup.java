@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -24,7 +25,7 @@ public class TestPersistenciaGroup {
 		User user = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manuel", LocalDate.now(),
 				0, "mrblacknuel", "1234", true, new YoungDiscount(), null);
 		LinkedList<Message> mensajes = new LinkedList<>();
-		mensajes.add(new Message("Pasar los test", LocalDate.now(), user,
+		mensajes.add(new Message("Pasar los test", LocalDateTime.now(), user,
 				new IndividualContact("Alberto", new LinkedList<>(), 0, user)));
 		LinkedList<IndividualContact> contactos = new LinkedList<>();
 		contactos.add(new IndividualContact("Manu", mensajes, 654789321, user));

@@ -13,14 +13,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
@@ -30,24 +28,19 @@ import javax.swing.DefaultListModel;
 
 import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
-import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
-import umu.tds.apps.AppChat.Status;
-import umu.tds.apps.AppChat.User;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -75,21 +68,32 @@ public class Principal extends JFrame {
 		});
 	}
 
-	private void sendMessage(JPanel panel, JTextField textField) throws IllegalArgumentException {
-		Controlador.getInstancia().enviarMensaje();
-		
+	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) throws IllegalArgumentException {
+		Controlador.getInstancia().enviarMensaje(contacto, textField.getText());
+
 		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
 		chat.add(burbuja);
 		textField.setText(null);
 	}
 
-	private void sendIcon(JPanel panel, int iconID) throws IllegalArgumentException {
+	private void sendIcon(JPanel panel, int iconID, Contact contacto) throws IllegalArgumentException {
+		Controlador.getInstancia().enviarMensaje(contacto, iconID);
+
 		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT, 10);
 		chat.add(burbuja);
 	}
 
-	private void loadChat() {
-		Controlador.getChat(null, chat).stream().forEach(b -> chat.add(b));
+	private void loadChat(Contact contacto) {
+		Controlador.getInstancia().getMensajes(contacto).stream()
+			.map(m -> {
+				if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
+					return new BubbleText(chat, m.getTexto(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
+				} else {
+					return new BubbleText(chat, m.getTexto(), INCOMING_MESSAGE_COLOR, contacto.getNombre(), BubbleText.RECEIVED);
+				}
+			})
+			.forEach(b -> chat.add(b));
+
 	}
 
 	/**
@@ -374,17 +378,18 @@ public class Principal extends JFrame {
 
 		// Contactos de ejemplo
 		List<Contact> contactos = controlador.getContactosUsuarioActual();
-		//usuarios.add(new User(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")),
-				//"Alfonso Info", LocalDate.now(), 0, "Alf", "1234", false, null, null));
+		// usuarios.add(new User(new
+		// ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png")),
+		// "Alfonso Info", LocalDate.now(), 0, "Alf", "1234", false, null, null));
 
 		// Creamos el modelo
 		final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
 
 		// Rellenamos el modelo
-		for (int i = 0; i < contactos.size(); i++)
-			modelContacts.add(i, contactos.get(i));
+		contactos.stream().forEach(c -> modelContacts.addElement(c));
 
 		JList<Contact> list_contacts = new JList<>(modelContacts);
+		list_contacts.setBorder(null);
 		list_contacts.setSelectedIndex(0);
 		list_contacts.setBackground(MAIN_COLOR_LIGHT);
 		list_contacts.setCellRenderer(createListRenderer());
@@ -427,7 +432,7 @@ public class Principal extends JFrame {
 		chat.setSize(400, 700);
 
 		// Se muestran todas las burbujas de la conversacion actual
-		loadChat();
+		loadChat(null);
 
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBorder(null);
@@ -453,7 +458,7 @@ public class Principal extends JFrame {
 			labelIconos.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					sendIcon(chat, Integer.valueOf(labelIconos.getName()));
+					sendIcon(chat, Integer.valueOf(labelIconos.getName()), list_contacts.getSelectedValue());
 				}
 			});
 		}
@@ -504,7 +509,7 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					sendMessage(chat, textField);
+					sendMessage(chat, textField, list_contacts.getSelectedValue());
 				} catch (IllegalArgumentException e2) {
 				}
 			}
@@ -523,7 +528,7 @@ public class Principal extends JFrame {
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					sendMessage(chat, textField);
+					sendMessage(chat, textField, list_contacts.getSelectedValue());
 				} catch (IllegalArgumentException e) {
 				}
 			}
@@ -537,18 +542,9 @@ public class Principal extends JFrame {
 		writeText.add(lblSend, gbc_lblSend);
 	}
 
-	private ListSelectionListener createListSelectionListener(JList<User> listaUsuarios) {
-		return e -> {
-			if (!e.getValueIsAdjusting()) {
-				System.out.println(listaUsuarios.getSelectedValue().getName());
-			}
-		};
-	}
-
 	private static ListCellRenderer<? super Contact> createListRenderer() {
 		return new DefaultListCellRenderer() {
-			private Color background = new Color(0, 100, 255, 15);
-			private Color defaultBackground = (Color) UIManager.get("List.background");
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
@@ -556,7 +552,7 @@ public class Principal extends JFrame {
 				Contact contacto = (Contact) value;
 				IndividualContact contactoIndividual = null;
 				boolean isIndividual = false;
-				
+
 				if (contacto instanceof IndividualContact) {
 					isIndividual = true;
 					contactoIndividual = (IndividualContact) contacto;
@@ -572,9 +568,14 @@ public class Principal extends JFrame {
 
 				JLabel label = new JLabel("");
 				if (isIndividual) {
-					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());	
+					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());
 				} else {
-					label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/user50.png"))); // ICONO POR DEFECTO PARA LOS GRUPOS
+					label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/group.png"))); // ICONO
+																													// POR
+																													// DEFECTO
+																													// PARA
+																													// LOS
+																													// GRUPOS
 				}
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
@@ -593,8 +594,8 @@ public class Principal extends JFrame {
 				panel.add(lblNewLabel, gbc_lblNewLabel);
 
 				JLabel lblNewLabel_1;
-				if (!contacto.getMensajes().isEmpty()) {
-					lblNewLabel_1 = new JLabel(contacto.getMensajes().get(0).getHora().toString());
+				if (!contacto.getMensajesEnviados().isEmpty()) {
+					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(0).getHora().toString());
 				} else {
 					lblNewLabel_1 = new JLabel("");
 				}
@@ -606,8 +607,8 @@ public class Principal extends JFrame {
 				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 				JLabel lblEsteHaSido;
-				if (!contacto.getMensajes().isEmpty()) {
-					lblEsteHaSido = new JLabel(contacto.getMensajes().get(0).getTexto());
+				if (!contacto.getMensajesEnviados().isEmpty()) {
+					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(0).getTexto());
 				} else {
 					lblEsteHaSido = new JLabel("");
 				}
