@@ -92,20 +92,24 @@ public class Principal extends JFrame {
 		chat.removeAll();
 
 		Controlador.getInstancia().getMensajes(contacto).stream().map(m -> {
-			if (m.getTexto().isEmpty() && m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
-				return new BubbleText(chat, m.getEmoticono(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT, MESSAGE_SIZE);
-			} else {
-				if (m.getTexto().isEmpty())
-					return new BubbleText(chat, m.getEmoticono(), INCOMING_MESSAGE_COLOR, contacto.getNombre(),
-							BubbleText.RECEIVED, MESSAGE_SIZE);
-			}
+			String emisor;
+			int direccionMensaje;
+			Color colorBurbuja;
 
 			if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
-				return new BubbleText(chat, m.getTexto(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
+				colorBurbuja = SENT_MESSAGE_COLOR;
+				emisor = "Tú";
+				direccionMensaje = BubbleText.SENT;
 			} else {
-				return new BubbleText(chat, m.getTexto(), INCOMING_MESSAGE_COLOR, contacto.getNombre(),
-						BubbleText.RECEIVED);
+				colorBurbuja = INCOMING_MESSAGE_COLOR;
+				emisor = contacto.getNombre();
+				direccionMensaje = BubbleText.RECEIVED;
 			}
+
+			if (m.getTexto().isEmpty()) {
+				return new BubbleText(chat, m.getEmoticono(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
+			}
+			return new BubbleText(chat, m.getTexto(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
 		}).forEach(b -> chat.add(b));
 
 	}
