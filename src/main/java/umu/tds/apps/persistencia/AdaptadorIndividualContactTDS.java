@@ -93,7 +93,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		servPersistencia.eliminarPropiedadEntidad(eContact, "nombre");
 		servPersistencia.anadirPropiedadEntidad(eContact, "nombre", contact.getNombre());
 		servPersistencia.eliminarPropiedadEntidad(eContact, "movil");
-		servPersistencia.anadirPropiedadEntidad(eContact, "movil", contact.getNombre());
+		servPersistencia.anadirPropiedadEntidad(eContact, "movil", String.valueOf(contact.getMovil()));
 		servPersistencia.eliminarPropiedadEntidad(eContact, "mensajesRecibidos");
 		servPersistencia.anadirPropiedadEntidad(eContact, "mensajesRecibidos",
 				obtenerCodigosMensajesRecibidos(contact.getMensajesEnviados()));
@@ -117,7 +117,7 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		
 		String movil = null;
 		movil = servPersistencia.recuperarPropiedadEntidad(eContact, "movil");
-
+		
 		IndividualContact contact = new IndividualContact(nombre, new LinkedList<Message>(), Integer.valueOf(movil), null);
 		contact.setCodigo(codigo);
 

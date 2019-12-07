@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.swing.Icon;
+
 public class IndividualContact extends Contact {
 	// Properties.
 	private int movil;
@@ -30,6 +32,11 @@ public class IndividualContact extends Contact {
 
 	public User getUsuario() {
 		return usuario;
+	}
+	
+	@Override
+	public Icon getFoto() {
+		return usuario.getProfilePhoto();
 	}
 
 	// Setters.

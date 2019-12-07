@@ -46,15 +46,16 @@ public class TestLogica {
 		
 		// Admin tiene un estado
 		controlador.addEstado(ADMIN_STATUS);
+		controlador.cerrarSesion();
 		
 		// Creacion de la cuenta No Admin
 		assertTrue(controlador.crearCuenta(ICON, NOADMIN_NICK, PASSWORD, NOADMIN_MAIL, NOADMIN_NAME, NOADMIN_PHONE, LocalDate.now()));
 		
 		// No Admin añade como contacto a Admin
 		assertTrue(controlador.crearContacto(ADMIN_NAME, ADMIN_PHONE));
+		controlador.cerrarSesion();
 		
 		// Admin inicia sesión
-		controlador.cerrarSesion();
 		assertTrue(controlador.iniciarSesion(ADMIN_NICK, PASSWORD));
 		
 		// Admin añade a NoAdmin como contacto
@@ -68,12 +69,12 @@ public class TestLogica {
 		
 		// Admin manda un mensaje a No Admin
 		controlador.enviarMensaje(contactoNoAdmin, "Ya te he metido al grupo!");
-		
-		// No Admin inicia sesión y responde por el grupo
 		controlador.cerrarSesion();
-		assertTrue(controlador.iniciarSesion(NOADMIN_NICK, PASSWORD));
-		IndividualContact contactoAdmin = (IndividualContact) controlador.getContacto(ADMIN_NAME).get();
-		controlador.enviarMensaje(contactoAdmin, EMOJI);
+		
+		// No Admin inicia sesión y responde por el grupo Juernes
+		/*assertTrue(controlador.iniciarSesion(NOADMIN_NICK, PASSWORD));
+		Group grupo = (Group) controlador.getContacto(GROUP_NAME).get();
+		controlador.enviarMensaje(grupo, EMOJI);*/
 		
 		// NoAdmin cierra sesión
 		controlador.cerrarSesion();

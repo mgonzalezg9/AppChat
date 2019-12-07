@@ -109,11 +109,15 @@ public class Controlador {
 
 	public void setSaludoUsuario(String saludo) {
 		usuarioActual.setSaludo(saludo);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	// Añade una imagen al conjunto de imágenes del usuario
 	public void addImagenUsuario(ImageIcon image) {
 		usuarioActual.addProfilePhoto(image);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	// Devuelvo mi lista de contactos.
@@ -159,6 +163,7 @@ public class Controlador {
 			IndividualContact nuevoContacto = new IndividualContact(nombre, numTelefono, usuario);
 			usuarioActual.addContacto(nuevoContacto);
 			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
+			adaptadorUsuario.modificarUsuario(usuarioActual);
 			return true;
 		}
 		return false;
@@ -170,6 +175,8 @@ public class Controlador {
 		usuarioActual.addGrupo(nuevoGrupo);
 		usuarioActual.addGrupoAdmin(nuevoGrupo);
 		adaptadorGrupo.registrarGrupo(nuevoGrupo);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	public List<Group> getGruposAdminUsuarioActual() {
@@ -188,6 +195,8 @@ public class Controlador {
 	public void hacerPremium() { // MANUELITO
 		// TODO Ponerle algun descuento segun convenga
 		usuarioActual.setPremium();
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	public void cerrarSesion() { // MANUELITO
@@ -223,10 +232,15 @@ public class Controlador {
 		} else {
 			adaptadorGrupo.borrarGrupo((Group) c);
 		}
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	public void addEstado(Status estado) { 
 		usuarioActual.setEstado(Optional.of(estado));
+		adaptadorEstado.registrarEstado(estado);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	public List<Status> getEstados(List<Contact> contactos) { // ALFONSITO
@@ -234,11 +248,27 @@ public class Controlador {
 	}
 
 	public void enviarMensaje(Contact contacto, String message) {
-		contacto.sendMessage(new Message(message, LocalDateTime.now(), usuarioActual, contacto));
+		Message mensaje = new Message(message, LocalDateTime.now(), usuarioActual, contacto);
+		contacto.sendMessage(mensaje);
+		adaptadorMensaje.registrarMensaje(mensaje);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		if (contacto instanceof IndividualContact) {
+			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
+		} else {
+			adaptadorGrupo.modificarGrupo((Group) contacto);
+		}
 	}
 
 	public void enviarMensaje(Contact contacto, int emoji) {
-		contacto.sendMessage(new Message(emoji, LocalDateTime.now(), usuarioActual, contacto));
+		Message mensaje = new Message(emoji, LocalDateTime.now(), usuarioActual, contacto);
+		contacto.sendMessage(mensaje);
+		adaptadorMensaje.registrarMensaje(mensaje);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		if (contacto instanceof IndividualContact) {
+			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
+		} else {
+			adaptadorGrupo.modificarGrupo((Group) contacto);
+		}
 	}
 
 	// Devuelve los contactos del usuario actual que tienen un estado

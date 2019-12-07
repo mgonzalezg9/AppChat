@@ -3,6 +3,11 @@ package umu.tds.apps.AppChat;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import umu.tds.apps.vistas.Theme;
+
 public class Group extends Contact {
 	// Properties
 	private List<IndividualContact> contactos;
@@ -28,6 +33,11 @@ public class Group extends Contact {
 
 	public User getAdmin() {
 		return admin;
+	}
+	
+	@Override
+	public Icon getFoto() {
+		return new ImageIcon(Theme.GROUP_MINI_ICON_PATH);
 	}
 
 	// Methods
