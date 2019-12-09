@@ -1,5 +1,6 @@
 package umu.tds.apps.controlador;
 
+import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import umu.tds.apps.AppChat.*;
@@ -18,6 +20,8 @@ import umu.tds.apps.persistencia.IndividualContactDAO;
 import umu.tds.apps.persistencia.MessageDAO;
 import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
+import java.io.File;
+import java.io.IOException;
 
 public class Controlador {
 	// Instancia del controlador.
@@ -98,6 +102,15 @@ public class Controlador {
 			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password, false, null, null);
 			catalogoUsuarios.addUsuario(nuevoUsuario);
 			adaptadorUsuario.registrarUsuario(nuevoUsuario);
+			
+			/*try {
+				// Guardamos la imagen de perfil del usuario en el proyecto
+				BufferedImage bi = new BufferedImage(imagen.getIconWidth(), imagen.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+				ImageIO.write(bi, imagen.getDescription().substring(imagen.getDescription().lastIndexOf(".")), new File("mainPhoto_" + name));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}*/
+			
 			return iniciarSesion(nick, password);
 		}
 		return false;
