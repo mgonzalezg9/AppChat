@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public class IndividualContact extends Contact {
 	// Properties.
@@ -35,7 +36,7 @@ public class IndividualContact extends Contact {
 	}
 	
 	@Override
-	public Icon getFoto() {
+	public ImageIcon getFoto() {
 		return usuario.getProfilePhoto();
 	}
 

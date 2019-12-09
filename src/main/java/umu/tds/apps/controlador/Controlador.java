@@ -1,8 +1,11 @@
 package umu.tds.apps.controlador;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -99,14 +102,25 @@ public class Controlador {
 		// TODO Comprobar que no haya un usuario con ese numero de telefono
 		User u = catalogoUsuarios.getUsuario(nick);
 		if (u == null) {
-			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password, false, null, null);
+			User nuevoUsuario = new User(Arrays.asList(imagen), name, fechaNacimiento, numTelefono, nick, password, false, null, null);
 			catalogoUsuarios.addUsuario(nuevoUsuario);
 			adaptadorUsuario.registrarUsuario(nuevoUsuario);
 			
 			/*try {
 				// Guardamos la imagen de perfil del usuario en el proyecto
-				BufferedImage bi = new BufferedImage(imagen.getIconWidth(), imagen.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-				ImageIO.write(bi, imagen.getDescription().substring(imagen.getDescription().lastIndexOf(".")), new File("mainPhoto_" + name));
+				String ext = imagen.getDescription().substring(imagen.getDescription().lastIndexOf("."));
+				System.out.println(ext);
+				
+				
+				
+				File file = new File("/umu/tds/apps/photos/mainPhoto_" + name + ext);
+				BufferedImage image = new BufferedImage(imagen.getIconWidth(), imagen.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+				
+				Graphics2D g2 = image.createGraphics();
+				g2.drawImage(imagen.getImage(), 0, 0, null);
+				g2.dispose();
+				
+				ImageIO.write(image, ext, file);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}*/

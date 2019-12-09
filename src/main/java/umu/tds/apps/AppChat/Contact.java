@@ -3,7 +3,7 @@ package umu.tds.apps.AppChat;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public abstract class Contact {
 	// Properties.
@@ -36,7 +36,7 @@ public abstract class Contact {
 		return codigo;
 	}
 	
-	public abstract Icon getFoto();
+	public abstract ImageIcon getFoto();
 
 	// Setters
 	public void setCodigo(int codigo) {

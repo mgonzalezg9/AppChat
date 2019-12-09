@@ -364,7 +364,6 @@ public class Register extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {				
 				// Registra al usuario
-				System.out.println(imgUser.toString());
 				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()), textFieldUser.getText(),
 						textFieldPassword.getText(), textFieldEmail.getText(), textFieldName.getText(),
 						Integer.parseInt(textFieldPNumber.getText()),

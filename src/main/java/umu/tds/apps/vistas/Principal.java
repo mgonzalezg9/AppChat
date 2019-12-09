@@ -10,12 +10,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.List;
 import java.util.Random;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
@@ -35,6 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
@@ -300,12 +304,25 @@ public class Principal extends JFrame {
 		gbl_settingsDer.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		settingsDer.setLayout(gbl_settingsDer);
 
+		// Contactos de ejemplo
+				List<Contact> contactos = controlador.getContactosUsuarioActual();
+
+				// Creamos el modelo
+				final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
+
+				// Rellenamos el modelo
+				contactos.stream().forEach(c -> modelContacts.addElement(c));
+				
+				JList<Contact> list_contacts = new JList<>(modelContacts);
+		
+		
+		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(MAIN_COLOR);
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ContactInfo window = new ContactInfo();
+				ContactInfo window = new ContactInfo(list_contacts.getSelectedValue());
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -319,14 +336,6 @@ public class Principal extends JFrame {
 		gbc_panel_3.gridx = 0;
 		gbc_panel_3.gridy = 0;
 		settingsDer.add(panel_3, gbc_panel_3);
-
-		JLabel lblContactPhoto = new JLabel("");
-		lblContactPhoto.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/group20.png")));
-		panel_3.add(lblContactPhoto);
-
-		JLabel lblChatName = new JLabel();
-		lblChatName.setForeground(TEXT_COLOR_LIGHT);
-		panel_3.add(lblChatName);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(MAIN_COLOR);
@@ -394,16 +403,17 @@ public class Principal extends JFrame {
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		// Contactos de ejemplo
-		List<Contact> contactos = controlador.getContactosUsuarioActual();
-
-		// Creamos el modelo
-		final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
-
-		// Rellenamos el modelo
-		contactos.stream().forEach(c -> modelContacts.addElement(c));
-
-		JList<Contact> list_contacts = new JList<>(modelContacts);
+		
+		
+		JLabel lblContactPhoto = new JLabel("");
+		if (!list_contacts.isSelectionEmpty())
+			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), 20));
+		panel_3.add(lblContactPhoto);
+		
+		JLabel lblChatName = new JLabel();
+		lblChatName.setForeground(TEXT_COLOR_LIGHT);
+		panel_3.add(lblChatName);
+		
 		list_contacts.setBorder(null);
 		list_contacts.setBackground(MAIN_COLOR_LIGHT);
 		list_contacts.setCellRenderer(createListRenderer());
@@ -412,13 +422,13 @@ public class Principal extends JFrame {
 				Contact contactoActual = list_contacts.getSelectedValue();
 				loadChat(contactoActual);
 				lblChatName.setText(contactoActual.getNombre());
-				lblContactPhoto.setIcon(contactoActual.getFoto());
+				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), 20));
 			}
 
 		});
 
 		scrollPane.setViewportView(list_contacts);
-
+		
 		JPanel chatPersonal = new JPanel();
 		chatPersonal.setBackground(CHAT_COLOR);
 		chatPersonal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -588,7 +598,8 @@ public class Principal extends JFrame {
 
 				JLabel label = new JLabel("");
 				if (isIndividual) {
-					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());
+					ImageIcon img = contactoIndividual.getUsuario().getProfilePhoto();
+					label.setIcon(resizeIcon(img, 50));
 				} else {
 					label.setIcon(new ImageIcon(Principal.class.getResource(GROUP_ICON_PATH)));
 				}

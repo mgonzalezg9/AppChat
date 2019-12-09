@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -21,7 +22,7 @@ public class TestPersistenciaContactoIndividual {
 
 	@BeforeClass
 	public static void setUp() {
-		User user = new User(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png"), "Manuel", LocalDate.now(),
+		User user = new User(Arrays.asList(new ImageIcon("/umu/tds/apps/resources/paper plane-white.png")), "Manuel", LocalDate.now(),
 				0, "mrblacknuel", "1234", true, new YoungDiscount(), null);
 		LinkedList<Message> mensajes = new LinkedList<>();
 		// mensajes.add(new Message("Pasar los test", LocalDate.now(), user, new

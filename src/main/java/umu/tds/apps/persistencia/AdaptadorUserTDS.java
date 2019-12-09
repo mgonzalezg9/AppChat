@@ -172,7 +172,6 @@ public class AdaptadorUserTDS implements UserDAO {
 		int telefono = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eUser, "telefono"));
 		String nick = servPersistencia.recuperarPropiedadEntidad(eUser, "nick");
 		String password = servPersistencia.recuperarPropiedadEntidad(eUser, "password");
-		ImageIcon img = new ImageIcon(servPersistencia.recuperarPropiedadEntidad(eUser, "imagen"));
 		Boolean premium = Boolean.valueOf(servPersistencia.recuperarPropiedadEntidad(eUser, "premium"));
 		String saludo = servPersistencia.recuperarPropiedadEntidad(eUser, "saludo");
 		String descuento = servPersistencia.recuperarPropiedadEntidad(eUser, "descuento");
@@ -184,8 +183,12 @@ public class AdaptadorUserTDS implements UserDAO {
 				e.printStackTrace();
 			}
 		}
+		
+		String pathImages = servPersistencia.recuperarPropiedadEntidad(eUser, "imagenes");
+		List<ImageIcon> imagenes;
+		imagenes = obtenerImagenesDesdePath(pathImages);
 
-		User usuario = new User(img, nombre, fechaNacimiento, telefono, nick, password, premium, descuentoOpt, saludo);
+		User usuario = new User(imagenes, nombre, fechaNacimiento, telefono, nick, password, premium, descuentoOpt, saludo);
 		usuario.setCodigo(codigo);
 
 		// Metemos el usuario en el pool antes de llamar a otros
@@ -258,6 +261,15 @@ public class AdaptadorUserTDS implements UserDAO {
 				adaptadorGrupos.registrarGrupo((Group) c);
 			}
 		});
+	}
+	
+	private List<ImageIcon> obtenerImagenesDesdePath(String pathImages) {
+		List<ImageIcon> imagenes = new LinkedList<>();
+		StringTokenizer strTok = new StringTokenizer(pathImages, " ");
+		while (strTok.hasMoreTokens()) {
+			imagenes.add(new ImageIcon((String) strTok.nextElement()));
+		}
+		return imagenes;
 	}
 
 	private String obtenerCodigosGruposAdmin(List<Group> gruposAdmin) {

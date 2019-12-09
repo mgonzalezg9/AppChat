@@ -3,6 +3,7 @@ package umu.tds.apps.vistas;
 import static umu.tds.apps.vistas.Theme.*;
 
 import java.awt.EventQueue;
+import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ import javax.swing.filechooser.FileSystemView;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
+import java.util.LinkedList;
 import java.util.List;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -46,11 +48,14 @@ class Carrousel {
 
 	public Carrousel(JLabel profilePhoto, List<ImageIcon> imagenes, JLabel indicador) {
 		this.profilePhoto = profilePhoto;
-		this.imagenes = imagenes;
+		this.imagenes = new LinkedList<ImageIcon>();
 		this.numImagen = 0;
 		this.indicador = indicador;
 
-		profilePhoto.setIcon(imagenes.get(numImagen));
+		for (ImageIcon img : imagenes)
+			this.imagenes.add(resizeIcon(img, 128));
+		
+		profilePhoto.setIcon(this.imagenes.get(numImagen));
 		profilePhoto.setText("");
 
 		int numMostrado = numImagen + 1;
@@ -68,6 +73,8 @@ class Carrousel {
 		profilePhoto.setIcon(imagenes.get(numImagen));
 	}
 
+	
+	
 	public void addImagen(JFileChooser jfc) {
 		int returnValue = jfc.showOpenDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -76,6 +83,7 @@ class Carrousel {
 				BufferedImage img = ImageIO.read(jfc.getSelectedFile());
 				Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 				ImageIcon icon = new ImageIcon(imgScaled);
+				icon.setDescription(jfc.getSelectedFile().getPath());
 
 				// La añade
 				Controlador.getInstancia().addImagenUsuario(icon);
@@ -136,7 +144,6 @@ public class UserSettings extends JFrame {
 	public UserSettings() {
 		frame = this;
 		setTitle("Settings");
-		Controlador.getInstancia().addImagenUsuario(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")));
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(UserSettings.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -229,7 +236,7 @@ public class UserSettings extends JFrame {
 				jfc.setAcceptAllFileFilterUsed(false);
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG and PNG images", "jpg", "png");
 				jfc.addChoosableFileFilter(filter);
-
+				
 				// Si se ha escogido la añade
 				car.addImagen(jfc);
 			}
