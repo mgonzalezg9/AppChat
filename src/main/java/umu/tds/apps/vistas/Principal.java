@@ -4,6 +4,7 @@ import static umu.tds.apps.vistas.Theme.*;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.List;
 import java.util.Random;
@@ -36,6 +38,9 @@ import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.Scrollable;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -45,6 +50,37 @@ import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+// Clase para que desaparezca la scrollbar horizontal
+class ChatBurbujas extends JPanel implements Scrollable {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return true;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return null;
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 0;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 0;
+	}
+
+}
 
 public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -454,7 +490,7 @@ public class Principal extends JFrame {
 		gbc_scrollPane_1.gridy = 0;
 		chatPersonal.add(scrollPane_1, gbc_scrollPane_1);
 
-		chat = new JPanel();
+		chat = new ChatBurbujas();
 		chat.setBackground(CHAT_COLOR);
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
