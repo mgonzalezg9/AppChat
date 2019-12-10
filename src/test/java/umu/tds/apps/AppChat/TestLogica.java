@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 import org.junit.AfterClass;
@@ -52,14 +53,14 @@ public class TestLogica {
 		assertTrue(controlador.crearCuenta(ICON, NOADMIN_NICK, PASSWORD, NOADMIN_MAIL, NOADMIN_NAME, NOADMIN_PHONE, LocalDate.now()));
 		
 		// No Admin añade como contacto a Admin
-		assertTrue(controlador.crearContacto(ADMIN_NAME, ADMIN_PHONE));
+		assertTrue(controlador.crearContacto(ADMIN_NAME, ADMIN_PHONE, new DefaultListModel<Contact>()));
 		controlador.cerrarSesion();
 		
 		// Admin inicia sesión
 		assertTrue(controlador.iniciarSesion(ADMIN_NICK, PASSWORD));
 		
 		// Admin añade a NoAdmin como contacto
-		assertTrue(controlador.crearContacto(NOADMIN_NAME, NOADMIN_PHONE));
+		assertTrue(controlador.crearContacto(NOADMIN_NAME, NOADMIN_PHONE, new DefaultListModel<Contact>()));
 		
 		// Admin crea un grupo compartido por ambos
 		LinkedList<IndividualContact> integrantes = new LinkedList<>();
