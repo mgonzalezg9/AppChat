@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 import umu.tds.apps.AppChat.*;
@@ -177,7 +178,7 @@ public class Controlador {
 	}
 
 	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
-	public boolean crearContacto(String nombre, int numTelefono) {
+	public boolean crearContacto(String nombre, int numTelefono, DefaultListModel<Contact> modelContacts) {
 		boolean existeContacto = false;
 		if (!usuarioActual.getContactos().isEmpty()) {
 			existeContacto = usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
@@ -191,6 +192,7 @@ public class Controlador {
 			usuarioActual.addContacto(nuevoContacto);
 			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
 			adaptadorUsuario.modificarUsuario(usuarioActual);
+			modelContacts.add(modelContacts.size(), nuevoContacto);
 			return true;
 		}
 		return false;

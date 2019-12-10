@@ -176,6 +176,19 @@ public class Principal extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		iconsVisible = false;
+		
+		
+		// Contactos de ejemplo
+		List<Contact> contactos = controlador.getContactosUsuarioActual();
+
+		// Creamos el modelo
+		final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
+
+		// Rellenamos el modelo
+		contactos.stream().forEach(c -> modelContacts.addElement(c));
+		
+		JList<Contact> list_contacts = new JList<>(modelContacts);
+		
 
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(MAIN_COLOR);
@@ -250,7 +263,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CreateContact window = new CreateContact();
+				CreateContact window = new CreateContact(modelContacts);
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -340,16 +353,7 @@ public class Principal extends JFrame {
 		gbl_settingsDer.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		settingsDer.setLayout(gbl_settingsDer);
 
-		// Contactos de ejemplo
-				List<Contact> contactos = controlador.getContactosUsuarioActual();
 
-				// Creamos el modelo
-				final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
-
-				// Rellenamos el modelo
-				contactos.stream().forEach(c -> modelContacts.addElement(c));
-				
-				JList<Contact> list_contacts = new JList<>(modelContacts);
 		
 		
 		
