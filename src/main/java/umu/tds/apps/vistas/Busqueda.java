@@ -2,6 +2,8 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
+import umu.tds.apps.AppChat.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -20,15 +22,24 @@ import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
 
 import tds.BubbleText;
+import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.awt.event.ActionEvent;
 
 public class Busqueda extends JFrame {
 
 	private JPanel contentPane;
+	private List<Contact> misContactos;
 
 	/**
 	 * Launch the application.
@@ -37,8 +48,8 @@ public class Busqueda extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Busqueda frame = new Busqueda();
-					frame.setVisible(true);
+					//Busqueda frame = new Busqueda();
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,11 +60,14 @@ public class Busqueda extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Busqueda() {
+	public Busqueda(List<Contact> contacts) {
 		setTitle("Search");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 606, 462);
+		
+		misContactos = contacts;
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(MAIN_COLOR_LIGHT);
@@ -83,8 +97,11 @@ public class Busqueda extends JFrame {
 		gbc_lblSender.gridy = 0;
 		contentPane.add(lblSender, gbc_lblSender);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Alf", "Manu", "Perico"}));
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+		model.addElement("All");
+		misContactos.stream().forEach(c -> model.addElement(c.getNombre()));
+		
+		JComboBox comboBox = new JComboBox(model);
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
@@ -158,18 +175,46 @@ public class Busqueda extends JFrame {
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400,700);
-
-		BubbleText burbuja = new BubbleText(chat, "Primer mensaje encontrado", INCOMING_MESSAGE_COLOR, "Dieguin",
-				BubbleText.RECEIVED);
-		chat.add(burbuja);
-		BubbleText burbuja1 = new BubbleText(chat, "Segundo mensaje encontrado chavales", INCOMING_MESSAGE_COLOR, "Manusín",
-				BubbleText.RECEIVED);
-		chat.add(burbuja1);
-		BubbleText burbuja2 = new BubbleText(chat, "Gensanta, si es que no paro de encontrar mensajes", INCOMING_MESSAGE_COLOR, "DiegoOriginals",
-				BubbleText.RECEIVED);
-		chat.add(burbuja2);
 		
 		JButton btnNewButton = new JButton("SEARCH");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Obtengo los mensajes que cumplen con los datos
+				LocalDateTime fechaInicio = (dateChooser.getDate() == null) ? null : dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				LocalDateTime fechaFin = (dateChooser_1.getDate() == null) ? null : dateChooser_1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				String emisorMensaje = comboBox.getSelectedItem().toString();
+				if (emisorMensaje != "All") {
+					List<String> nombreUsuario = misContactos.stream().filter(c -> c.getNombre().equals(comboBox.getSelectedItem().toString())).filter(c -> c instanceof IndividualContact).map(c -> ((IndividualContact) c).getUsuario().getName()).collect(Collectors.toList());
+					emisorMensaje = nombreUsuario.get(0);
+				}
+				List<Message> mensajes = Controlador.getInstancia().buscarMensajes(emisorMensaje, fechaInicio, fechaFin, textPane.getText());
+				
+				chat.removeAll();
+				
+				// Muestro los mensajes encontrados
+				mensajes.stream().map(m -> {
+					String emisor;
+					int direccionMensaje;
+					Color colorBurbuja;
+
+					if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
+						colorBurbuja = SENT_MESSAGE_COLOR;
+						emisor = "Tú";
+						direccionMensaje = BubbleText.SENT;
+					} else {
+						colorBurbuja = INCOMING_MESSAGE_COLOR;
+						emisor = m.getEmisor().getName();
+						direccionMensaje = BubbleText.RECEIVED;
+					}
+
+					if (m.getTexto().isEmpty()) {
+						return new BubbleText(chat, m.getEmoticono(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
+					}
+					
+					return new BubbleText(chat, m.getTexto(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
+				}).forEach(b -> chat.add(b));
+			}
+		});
 		btnNewButton.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridwidth = 3;

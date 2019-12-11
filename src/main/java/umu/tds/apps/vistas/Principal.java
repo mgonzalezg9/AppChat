@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Rectangle;
@@ -19,7 +18,6 @@ import java.awt.Toolkit;
 import java.util.List;
 import java.util.Random;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -38,7 +36,6 @@ import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.Scrollable;
 
 import java.awt.event.MouseAdapter;
@@ -54,7 +51,7 @@ import javax.swing.SwingConstants;
 // Clase para que desaparezca la scrollbar horizontal
 class ChatBurbujas extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return true;
@@ -274,7 +271,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaNuevoGrupo window = new VentanaNuevoGrupo();
+				VentanaNuevoGrupo window = new VentanaNuevoGrupo(Controlador.getInstancia().getContactosUsuarioActual());
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -389,7 +386,7 @@ public class Principal extends JFrame {
 		label_4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Busqueda ventanaBusqueda = new Busqueda();
+				Busqueda ventanaBusqueda = new Busqueda(Controlador.getInstancia().getContactosUsuarioActual());
 				ventanaBusqueda.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				ventanaBusqueda.setVisible(true);
 			}

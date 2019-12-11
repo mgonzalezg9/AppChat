@@ -248,9 +248,11 @@ public class Controlador {
 		}).collect(Collectors.toList());
 
 		return Stream.concat(recibidos.stream(), enviados.stream())
-				.filter(m -> emisor == null || m.getEmisor().getName().equals(emisor))
-				.filter(m -> emisor == null || m.getHora().isAfter(fechaInicio) && m.getHora().isBefore(fechaFin))
-				.filter(m -> emisor == null || m.getTexto().contains(text)).collect(Collectors.toList());
+				.filter(m -> emisor.equals("All") || m.getEmisor().getName().equals(emisor))
+				.filter(m -> fechaInicio == null || m.getHora().isBefore(fechaInicio))
+				.filter(m -> fechaFin == null || m.getHora().isAfter(fechaFin))
+				.filter(m -> text == "" || m.getTexto().contains(text))
+				.collect(Collectors.toList());
 	}
 
 	// Borramos el contacto

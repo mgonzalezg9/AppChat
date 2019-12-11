@@ -122,7 +122,7 @@ public class Register extends JFrame {
 		panel.add(lblChooseImage, gbc_lblChooseImage);
 
 		final JLabel imgUser = new JLabel("");
-		imgUser.setIcon(new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png")));
+		imgUser.setIcon(new ImageIcon(Register.class.getResource("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/user.png")));
 		GridBagConstraints gbc_imgUser = new GridBagConstraints();
 		gbc_imgUser.fill = GridBagConstraints.BOTH;
 		gbc_imgUser.gridx = 1;
