@@ -41,6 +41,8 @@ import javax.swing.Scrollable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
@@ -88,6 +90,8 @@ public class Principal extends JFrame {
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
 	private Controlador controlador;
+	private JList<Contact> listaContactos;
+	private static DateTimeFormatter format;
 
 	/**
 	 * Launch the application.
@@ -112,6 +116,7 @@ public class Principal extends JFrame {
 				MESSAGE_SIZE);
 		chat.add(burbuja);
 		textField.setText(null);
+		listaContactos.updateUI();
 	}
 
 	private void sendIcon(JPanel panel, int iconID, Contact contacto) throws IllegalArgumentException {
@@ -173,6 +178,7 @@ public class Principal extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		iconsVisible = false;
+		format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		
 		
 		// Contactos de ejemplo
@@ -185,6 +191,7 @@ public class Principal extends JFrame {
 		contactos.stream().forEach(c -> modelContacts.addElement(c));
 		
 		JList<Contact> list_contacts = new JList<>(modelContacts);
+		listaContactos = list_contacts;
 		
 
 		JPanel settingsIzq = new JPanel();
@@ -638,7 +645,7 @@ public class Principal extends JFrame {
 					ImageIcon img = contactoIndividual.getUsuario().getProfilePhoto();
 					label.setIcon(resizeIcon(img, 50));
 				} else {
-					label.setIcon(new ImageIcon(Principal.class.getResource(GROUP_ICON_PATH)));
+					label.setIcon(new ImageIcon(GROUP_ICON_PATH));
 				}
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
@@ -658,7 +665,7 @@ public class Principal extends JFrame {
 
 				JLabel lblNewLabel_1;
 				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(0).getHora().toString());
+					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getHora().format(format).toString());
 				} else {
 					lblNewLabel_1 = new JLabel("");
 				}
@@ -671,7 +678,7 @@ public class Principal extends JFrame {
 
 				JLabel lblEsteHaSido;
 				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(0).getTexto());
+					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getTexto());
 				} else {
 					lblEsteHaSido = new JLabel("");
 				}
