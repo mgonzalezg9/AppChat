@@ -2,7 +2,6 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -27,13 +26,9 @@ import java.io.IOException;
 import java.time.ZoneId;
 
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
@@ -48,7 +43,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 
 public class Register extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textFieldUser;
 	private JTextField textFieldPassword;
@@ -122,7 +117,7 @@ public class Register extends JFrame {
 		panel.add(lblChooseImage, gbc_lblChooseImage);
 
 		final JLabel imgUser = new JLabel("");
-		imgUser.setIcon(new ImageIcon("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/user.png"));
+		imgUser.setIcon(new ImageIcon("/umu/tds/apps/resources/user.png"));
 		GridBagConstraints gbc_imgUser = new GridBagConstraints();
 		gbc_imgUser.fill = GridBagConstraints.BOTH;
 		gbc_imgUser.gridx = 1;

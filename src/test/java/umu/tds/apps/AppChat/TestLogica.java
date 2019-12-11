@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import umu.tds.apps.controlador.Controlador;
+import umu.tds.apps.vistas.Login;
 
 // Clase para crear contenido en BD con el que probar la logica de la aplicacion
 public class TestLogica {
@@ -21,13 +22,13 @@ public class TestLogica {
 	private final static String ADMIN_NICK = "admin";
 	private final static String ADMIN_MAIL = "admin@um.es";
 	private final static int ADMIN_PHONE = 1;
-	private final static Status ADMIN_STATUS = new Status(new ImageIcon("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/paper plane-white.png"), "Buscadme en Telegram");
+	private final static Status ADMIN_STATUS = new Status(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/icon.png")), "Buscadme en Telegram");
 	private final static String NOADMIN_NAME = "No Administrador";
 	private final static String NOADMIN_NICK = "noadmin";
 	private final static String NOADMIN_MAIL = "noadmin@um.es";
 	private final static int NOADMIN_PHONE = 2;
 	private final static String PASSWORD = "1234";
-	private final static ImageIcon ICON = new ImageIcon("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/user50.png");
+	private final static ImageIcon ICON = new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/icon.png"));
 	private final static String GROUP_NAME = "Juernes";
 	private final static int EMOJI = 3;
 	
