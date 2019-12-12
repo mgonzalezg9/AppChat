@@ -26,6 +26,9 @@ import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+
+import umu.tds.apps.AppChat.Contact;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -47,6 +50,7 @@ public class VentanaNuevoGrupo extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtGroupName;
+	private List<Contact> misContactos;
 
 	/**
 	 * Launch the application.
@@ -55,8 +59,8 @@ public class VentanaNuevoGrupo extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaNuevoGrupo frame = new VentanaNuevoGrupo();
-					frame.setVisible(true);
+					//VentanaNuevoGrupo frame = new VentanaNuevoGrupo();
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -67,12 +71,15 @@ public class VentanaNuevoGrupo extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaNuevoGrupo() {
+	public VentanaNuevoGrupo(List<Contact> contacts) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
 		setBounds(100, 100, 497, 340);
+		
+		misContactos = contacts;
+		
 		contentPane = new JPanel();
 		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -134,7 +141,7 @@ public class VentanaNuevoGrupo extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Abre la nueva ventana
-				JFrame busquedaWindow = new Busqueda();
+				JFrame busquedaWindow = new Busqueda(misContactos);
 				busquedaWindow.setDefaultCloseOperation(HIDE_ON_CLOSE);
 				busquedaWindow.setVisible(true);
 			}

@@ -1,6 +1,7 @@
 package umu.tds.apps.AppChat;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -24,18 +25,17 @@ public class User {
 	private Optional<Discount> descuento;
 
 	// Constructores
-	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
+	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
 			boolean premium, Discount descuento, String saludo) {
-		this(icon, name, fechaNacimiento, numTelefono, nick, password, premium, null, saludo, new LinkedList<>(),
+		this(iconList, name, fechaNacimiento, numTelefono, nick, password, premium, null, saludo, new LinkedList<>(),
 				new LinkedList<>(), descuento);
 	}
 
-	public User(ImageIcon icon, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
+	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
 			boolean premium, Status estado, String saludo, List<Group> gruposAdmin, List<Contact> contactos,
 			Discount descuento) {
 		this.codigo = 0;
-		this.profilePhotos = new LinkedList<>();
-		this.profilePhotos.add(icon);
+		this.profilePhotos = iconList;
 		this.name = name;
 		this.fechaNacimiento = fechaNacimiento;
 		this.numTelefono = numTelefono;

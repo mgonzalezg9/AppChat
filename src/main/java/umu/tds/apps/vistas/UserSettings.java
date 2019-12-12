@@ -3,6 +3,7 @@ package umu.tds.apps.vistas;
 import static umu.tds.apps.vistas.Theme.*;
 
 import java.awt.EventQueue;
+import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,7 +14,10 @@ import javax.swing.filechooser.FileSystemView;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 
@@ -46,11 +50,11 @@ class Carrousel {
 
 	public Carrousel(JLabel profilePhoto, List<ImageIcon> imagenes, JLabel indicador) {
 		this.profilePhoto = profilePhoto;
-		this.imagenes = imagenes;
+		this.imagenes = imagenes.stream().map(i -> resizeIcon(i, 128)).collect(Collectors.toList());
 		this.numImagen = 0;
 		this.indicador = indicador;
 
-		profilePhoto.setIcon(imagenes.get(numImagen));
+		profilePhoto.setIcon(this.imagenes.get(numImagen));
 		profilePhoto.setText("");
 
 		int numMostrado = numImagen + 1;
@@ -76,6 +80,7 @@ class Carrousel {
 				BufferedImage img = ImageIO.read(jfc.getSelectedFile());
 				Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 				ImageIcon icon = new ImageIcon(imgScaled);
+				icon.setDescription(jfc.getSelectedFile().getPath());
 
 				// La añade
 				Controlador.getInstancia().addImagenUsuario(icon);
@@ -285,7 +290,7 @@ public class UserSettings extends JFrame {
 		btnSaveGreeting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Controlador.getInstancia().setSaludoUsuario(textAreaSaludo.getText());
-				
+
 				// Cierra la ventana
 				setVisible(false);
 				dispose();

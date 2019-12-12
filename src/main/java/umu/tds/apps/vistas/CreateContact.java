@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
+import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
@@ -15,6 +16,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -27,6 +30,7 @@ public class CreateContact extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldName;
 	private JTextField textFieldTelf;
+	private DefaultListModel<Contact> modelContacts;
 
 	/**
 	 * Launch the application.
@@ -35,8 +39,8 @@ public class CreateContact extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CreateContact frame = new CreateContact();
-					frame.setVisible(true);
+					//CreateContact frame = new CreateContact();
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -47,7 +51,8 @@ public class CreateContact extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CreateContact() {
+	public CreateContact(DefaultListModel<Contact> modelo) {
+		this.modelContacts = modelo;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CreateContact.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Add contact");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -149,7 +154,7 @@ public class CreateContact extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Creamos el contacto
-				boolean creado = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()));
+				boolean creado = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()), modelContacts);
 				if (!creado) {
 					// No se ha podido crear el usuario
 					

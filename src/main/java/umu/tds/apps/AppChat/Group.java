@@ -36,7 +36,7 @@ public class Group extends Contact {
 	}
 	
 	@Override
-	public Icon getFoto() {
+	public ImageIcon getFoto() {
 		return new ImageIcon(Theme.GROUP_MINI_ICON_PATH);
 	}
 

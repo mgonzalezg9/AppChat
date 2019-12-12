@@ -1,13 +1,19 @@
 package umu.tds.apps.controlador;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 import umu.tds.apps.AppChat.*;
@@ -18,6 +24,8 @@ import umu.tds.apps.persistencia.IndividualContactDAO;
 import umu.tds.apps.persistencia.MessageDAO;
 import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
+import java.io.File;
+import java.io.IOException;
 
 public class Controlador {
 	// Instancia del controlador.
@@ -95,9 +103,29 @@ public class Controlador {
 		// TODO Comprobar que no haya un usuario con ese numero de telefono
 		User u = catalogoUsuarios.getUsuario(nick);
 		if (u == null) {
-			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password, false, null, null);
+			User nuevoUsuario = new User(Arrays.asList(imagen), name, fechaNacimiento, numTelefono, nick, password, false, null, null);
 			catalogoUsuarios.addUsuario(nuevoUsuario);
 			adaptadorUsuario.registrarUsuario(nuevoUsuario);
+			
+			/*try {
+				// Guardamos la imagen de perfil del usuario en el proyecto
+				String ext = imagen.getDescription().substring(imagen.getDescription().lastIndexOf("."));
+				System.out.println(ext);
+				
+				
+				
+				File file = new File("/umu/tds/apps/photos/mainPhoto_" + name + ext);
+				BufferedImage image = new BufferedImage(imagen.getIconWidth(), imagen.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+				
+				Graphics2D g2 = image.createGraphics();
+				g2.drawImage(imagen.getImage(), 0, 0, null);
+				g2.dispose();
+				
+				ImageIO.write(image, ext, file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}*/
+			
 			return iniciarSesion(nick, password);
 		}
 		return false;
@@ -150,7 +178,7 @@ public class Controlador {
 	}
 
 	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
-	public boolean crearContacto(String nombre, int numTelefono) {
+	public boolean crearContacto(String nombre, int numTelefono, DefaultListModel<Contact> modelContacts) {
 		boolean existeContacto = false;
 		if (!usuarioActual.getContactos().isEmpty()) {
 			existeContacto = usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
@@ -164,6 +192,7 @@ public class Controlador {
 			usuarioActual.addContacto(nuevoContacto);
 			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
 			adaptadorUsuario.modificarUsuario(usuarioActual);
+			modelContacts.add(modelContacts.size(), nuevoContacto);
 			return true;
 		}
 		return false;
@@ -219,9 +248,11 @@ public class Controlador {
 		}).collect(Collectors.toList());
 
 		return Stream.concat(recibidos.stream(), enviados.stream())
-				.filter(m -> emisor == null || m.getEmisor().getName().equals(emisor))
-				.filter(m -> emisor == null || m.getHora().isAfter(fechaInicio) && m.getHora().isBefore(fechaFin))
-				.filter(m -> emisor == null || m.getTexto().contains(text)).collect(Collectors.toList());
+				.filter(m -> emisor.equals("All") || m.getEmisor().getName().equals(emisor))
+				.filter(m -> fechaInicio == null || m.getHora().isBefore(fechaInicio))
+				.filter(m -> fechaFin == null || m.getHora().isAfter(fechaFin))
+				.filter(m -> text == "" || m.getTexto().contains(text))
+				.collect(Collectors.toList());
 	}
 
 	// Borramos el contacto

@@ -122,7 +122,7 @@ public class Register extends JFrame {
 		panel.add(lblChooseImage, gbc_lblChooseImage);
 
 		final JLabel imgUser = new JLabel("");
-		imgUser.setIcon(new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png")));
+		imgUser.setIcon(new ImageIcon("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/user.png"));
 		GridBagConstraints gbc_imgUser = new GridBagConstraints();
 		gbc_imgUser.fill = GridBagConstraints.BOTH;
 		gbc_imgUser.gridx = 1;
@@ -146,6 +146,7 @@ public class Register extends JFrame {
 						img = ImageIO.read(jfc.getSelectedFile());
 						Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 						ImageIcon icon = new ImageIcon(imgScaled);
+						icon.setDescription(jfc.getSelectedFile().getPath());
 						imgUser.setIcon(icon);
 
 						Dimension imageSize = new Dimension(128, 128);
@@ -361,7 +362,7 @@ public class Register extends JFrame {
 		});
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent arg0) {				
 				// Registra al usuario
 				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()), textFieldUser.getText(),
 						textFieldPassword.getText(), textFieldEmail.getText(), textFieldName.getText(),

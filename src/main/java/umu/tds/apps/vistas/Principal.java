@@ -18,6 +18,7 @@ import java.awt.Toolkit;
 import java.util.List;
 import java.util.Random;
 import java.awt.FlowLayout;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
@@ -35,11 +36,13 @@ import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.Scrollable;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
@@ -50,7 +53,7 @@ import javax.swing.SwingConstants;
 // Clase para que desaparezca la scrollbar horizontal
 class ChatBurbujas extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return true;
@@ -87,6 +90,8 @@ public class Principal extends JFrame {
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
 	private Controlador controlador;
+	private JList<Contact> listaContactos;
+	private static DateTimeFormatter format;
 
 	/**
 	 * Launch the application.
@@ -111,6 +116,7 @@ public class Principal extends JFrame {
 				MESSAGE_SIZE);
 		chat.add(burbuja);
 		textField.setText(null);
+		listaContactos.updateUI();
 	}
 
 	private void sendIcon(JPanel panel, int iconID, Contact contacto) throws IllegalArgumentException {
@@ -172,6 +178,21 @@ public class Principal extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		iconsVisible = false;
+		format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		
+		
+		// Contactos de ejemplo
+		List<Contact> contactos = controlador.getContactosUsuarioActual();
+
+		// Creamos el modelo
+		final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
+
+		// Rellenamos el modelo
+		contactos.stream().forEach(c -> modelContacts.addElement(c));
+		
+		JList<Contact> list_contacts = new JList<>(modelContacts);
+		listaContactos = list_contacts;
+		
 
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(MAIN_COLOR);
@@ -246,7 +267,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CreateContact window = new CreateContact();
+				CreateContact window = new CreateContact(modelContacts);
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -257,7 +278,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaNuevoGrupo window = new VentanaNuevoGrupo();
+				VentanaNuevoGrupo window = new VentanaNuevoGrupo(Controlador.getInstancia().getContactosUsuarioActual());
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -336,12 +357,16 @@ public class Principal extends JFrame {
 		gbl_settingsDer.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		settingsDer.setLayout(gbl_settingsDer);
 
+
+		
+		
+		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(MAIN_COLOR);
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ContactInfo window = new ContactInfo();
+				ContactInfo window = new ContactInfo(list_contacts.getSelectedValue());
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -356,14 +381,6 @@ public class Principal extends JFrame {
 		gbc_panel_3.gridy = 0;
 		settingsDer.add(panel_3, gbc_panel_3);
 
-		JLabel lblContactPhoto = new JLabel("");
-		lblContactPhoto.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/group20.png")));
-		panel_3.add(lblContactPhoto);
-
-		JLabel lblChatName = new JLabel();
-		lblChatName.setForeground(TEXT_COLOR_LIGHT);
-		panel_3.add(lblChatName);
-
 		JPanel panel = new JPanel();
 		panel.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -376,7 +393,7 @@ public class Principal extends JFrame {
 		label_4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Busqueda ventanaBusqueda = new Busqueda();
+				Busqueda ventanaBusqueda = new Busqueda(Controlador.getInstancia().getContactosUsuarioActual());
 				ventanaBusqueda.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				ventanaBusqueda.setVisible(true);
 			}
@@ -430,16 +447,17 @@ public class Principal extends JFrame {
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		// Contactos de ejemplo
-		List<Contact> contactos = controlador.getContactosUsuarioActual();
-
-		// Creamos el modelo
-		final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
-
-		// Rellenamos el modelo
-		contactos.stream().forEach(c -> modelContacts.addElement(c));
-
-		JList<Contact> list_contacts = new JList<>(modelContacts);
+		
+		
+		JLabel lblContactPhoto = new JLabel("");
+		if (!list_contacts.isSelectionEmpty())
+			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), 20));
+		panel_3.add(lblContactPhoto);
+		
+		JLabel lblChatName = new JLabel();
+		lblChatName.setForeground(TEXT_COLOR_LIGHT);
+		panel_3.add(lblChatName);
+		
 		list_contacts.setBorder(null);
 		list_contacts.setBackground(MAIN_COLOR_LIGHT);
 		list_contacts.setCellRenderer(createListRenderer());
@@ -448,13 +466,13 @@ public class Principal extends JFrame {
 				Contact contactoActual = list_contacts.getSelectedValue();
 				loadChat(contactoActual);
 				lblChatName.setText(contactoActual.getNombre());
-				lblContactPhoto.setIcon(contactoActual.getFoto());
+				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), 20));
 			}
 
 		});
 
 		scrollPane.setViewportView(list_contacts);
-
+		
 		JPanel chatPersonal = new JPanel();
 		chatPersonal.setBackground(CHAT_COLOR);
 		chatPersonal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -624,9 +642,10 @@ public class Principal extends JFrame {
 
 				JLabel label = new JLabel("");
 				if (isIndividual) {
-					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());
+					ImageIcon img = contactoIndividual.getUsuario().getProfilePhoto();
+					label.setIcon(resizeIcon(img, 50));
 				} else {
-					label.setIcon(new ImageIcon(Principal.class.getResource(GROUP_ICON_PATH)));
+					label.setIcon(new ImageIcon(GROUP_ICON_PATH));
 				}
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
@@ -646,7 +665,7 @@ public class Principal extends JFrame {
 
 				JLabel lblNewLabel_1;
 				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(0).getHora().toString());
+					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getHora().format(format).toString());
 				} else {
 					lblNewLabel_1 = new JLabel("");
 				}
@@ -659,7 +678,7 @@ public class Principal extends JFrame {
 
 				JLabel lblEsteHaSido;
 				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(0).getTexto());
+					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getTexto());
 				} else {
 					lblEsteHaSido = new JLabel("");
 				}
