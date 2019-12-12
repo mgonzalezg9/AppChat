@@ -3,6 +3,7 @@ package umu.tds.apps.vistas;
 import static umu.tds.apps.vistas.Theme.*;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -60,7 +61,8 @@ public class ContactInfo extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(resizeIcon(contact.getFoto(), 128));
+		lblNewLabel.setIcon(resizeIcon(contact.getFoto(), 128));		
+		
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.gridwidth = 2;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);

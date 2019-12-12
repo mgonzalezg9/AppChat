@@ -267,7 +267,10 @@ public class AdaptadorUserTDS implements UserDAO {
 		List<ImageIcon> imagenes = new LinkedList<>();
 		StringTokenizer strTok = new StringTokenizer(pathImages, " ");
 		while (strTok.hasMoreTokens()) {
-			imagenes.add(new ImageIcon((String) strTok.nextElement()));
+			String path = (String) strTok.nextElement();
+			ImageIcon imagen = new ImageIcon(AdaptadorUserTDS.class.getResource(path));
+			imagen.setDescription(path);
+			imagenes.add(imagen);
 		}
 		return imagenes;
 	}
