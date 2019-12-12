@@ -122,7 +122,9 @@ public class Register extends JFrame {
 		panel.add(lblChooseImage, gbc_lblChooseImage);
 
 		final JLabel imgUser = new JLabel("");
-		imgUser.setIcon(new ImageIcon("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/user.png"));
+		ImageIcon imagenPorDefecto = new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png"));
+		imagenPorDefecto.setDescription("/umu/tds/apps/resources/user.png");
+		imgUser.setIcon(imagenPorDefecto);
 		GridBagConstraints gbc_imgUser = new GridBagConstraints();
 		gbc_imgUser.fill = GridBagConstraints.BOTH;
 		gbc_imgUser.gridx = 1;
@@ -146,7 +148,7 @@ public class Register extends JFrame {
 						img = ImageIO.read(jfc.getSelectedFile());
 						Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 						ImageIcon icon = new ImageIcon(imgScaled);
-						icon.setDescription(jfc.getSelectedFile().getPath());
+						icon.setDescription("/umu/tds/apps/photos/" + jfc.getSelectedFile().getName());
 						imgUser.setIcon(icon);
 
 						Dimension imageSize = new Dimension(128, 128);

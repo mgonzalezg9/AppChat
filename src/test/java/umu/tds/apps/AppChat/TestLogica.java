@@ -21,13 +21,14 @@ public class TestLogica {
 	private final static String ADMIN_NICK = "admin";
 	private final static String ADMIN_MAIL = "admin@um.es";
 	private final static int ADMIN_PHONE = 1;
-	private final static Status ADMIN_STATUS = new Status(new ImageIcon("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/paper plane-white.png"), "Buscadme en Telegram");
+	private final static ImageIcon iconoEstado = new ImageIcon(TestLogica.class.getResource("/umu/tds/apps/resources/paper plane-white.png"));
+	private Status ADMIN_STATUS;
 	private final static String NOADMIN_NAME = "No Administrador";
 	private final static String NOADMIN_NICK = "noadmin";
 	private final static String NOADMIN_MAIL = "noadmin@um.es";
 	private final static int NOADMIN_PHONE = 2;
 	private final static String PASSWORD = "1234";
-	private final static ImageIcon ICON = new ImageIcon("C:/eclipse/workspace/AppChat/target/classes/umu/tds/apps/resources/user50.png");
+	private final static ImageIcon ICON = new ImageIcon(TestLogica.class.getResource("/umu/tds/apps/resources/icon.png"));
 	private final static String GROUP_NAME = "Juernes";
 	private final static int EMOJI = 3;
 	
@@ -42,6 +43,10 @@ public class TestLogica {
 
 	@Test
 	public void test() {
+		ICON.setDescription("/umu/tds/apps/resources/icon.png");
+		iconoEstado.setDescription("/umu/tds/apps/resources/paper plane-white.png");
+		ADMIN_STATUS = new Status(iconoEstado, "Buscadme en Telegram");
+		
 		// Creacion de la cuenta Admin
 		assertTrue(controlador.crearCuenta(ICON, ADMIN_NICK, PASSWORD, ADMIN_MAIL, ADMIN_NAME, ADMIN_PHONE, LocalDate.now()));
 		

@@ -1,11 +1,14 @@
 package umu.tds.apps.AppChat;
 
+import static umu.tds.apps.vistas.Theme.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import umu.tds.apps.vistas.Principal;
 import umu.tds.apps.vistas.Theme;
 
 public class Group extends Contact {
@@ -37,7 +40,9 @@ public class Group extends Contact {
 	
 	@Override
 	public ImageIcon getFoto() {
-		return new ImageIcon(Theme.GROUP_MINI_ICON_PATH);
+		ImageIcon imagen = new ImageIcon(Group.class.getResource(GROUP_ICON_PATH));
+		imagen.setDescription(GROUP_ICON_PATH);
+		return imagen;
 	}
 
 	// Methods

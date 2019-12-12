@@ -156,13 +156,6 @@ public class Controlador {
 		return u.getContactos();
 	}
 
-	// Devuelvo el último mensaje con ese contacto.
-	public Message getUltimoMensaje(Contact contacto) {
-		if (contacto.getMensajesEnviados().isEmpty())
-			return null;
-		return contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1);
-	}
-
 	// Devuelvo mi lista de mensajes con ese contacto
 	public List<Message> getMensajes(Contact contacto) {
 		if (contacto instanceof IndividualContact) {
@@ -175,6 +168,14 @@ public class Controlador {
 					.concat(contacto.getMensajesEnviados().stream(), ((Group) contacto).getMensajesEnviados().stream())
 					.sorted().collect(Collectors.toList());
 		}
+	}
+	
+	// Devuelvo el último mensaje con ese contacto.
+	public Message getUltimoMensaje(Contact contacto) {
+		List<Message> mensajes = getMensajes(contacto);
+		if (mensajes.isEmpty())
+			return null;
+		return mensajes.get(mensajes.size() - 1);
 	}
 
 	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.

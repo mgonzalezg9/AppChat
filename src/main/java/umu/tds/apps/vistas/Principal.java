@@ -355,11 +355,7 @@ public class Principal extends JFrame {
 		gbl_settingsDer.rowHeights = new int[] { 0, 0 };
 		gbl_settingsDer.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
 		gbl_settingsDer.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
-		settingsDer.setLayout(gbl_settingsDer);
-
-
-		
-		
+		settingsDer.setLayout(gbl_settingsDer);		
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(MAIN_COLOR);
@@ -645,7 +641,9 @@ public class Principal extends JFrame {
 					ImageIcon img = contactoIndividual.getUsuario().getProfilePhoto();
 					label.setIcon(resizeIcon(img, 50));
 				} else {
-					label.setIcon(new ImageIcon(GROUP_ICON_PATH));
+					ImageIcon imagen = new ImageIcon(Principal.class.getResource(GROUP_ICON_PATH));
+					imagen.setDescription(GROUP_ICON_PATH);
+					label.setIcon(imagen);
 				}
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
