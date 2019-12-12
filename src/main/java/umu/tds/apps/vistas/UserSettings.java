@@ -3,7 +3,6 @@ package umu.tds.apps.vistas;
 import static umu.tds.apps.vistas.Theme.*;
 
 import java.awt.EventQueue;
-import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,8 +13,6 @@ import javax.swing.filechooser.FileSystemView;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.GridBagLayout;
@@ -38,8 +35,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 // Clase que gestiona el carrousel de imagenes
 class Carrousel {
@@ -82,11 +77,14 @@ class Carrousel {
 				ImageIcon icon = new ImageIcon(imgScaled);
 				icon.setDescription(jfc.getSelectedFile().getPath());
 
-				// La añade
+				// La añade y guarda en el proyecto
+				icon.setDescription("/umu/tds/apps/photos/" + jfc.getSelectedFile().getName());
 				Controlador.getInstancia().addImagenUsuario(icon);
+				imagenes.add(icon);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			numImagen++;
 			int numMostrado = numImagen + 1;
 			indicador.setText(numMostrado + "/" + imagenes.size());
 			profilePhoto.setIcon(imagenes.get(imagenes.size() - 1));
@@ -96,7 +94,8 @@ class Carrousel {
 	}
 
 	public void removeImagen(int op) {
-		ImageIcon imgBorrada = Controlador.getInstancia().getUsuarioActual().removeProfilePhoto(op);
+		ImageIcon imgBorrada = Controlador.getInstancia().removeImagenUsuario(op);
+		imagenes.remove(op);
 		if (imagenes.size() > 0)
 			desplazar(-1);
 		else {
@@ -111,6 +110,7 @@ class Carrousel {
 			if (!escogida) {
 				// Deshace el cambio
 				Controlador.getInstancia().addImagenUsuario(imgBorrada);
+				imagenes.add(imgBorrada);
 			}
 		}
 	}

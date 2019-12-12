@@ -131,8 +131,9 @@ public class User {
 		this.descuento = Optional.ofNullable(descuento);
 	}
 
-	public void addProfilePhoto(ImageIcon icon) {
+	public int addProfilePhoto(ImageIcon icon) {
 		this.profilePhotos.add(icon);
+		return profilePhotos.size();
 	}
 
 	// Methods

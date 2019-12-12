@@ -58,3 +58,6 @@ local.properties
 
 # Para librerias
 .classpath
+
+# Imagenes de los usuarios
+src/main/java/umu/tds/apps/photos/profilePhoto*

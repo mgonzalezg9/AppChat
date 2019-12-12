@@ -148,7 +148,6 @@ public class Register extends JFrame {
 						img = ImageIO.read(jfc.getSelectedFile());
 						Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 						ImageIcon icon = new ImageIcon(imgScaled);
-						icon.setDescription("/umu/tds/apps/photos/" + jfc.getSelectedFile().getName());
 						imgUser.setIcon(icon);
 
 						Dimension imageSize = new Dimension(128, 128);

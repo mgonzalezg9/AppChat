@@ -24,8 +24,11 @@ import umu.tds.apps.persistencia.IndividualContactDAO;
 import umu.tds.apps.persistencia.MessageDAO;
 import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
+import umu.tds.apps.vistas.Theme;
+
 import java.io.File;
 import java.io.IOException;
+import java.sql.Savepoint;
 
 public class Controlador {
 	// Instancia del controlador.
@@ -103,29 +106,14 @@ public class Controlador {
 		// TODO Comprobar que no haya un usuario con ese numero de telefono
 		User u = catalogoUsuarios.getUsuario(nick);
 		if (u == null) {
-			User nuevoUsuario = new User(Arrays.asList(imagen), name, fechaNacimiento, numTelefono, nick, password, false, null, null);
+			User nuevoUsuario = new User(Arrays.asList(imagen), name, fechaNacimiento, numTelefono, nick, password,
+					false, null, null);
 			catalogoUsuarios.addUsuario(nuevoUsuario);
 			adaptadorUsuario.registrarUsuario(nuevoUsuario);
-			
-			/*try {
-				// Guardamos la imagen de perfil del usuario en el proyecto
-				String ext = imagen.getDescription().substring(imagen.getDescription().lastIndexOf("."));
-				System.out.println(ext);
-				
-				
-				
-				File file = new File("/umu/tds/apps/photos/mainPhoto_" + name + ext);
-				BufferedImage image = new BufferedImage(imagen.getIconWidth(), imagen.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-				
-				Graphics2D g2 = image.createGraphics();
-				g2.drawImage(imagen.getImage(), 0, 0, null);
-				g2.dispose();
-				
-				ImageIO.write(image, ext, file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
-			
+
+			// Guarda la imagen en el proyecto
+			Theme.saveImage(imagen, nuevoUsuario.getCodigo(), 1);
+
 			return iniciarSesion(nick, password);
 		}
 		return false;
@@ -143,9 +131,20 @@ public class Controlador {
 
 	// Añade una imagen al conjunto de imágenes del usuario
 	public void addImagenUsuario(ImageIcon image) {
-		usuarioActual.addProfilePhoto(image);
+		int pos = usuarioActual.addProfilePhoto(image);
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
+
+		// Guarda la imagen en el proyecto
+		Theme.saveImage(image, usuarioActual.getCodigo(), pos);
+	}
+
+	// Borra una imagen del conjunto de imágenes del usuario
+	public ImageIcon removeImagenUsuario(int pos) {
+		ImageIcon img = usuarioActual.removeProfilePhoto(pos);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+		return img;
 	}
 
 	// Devuelvo mi lista de contactos.
@@ -169,7 +168,7 @@ public class Controlador {
 					.sorted().collect(Collectors.toList());
 		}
 	}
-	
+
 	// Devuelvo el último mensaje con ese contacto.
 	public Message getUltimoMensaje(Contact contacto) {
 		List<Message> mensajes = getMensajes(contacto);
@@ -252,8 +251,7 @@ public class Controlador {
 				.filter(m -> emisor.equals("All") || m.getEmisor().getName().equals(emisor))
 				.filter(m -> fechaInicio == null || m.getHora().isBefore(fechaInicio))
 				.filter(m -> fechaFin == null || m.getHora().isAfter(fechaFin))
-				.filter(m -> text == "" || m.getTexto().contains(text))
-				.collect(Collectors.toList());
+				.filter(m -> text == "" || m.getTexto().contains(text)).collect(Collectors.toList());
 	}
 
 	// Borramos el contacto
@@ -268,7 +266,7 @@ public class Controlador {
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
-	public void addEstado(Status estado) { 
+	public void addEstado(Status estado) {
 		usuarioActual.setEstado(Optional.of(estado));
 		adaptadorEstado.registrarEstado(estado);
 		catalogoUsuarios.addUsuario(usuarioActual);
@@ -308,11 +306,9 @@ public class Controlador {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
 				.filter(c -> ((IndividualContact) c).getEstado().isPresent()).collect(Collectors.toList());
 	}
-	
+
 	public Optional<Contact> getContacto(String nombre) {
-		return getContactosUsuarioActual().stream()
-				.filter(c -> c.getNombre().equals(nombre))
-				.findAny();
+		return getContactosUsuarioActual().stream().filter(c -> c.getNombre().equals(nombre)).findAny();
 	}
 
 }

@@ -265,7 +265,7 @@ public class AdaptadorUserTDS implements UserDAO {
 	
 	private List<ImageIcon> obtenerImagenesDesdePath(String pathImages) {
 		List<ImageIcon> imagenes = new LinkedList<>();
-		StringTokenizer strTok = new StringTokenizer(pathImages, " ");
+		StringTokenizer strTok = new StringTokenizer(pathImages, "?");
 		while (strTok.hasMoreTokens()) {
 			String path = (String) strTok.nextElement();
 			ImageIcon imagen = new ImageIcon(AdaptadorUserTDS.class.getResource(path));
@@ -329,7 +329,7 @@ public class AdaptadorUserTDS implements UserDAO {
 	}
 
 	private String obtenerPathImagenes(List<ImageIcon> imagenes) {
-		return imagenes.stream().map(i -> String.valueOf(i.getDescription())).reduce("", (l, c) -> l + c + " ").trim();
+		return imagenes.stream().map(i -> String.valueOf(i.getDescription())).reduce("", (l, c) -> l + c + "?").trim();
 	}
 
 }

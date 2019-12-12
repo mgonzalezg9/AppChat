@@ -221,9 +221,9 @@ public class Principal extends JFrame {
 		gbc_panel_1.gridy = 0;
 		settingsIzq.add(panel_1, gbc_panel_1);
 
-		JLabel label = new JLabel("foto");
-		label.setIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto());
-		label.addMouseListener(new MouseAdapter() {
+		JLabel lblMiFoto = new JLabel();
+		lblMiFoto.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), 20));
+		lblMiFoto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				UserSettings settingsUsuario = new UserSettings();
@@ -231,7 +231,7 @@ public class Principal extends JFrame {
 				settingsUsuario.setVisible(true);
 			}
 		});
-		panel_1.add(label);
+		panel_1.add(lblMiFoto);
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(MAIN_COLOR);
