@@ -15,27 +15,20 @@ import umu.tds.apps.controlador.Controlador;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import javax.swing.ImageIcon;
-import java.awt.BorderLayout;
-import java.awt.Color;
 
-import javax.swing.BoxLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.border.EtchedBorder;
-import static umu.tds.apps.vistas.Theme.*;
 
 public class Login extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private JTextField userField;
 	private JPasswordField passwordField;
+	private Controlador controlador;
 	
 
 	/**
@@ -59,6 +52,7 @@ public class Login extends JFrame {
 	 */
 	public Login() {
 		getContentPane().setBackground(MAIN_COLOR_LIGHT);
+		controlador = Controlador.getInstancia();
 		initialize();
 	}
 
@@ -92,7 +86,7 @@ public class Login extends JFrame {
 		gbl_panelNorte.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panelNorte.setLayout(gbl_panelNorte);
 
-		JLabel label = new JLabel("");
+		JLabel label = new JLabel();
 		label.setIcon(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/icon.png")));
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.anchor = GridBagConstraints.NORTHEAST;
@@ -101,7 +95,7 @@ public class Login extends JFrame {
 		gbc_label.gridy = 0;
 		panelNorte.add(label, gbc_label);
 
-		JLabel lblAppchat = new JLabel("");
+		JLabel lblAppchat = new JLabel();
 		lblAppchat.setIcon(new ImageIcon(Login.class.getResource("/umu/tds/apps/resources/header.png")));
 		GridBagConstraints gbc_lblAppchat = new GridBagConstraints();
 		gbc_lblAppchat.anchor = GridBagConstraints.WEST;
@@ -201,7 +195,7 @@ public class Login extends JFrame {
 				String user = userField.getText();
 				char[] password = passwordField.getPassword();
 
-				if (Controlador.getInstancia().iniciarSesion(user, password)) {
+				if (controlador.iniciarSesion(user, String.valueOf(password))) {
 					// Oculta la ventana actual
 					Login.this.setVisible(false);
 

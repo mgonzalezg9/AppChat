@@ -15,7 +15,7 @@ public class UserRenderer extends JLabel implements ListCellRenderer<User> {
 	@Override
 	public Component getListCellRendererComponent(JList<? extends User> list, User value, int index, boolean isSelected,
 			boolean cellHasFocus) {
-		setIcon(value.getIcon());
+		setIcon(value.getProfilePhoto());
 		setText(value.getName());
 
 		if (isSelected) {

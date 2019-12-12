@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.AppChat.Status;
 import umu.tds.apps.AppChat.User;
 import umu.tds.apps.controlador.Controlador;
@@ -21,17 +23,23 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Optional;
 import java.awt.Font;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.MouseAdapter;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 
@@ -41,7 +49,7 @@ public class Estados extends JFrame {
 	private JLabel lblFraseProfunda;
 	private JLabel lblEstadoSeleccionado;
 	private JLabel lblNewLabel;
-	private JList<User> list;
+	private JList<Contact> list;
 
 	/**
 	 * Launch the application.
@@ -96,7 +104,6 @@ public class Estados extends JFrame {
 
 		JPanel panelMiEstado = new JPanel();
 		panelMiEstado.setBackground(MAIN_COLOR_LIGHT);
-		
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(MAIN_COLOR);
@@ -106,9 +113,11 @@ public class Estados extends JFrame {
 				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
 				panel_2.setBackground(SECONDARY_COLOR);
 				list.clearSelection();
-				Status s = Controlador.getInstancia().getEstado(Controlador.getInstancia().getUsuario());
-				lblEstadoSeleccionado.setIcon(s.getImg());
-				lblFraseProfunda.setText(s.getFrase());
+				Optional<Status> s = Controlador.getInstancia().getUsuarioActual().getEstado();
+				if (s.isPresent()) {
+					lblEstadoSeleccionado.setIcon(s.get().getImg());
+					lblFraseProfunda.setText(s.get().getFrase());
+				}
 			}
 		});
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -166,17 +175,6 @@ public class Estados extends JFrame {
 		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-		DefaultListModel<User> listModel = new DefaultListModel<>();
-		listModel.addElement(
-				new User(new ImageIcon(getClass().getResource("/umu/tds/apps/resources/diego.jpg")), "Mi crush"));
-		listModel.addElement(
-				new User(new ImageIcon(getClass().getResource("/umu/tds/apps/resources/diego.jpg")), "Su padre"));
-		listModel.addElement(
-				new User(new ImageIcon(getClass().getResource("/umu/tds/apps/resources/diego.jpg")), "Su abuelo"));
-		listModel.addElement(
-				new User(new ImageIcon(getClass().getResource("/umu/tds/apps/resources/diego.jpg")), "Su crush"));
-		listModel.addElement(new User(
-				new ImageIcon(getClass().getResource("/umu/tds/apps/resources/Circle-PNG-Picture.png")), "Yo"));
 
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -186,7 +184,10 @@ public class Estados extends JFrame {
 		panel.add(scrollPane, gbc_scrollPane);
 		scrollPane.setBorder(null);
 
-		list = new JList<User>();
+		DefaultListModel<Contact> listModel = new DefaultListModel<>();
+		Controlador.getInstancia().getContactosEstado().stream().forEach(c -> listModel.addElement(c));
+
+		list = new JList<Contact>();
 		list.setBackground(MAIN_COLOR);
 		list.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		list.addMouseListener(new MouseListener() {
@@ -194,10 +195,9 @@ public class Estados extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
 				panel_2.setBackground(MAIN_COLOR);
-				User u = (User) list.getSelectedValue();
-				Status s = Controlador.getInstancia().getEstado(u);
-				lblFraseProfunda.setText(s.getFrase());
-				lblEstadoSeleccionado.setIcon(s.getImg());
+				Status estado = ((IndividualContact) list.getSelectedValue()).getEstado().get();
+				lblFraseProfunda.setText(estado.getFrase());
+				lblEstadoSeleccionado.setIcon(estado.getImg());
 			}
 
 			@Override
@@ -222,7 +222,7 @@ public class Estados extends JFrame {
 		list.setSelectionBackground(SECONDARY_COLOR);
 		list.setSelectionForeground(TEXT_COLOR_LIGHT);
 		list.setBorder(null);
-		list.setCellRenderer(new UserRenderer());
+		list.setCellRenderer(createListRenderer());
 		scrollPane.setViewportView(list);
 		list.setModel(listModel);
 
@@ -264,4 +264,89 @@ public class Estados extends JFrame {
 		lblFraseProfunda.setBorder(null);
 	}
 
+	private static ListCellRenderer<? super Contact> createListRenderer() {
+		return new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Contact contacto = (Contact) value;
+				IndividualContact contactoIndividual = null;
+				boolean isIndividual = false;
+
+				if (contacto instanceof IndividualContact) {
+					isIndividual = true;
+					contactoIndividual = (IndividualContact) contacto;
+				}
+
+				JPanel panel = new JPanel();
+				GridBagLayout gbl_contentPane = new GridBagLayout();
+				gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
+				gbl_contentPane.rowHeights = new int[] { 10, 26, 5, 10, 0 };
+				gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				panel.setLayout(gbl_contentPane);
+
+				JLabel label = new JLabel("");
+				if (isIndividual) {
+					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());
+				} else {
+					label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/group.png"))); // ICONO
+																													// POR
+																													// DEFECTO
+																													// PARA
+																													// LOS
+																													// GRUPOS
+				}
+				GridBagConstraints gbc_label = new GridBagConstraints();
+				gbc_label.anchor = GridBagConstraints.SOUTH;
+				gbc_label.gridheight = 2;
+				gbc_label.insets = new Insets(0, 0, 5, 5);
+				gbc_label.gridx = 0;
+				gbc_label.gridy = 1;
+				panel.add(label, gbc_label);
+
+				JLabel lblNewLabel = new JLabel(contacto.getNombre());
+				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
+				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+				gbc_lblNewLabel.gridx = 1;
+				gbc_lblNewLabel.gridy = 1;
+				panel.add(lblNewLabel, gbc_lblNewLabel);
+
+				JLabel lblNewLabel_1;
+				if (!contacto.getMensajesEnviados().isEmpty()) {
+					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(0).getHora().toString());
+				} else {
+					lblNewLabel_1 = new JLabel("");
+				}
+				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
+				gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
+				gbc_lblNewLabel_1.gridx = 2;
+				gbc_lblNewLabel_1.gridy = 1;
+				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+
+				JLabel lblEsteHaSido;
+				if (!contacto.getMensajesEnviados().isEmpty()) {
+					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(0).getTexto());
+				} else {
+					lblEsteHaSido = new JLabel("");
+				}
+				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
+				gbc_lblEsteHaSido.gridwidth = 2;
+				gbc_lblEsteHaSido.anchor = GridBagConstraints.WEST;
+				gbc_lblEsteHaSido.insets = new Insets(0, 0, 5, 5);
+				gbc_lblEsteHaSido.gridx = 1;
+				gbc_lblEsteHaSido.gridy = 2;
+				panel.add(lblEsteHaSido, gbc_lblEsteHaSido);
+
+				panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+				panel.setBackground((isSelected) ? SECONDARY_COLOR : MAIN_COLOR_LIGHT);
+
+				return panel;
+			}
+		};
+	}
 }

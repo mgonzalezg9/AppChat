@@ -70,7 +70,7 @@ public class VentanaNuevoGrupo extends JFrame {
 	public VentanaNuevoGrupo() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/umu/tds/apps/resources/icon.png")));
+				Toolkit.getDefaultToolkit().getImage(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
 		setBounds(100, 100, 497, 340);
 		contentPane = new JPanel();

@@ -1,28 +1,44 @@
 package umu.tds.apps.controlador;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
-import tds.BubbleText;
-import umu.tds.apps.vistas.Login;
 import umu.tds.apps.AppChat.*;
-import umu.tds.apps.vistas.UserSettings;
+import umu.tds.apps.persistencia.DAOException;
+import umu.tds.apps.persistencia.FactoriaDAO;
+import umu.tds.apps.persistencia.GroupDAO;
+import umu.tds.apps.persistencia.IndividualContactDAO;
+import umu.tds.apps.persistencia.MessageDAO;
+import umu.tds.apps.persistencia.StatusDAO;
+import umu.tds.apps.persistencia.UserDAO;
 
 public class Controlador {
+	// Instancia del controlador.
 	private static Controlador unicaInstancia = null;
-	private static List<ImageIcon> imagenes = new ArrayList<>();
-	private static String nickname = "Manuelillo";
-	private static String saludo = "Hola amigos del mundo!";
+
+	// Adaptadores
+	private GroupDAO adaptadorGrupo;
+	private IndividualContactDAO adaptadorContactoIndividual;
+	private MessageDAO adaptadorMensaje;
+	private UserDAO adaptadorUsuario;
+	private StatusDAO adaptadorEstado;
+
+	// Catálogos
+	private UsersCatalogue catalogoUsuarios;
+
+	// Nuestro usuario.
+	private User usuarioActual;
 
 	private Controlador() {
+		inicializarAdaptadores(); // debe ser la primera linea para evitar error de sincronización
+		inicializarCatalogos();
 	}
 
 	// Aplicamos el patrón Singleton.
@@ -34,57 +50,237 @@ public class Controlador {
 		return unicaInstancia;
 	}
 
-	public boolean iniciarSesion(String dni, char[] password) {
-		// TODO
+	// Inicializamos los adaptadores
+	private void inicializarAdaptadores() {
+		FactoriaDAO factoria = null;
+		try {
+			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+
+		adaptadorGrupo = factoria.getGrupoDAO();
+		adaptadorContactoIndividual = factoria.getContactoIndividualDAO();
+		adaptadorMensaje = factoria.getMensajeDAO();
+		adaptadorUsuario = factoria.getUserDAO();
+		adaptadorEstado = factoria.getEstadoDAO();
+	}
+
+	// Inicializamos los catálogos
+	private void inicializarCatalogos() {
+		catalogoUsuarios = UsersCatalogue.getUnicaInstancia();
+	}
+
+	public boolean iniciarSesion(String nick, String password) {
+		if (nick.isEmpty() || password.isEmpty()) {
+			return false;
+		}
+
+		User cliente = catalogoUsuarios.getUsuario(nick);
+
+		if (cliente == null)
+			return false;
+
+		// Si la password esta bien inicia sesion
+		if (cliente.getPassword().equals(password)) {
+			usuarioActual = cliente;
+			return true;
+		}
 		return false;
 	}
 
-	public String getNombreUsuario() {
-		return nickname;
+	// Registro el usuario. Devuelvo false si el nick ya está en uso
+	public boolean crearCuenta(ImageIcon imagen, String nick, String password, String email, String name,
+			int numTelefono, LocalDate fechaNacimiento) {
+		// TODO Comprobar que no haya un usuario con ese numero de telefono
+		User u = catalogoUsuarios.getUsuario(nick);
+		if (u == null) {
+			User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password, false, null, null);
+			catalogoUsuarios.addUsuario(nuevoUsuario);
+			adaptadorUsuario.registrarUsuario(nuevoUsuario);
+			return iniciarSesion(nick, password);
+		}
+		return false;
 	}
 
-	public String getSaludo() {
-		return saludo;
+	public User getUsuarioActual() {
+		return usuarioActual;
 	}
 
-	public void setSaludo(String saludo) {
-		Controlador.saludo = saludo;
+	public void setSaludoUsuario(String saludo) {
+		usuarioActual.setSaludo(saludo);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
-	public List<ImageIcon> getImagenesUsuario() {
-		return imagenes;
-	}
-
+	// Añade una imagen al conjunto de imágenes del usuario
 	public void addImagenUsuario(ImageIcon image) {
-		imagenes.add(image);
+		usuarioActual.addProfilePhoto(image);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
-	public ImageIcon removeImagenUsuario(int pos) {
-		return imagenes.remove(pos);
+	// Devuelvo mi lista de contactos.
+	public List<Contact> getContactosUsuarioActual() {
+		if (usuarioActual == null)
+			return new LinkedList<Contact>();
+		User u = catalogoUsuarios.getUsuario(usuarioActual.getCodigo());
+		return u.getContactos();
 	}
 
-	public boolean deleteChat() {
+	// Devuelvo el último mensaje con ese contacto.
+	public Message getUltimoMensaje(Contact contacto) {
+		if (contacto.getMensajesEnviados().isEmpty())
+			return null;
+		return contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1);
+	}
+
+	// Devuelvo mi lista de mensajes con ese contacto
+	public List<Message> getMensajes(Contact contacto) {
+		if (contacto instanceof IndividualContact) {
+			return Stream
+					.concat(contacto.getMensajesEnviados().stream(),
+							((IndividualContact) contacto).getMensajesEnviados(usuarioActual).stream())
+					.sorted().collect(Collectors.toList());
+		} else {
+			return Stream
+					.concat(contacto.getMensajesEnviados().stream(), ((Group) contacto).getMensajesEnviados().stream())
+					.sorted().collect(Collectors.toList());
+		}
+	}
+
+	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
+	public boolean crearContacto(String nombre, int numTelefono) {
+		boolean existeContacto = false;
+		if (!usuarioActual.getContactos().isEmpty()) {
+			existeContacto = usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
+					.map(c -> (IndividualContact) c).anyMatch(c -> c.getNombre().equals(nombre));
+		}
+
+		if (!existeContacto) {
+			User usuario = catalogoUsuarios.getUsuarios().stream().filter(u -> u.getNumTelefono() == numTelefono)
+					.collect(Collectors.toList()).get(0);
+			IndividualContact nuevoContacto = new IndividualContact(nombre, numTelefono, usuario);
+			usuarioActual.addContacto(nuevoContacto);
+			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
+			adaptadorUsuario.modificarUsuario(usuarioActual);
+			return true;
+		}
 		return false;
 	}
 
-	public Status getEstado(User u) {
-		if (new Random().nextInt(2) == 0) {
-			return new Status(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")),
-					"Flying");
-		} else
-			return new Status(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/fire_120x120.png")),
-					"Fuegooo");
+	// Creo el grupo.
+	public void crearGrupo(String nombre, List<IndividualContact> participantes) {
+		Group nuevoGrupo = new Group(nombre, new LinkedList<Message>(), participantes, usuarioActual);
+		usuarioActual.addGrupo(nuevoGrupo);
+		usuarioActual.addGrupoAdmin(nuevoGrupo);
+		adaptadorGrupo.registrarGrupo(nuevoGrupo);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
-	public User getUsuario() {
-		return new User(new ImageIcon(), "");
+	public List<Group> getGruposAdminUsuarioActual() {
+		// Devuelvo una lista de mis grupos. Saco el código del usuario actual.
+		return usuarioActual.getGruposAdmin();
 	}
 
-	public static List<BubbleText> getChat(User u, JPanel chat) {
-		List<BubbleText> list = new LinkedList<BubbleText>();
-		BubbleText burbuja = new BubbleText(chat, "Hola, ¿Como van las burbujas? xD", Color.LIGHT_GRAY, "Dieguin",
-				BubbleText.RECEIVED);
-		list.add(burbuja);
-		return list;
+	// Devuelvo una lista con los nombres de los grupos en los que se usuario y yo
+	// estamos.
+	public List<String> getNombresGrupo(IndividualContact contacto) {
+		return usuarioActual.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
+				.filter(g -> g.getContactos().stream().anyMatch(c -> c.getNombre().equals(contacto.getNombre())))
+				.map(g -> g.getNombre()).collect(Collectors.toList());
 	}
+
+	public void hacerPremium() { // MANUELITO
+		// TODO Ponerle algun descuento segun convenga
+		usuarioActual.setPremium();
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
+
+	public void cerrarSesion() { // MANUELITO
+		usuarioActual = null;
+	}
+
+	public List<Message> buscarMensajes(String emisor, LocalDateTime fechaInicio, LocalDateTime fechaFin, String text) {
+		// Recupero los mensajes que he enviado
+		List<Message> enviados = usuarioActual.getContactos().stream().flatMap(c -> c.getMensajesEnviados().stream())
+				.collect(Collectors.toList());
+
+		// Recupero los mensajes que he recibido
+		List<Message> recibidos = usuarioActual.getContactos().stream().flatMap(c -> {
+			List<Message> m;
+			if (c instanceof IndividualContact)
+				m = ((IndividualContact) c).getMensajesEnviados(usuarioActual);
+			else
+				m = ((Group) c).getMensajesEnviados();
+			return m.stream();
+		}).collect(Collectors.toList());
+
+		return Stream.concat(recibidos.stream(), enviados.stream())
+				.filter(m -> emisor == null || m.getEmisor().getName().equals(emisor))
+				.filter(m -> emisor == null || m.getHora().isAfter(fechaInicio) && m.getHora().isBefore(fechaFin))
+				.filter(m -> emisor == null || m.getTexto().contains(text)).collect(Collectors.toList());
+	}
+
+	// Borramos el contacto
+	public void deleteContact(Contact c) {
+		usuarioActual.removeContact(c);
+		if (c instanceof IndividualContact) {
+			adaptadorContactoIndividual.borrarContacto((IndividualContact) c);
+		} else {
+			adaptadorGrupo.borrarGrupo((Group) c);
+		}
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
+
+	public void addEstado(Status estado) { 
+		usuarioActual.setEstado(Optional.of(estado));
+		adaptadorEstado.registrarEstado(estado);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+	}
+
+	public List<Status> getEstados(List<Contact> contactos) { // ALFONSITO
+		return null;
+	}
+
+	public void enviarMensaje(Contact contacto, String message) {
+		Message mensaje = new Message(message, LocalDateTime.now(), usuarioActual, contacto);
+		contacto.sendMessage(mensaje);
+		adaptadorMensaje.registrarMensaje(mensaje);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		if (contacto instanceof IndividualContact) {
+			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
+		} else {
+			adaptadorGrupo.modificarGrupo((Group) contacto);
+		}
+	}
+
+	public void enviarMensaje(Contact contacto, int emoji) {
+		Message mensaje = new Message(emoji, LocalDateTime.now(), usuarioActual, contacto);
+		contacto.sendMessage(mensaje);
+		adaptadorMensaje.registrarMensaje(mensaje);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		if (contacto instanceof IndividualContact) {
+			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
+		} else {
+			adaptadorGrupo.modificarGrupo((Group) contacto);
+		}
+	}
+
+	// Devuelve los contactos del usuario actual que tienen un estado
+	public List<Contact> getContactosEstado() {
+		return usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
+				.filter(c -> ((IndividualContact) c).getEstado().isPresent()).collect(Collectors.toList());
+	}
+	
+	public Optional<Contact> getContacto(String nombre) {
+		return getContactosUsuarioActual().stream()
+				.filter(c -> c.getNombre().equals(nombre))
+				.findAny();
+	}
+
 }

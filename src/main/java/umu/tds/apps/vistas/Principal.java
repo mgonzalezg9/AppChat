@@ -2,7 +2,6 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -14,35 +13,33 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Label;
-import java.awt.TextField;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.TableModelListener;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.AbstractListModel;
-import javax.swing.Icon;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+
 import tds.BubbleText;
+import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
-import javax.swing.JButton;
+import javax.swing.ListCellRenderer;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.Scrollable;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
@@ -50,14 +47,46 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
+// Clase para que desaparezca la scrollbar horizontal
+class ChatBurbujas extends JPanel implements Scrollable {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return true;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return null;
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 0;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+		return 0;
+	}
+
+}
+
 public class Principal extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel chat;
-	private JTable table_1;
 	private JLabel profilePhoto;
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
 	private boolean iconsVisible;
+	private Controlador controlador;
 
 	/**
 	 * Launch the application.
@@ -75,27 +104,57 @@ public class Principal extends JFrame {
 		});
 	}
 
-	private void sendMessage(JPanel panel, JTextField textField) throws IllegalArgumentException {
-		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT);
+	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) throws IllegalArgumentException {
+		Controlador.getInstancia().enviarMensaje(contacto, textField.getText());
+
+		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT,
+				MESSAGE_SIZE);
 		chat.add(burbuja);
 		textField.setText(null);
-
-		// TODO Conectar con persistencia
 	}
 
-	private void sendIcon(JPanel panel, int iconID) throws IllegalArgumentException {
-		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT, 10);
+	private void sendIcon(JPanel panel, int iconID, Contact contacto) throws IllegalArgumentException {
+		Controlador.getInstancia().enviarMensaje(contacto, iconID);
+
+		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT, MESSAGE_SIZE);
 		chat.add(burbuja);
 	}
 
-	private void loadChat() {
-		Controlador.getChat(null, chat).stream().forEach(b -> chat.add(b));
+	private void loadChat(Contact contacto) {
+		if (contacto == null) {
+			return;
+		}
+
+		chat.removeAll();
+
+		Controlador.getInstancia().getMensajes(contacto).stream().map(m -> {
+			String emisor;
+			int direccionMensaje;
+			Color colorBurbuja;
+
+			if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
+				colorBurbuja = SENT_MESSAGE_COLOR;
+				emisor = "Tú";
+				direccionMensaje = BubbleText.SENT;
+			} else {
+				colorBurbuja = INCOMING_MESSAGE_COLOR;
+				emisor = contacto.getNombre();
+				direccionMensaje = BubbleText.RECEIVED;
+			}
+
+			if (m.getTexto().isEmpty()) {
+				return new BubbleText(chat, m.getEmoticono(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
+			}
+			return new BubbleText(chat, m.getTexto(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
+		}).forEach(b -> chat.add(b));
+
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public Principal() {
+		controlador = Controlador.getInstancia();
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
@@ -141,7 +200,8 @@ public class Principal extends JFrame {
 		gbc_panel_1.gridy = 0;
 		settingsIzq.add(panel_1, gbc_panel_1);
 
-		JLabel label = new JLabel("");
+		JLabel label = new JLabel("foto");
+		label.setIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto());
 		label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -150,7 +210,6 @@ public class Principal extends JFrame {
 				settingsUsuario.setVisible(true);
 			}
 		});
-		label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-white.png")));
 		panel_1.add(label);
 
 		JPanel panel_2 = new JPanel();
@@ -297,17 +356,16 @@ public class Principal extends JFrame {
 		gbc_panel_3.gridy = 0;
 		settingsDer.add(panel_3, gbc_panel_3);
 
-		JLabel label_3 = new JLabel("");
-		label_3.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/Circle-white.png")));
-		panel_3.add(label_3);
+		JLabel lblContactPhoto = new JLabel("");
+		lblContactPhoto.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/group20.png")));
+		panel_3.add(lblContactPhoto);
 
-		JLabel lblDiegoSevilla = new JLabel("Diego Sevilla");
-		lblDiegoSevilla.setForeground(TEXT_COLOR_LIGHT);
-		panel_3.add(lblDiegoSevilla);
+		JLabel lblChatName = new JLabel();
+		lblChatName.setForeground(TEXT_COLOR_LIGHT);
+		panel_3.add(lblChatName);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(MAIN_COLOR);
-		FlowLayout flowLayout_3 = (FlowLayout) panel.getLayout();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.NORTHEAST;
 		gbc_panel.gridx = 1;
@@ -347,7 +405,7 @@ public class Principal extends JFrame {
 		mntmDeleteContact.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Controlador.getInstancia().deleteChat()) {
+				if (/* FIXME */ true) {
 					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
@@ -359,77 +417,43 @@ public class Principal extends JFrame {
 		});
 		popupSettsChat.add(mntmDeleteContact);
 
-		JPanel listaChats = new JPanel();
-		listaChats.setBackground(CHAT_COLOR);
-		listaChats.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		GridBagConstraints gbc_listaChats = new GridBagConstraints();
-		gbc_listaChats.insets = new Insets(0, 0, 0, 5);
-		gbc_listaChats.fill = GridBagConstraints.BOTH;
-		gbc_listaChats.gridx = 0;
-		gbc_listaChats.gridy = 1;
-		contentPane.add(listaChats, gbc_listaChats);
-		listaChats.setLayout(new BorderLayout(0, 0));
-
 		profilePhoto = new JLabel();
 		profilePhoto.setIcon(new ImageIcon(
 				Principal.class.getResource("/umu/tds/apps/resources/173312_magnifying-glass-icon-png.png")));
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBackground(CHAT_COLOR);
-		listaChats.add(scrollPane);
-		table_1 = new JTable();
-		table_1.setBackground(CHAT_COLOR);
-		table_1.setShowVerticalLines(false);
-		table_1.setShowGrid(false);
-		table_1.setBorder(null);
-		table_1.setModel(new TableModel() {
-			private Object[] columnNames = { "Profile photo", "Name" };
+		scrollPane.setBackground(MAIN_COLOR_LIGHT);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 1;
+		contentPane.add(scrollPane, gbc_scrollPane);
 
-			private Object[][] data = { { profilePhoto, "Diego Sevilla" },
+		// Contactos de ejemplo
+		List<Contact> contactos = controlador.getContactosUsuarioActual();
 
-			};
+		// Creamos el modelo
+		final DefaultListModel<Contact> modelContacts = new DefaultListModel<>();
 
-			public int getColumnCount() {
-				return columnNames.length;
+		// Rellenamos el modelo
+		contactos.stream().forEach(c -> modelContacts.addElement(c));
+
+		JList<Contact> list_contacts = new JList<>(modelContacts);
+		list_contacts.setBorder(null);
+		list_contacts.setBackground(MAIN_COLOR_LIGHT);
+		list_contacts.setCellRenderer(createListRenderer());
+		list_contacts.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				Contact contactoActual = list_contacts.getSelectedValue();
+				loadChat(contactoActual);
+				lblChatName.setText(contactoActual.getNombre());
+				lblContactPhoto.setIcon(contactoActual.getFoto());
 			}
 
-			public int getRowCount() {
-				return data.length;
-			}
-
-			public String getColumnName(int col) {
-				return columnNames[col].toString();
-			}
-
-			public Object getValueAt(int row, int col) {
-				return data[row][col];
-			}
-
-			public Class<?> getColumnClass(int c) {
-				return Icon.class;
-			}
-
-			@Override
-			public void addTableModelListener(TableModelListener l) {
-
-			}
-
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-
-			@Override
-			public void removeTableModelListener(TableModelListener l) {
-
-			}
-
-			@Override
-			public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-			}
 		});
-		scrollPane.setViewportView(table_1);
+
+		scrollPane.setViewportView(list_contacts);
 
 		JPanel chatPersonal = new JPanel();
 		chatPersonal.setBackground(CHAT_COLOR);
@@ -456,14 +480,14 @@ public class Principal extends JFrame {
 		gbc_scrollPane_1.gridy = 0;
 		chatPersonal.add(scrollPane_1, gbc_scrollPane_1);
 
-		chat = new JPanel();
+		chat = new ChatBurbujas();
 		chat.setBackground(CHAT_COLOR);
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400, 700);
 
 		// Se muestran todas las burbujas de la conversacion actual
-		loadChat();
+		list_contacts.setSelectedIndex(0);
 
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBorder(null);
@@ -489,7 +513,7 @@ public class Principal extends JFrame {
 			labelIconos.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					sendIcon(chat, Integer.valueOf(labelIconos.getName()));
+					sendIcon(chat, Integer.valueOf(labelIconos.getName()), list_contacts.getSelectedValue());
 				}
 			});
 		}
@@ -522,6 +546,7 @@ public class Principal extends JFrame {
 				iconsVisible = !iconsVisible;
 				scrollPane_3.setVisible(iconsVisible);
 				chatPersonal.updateUI();
+				loadChat(list_contacts.getSelectedValue());
 			}
 		});
 		lblEmoji.setIcon(BubbleText.getEmoji(new Random().nextInt(BubbleText.MAXICONO + 1)));
@@ -540,7 +565,7 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					sendMessage(chat, textField);
+					sendMessage(chat, textField, list_contacts.getSelectedValue());
 				} catch (IllegalArgumentException e2) {
 				}
 			}
@@ -559,7 +584,7 @@ public class Principal extends JFrame {
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					sendMessage(chat, textField);
+					sendMessage(chat, textField, list_contacts.getSelectedValue());
 				} catch (IllegalArgumentException e) {
 				}
 			}
@@ -571,6 +596,87 @@ public class Principal extends JFrame {
 		gbc_lblSend.gridx = 2;
 		gbc_lblSend.gridy = 0;
 		writeText.add(lblSend, gbc_lblSend);
+	}
+
+	private static ListCellRenderer<? super Contact> createListRenderer() {
+		return new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Contact contacto = (Contact) value;
+				IndividualContact contactoIndividual = null;
+				boolean isIndividual = false;
+
+				if (contacto instanceof IndividualContact) {
+					isIndividual = true;
+					contactoIndividual = (IndividualContact) contacto;
+				}
+
+				JPanel panel = new JPanel();
+				GridBagLayout gbl_contentPane = new GridBagLayout();
+				gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
+				gbl_contentPane.rowHeights = new int[] { 10, 26, 5, 10, 0 };
+				gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				panel.setLayout(gbl_contentPane);
+
+				JLabel label = new JLabel("");
+				if (isIndividual) {
+					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());
+				} else {
+					label.setIcon(new ImageIcon(Principal.class.getResource(GROUP_ICON_PATH)));
+				}
+				GridBagConstraints gbc_label = new GridBagConstraints();
+				gbc_label.anchor = GridBagConstraints.SOUTH;
+				gbc_label.gridheight = 2;
+				gbc_label.insets = new Insets(0, 0, 5, 5);
+				gbc_label.gridx = 0;
+				gbc_label.gridy = 1;
+				panel.add(label, gbc_label);
+
+				JLabel lblNewLabel = new JLabel(contacto.getNombre());
+				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
+				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+				gbc_lblNewLabel.gridx = 1;
+				gbc_lblNewLabel.gridy = 1;
+				panel.add(lblNewLabel, gbc_lblNewLabel);
+
+				JLabel lblNewLabel_1;
+				if (!contacto.getMensajesEnviados().isEmpty()) {
+					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(0).getHora().toString());
+				} else {
+					lblNewLabel_1 = new JLabel("");
+				}
+				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
+				gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
+				gbc_lblNewLabel_1.gridx = 2;
+				gbc_lblNewLabel_1.gridy = 1;
+				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+
+				JLabel lblEsteHaSido;
+				if (!contacto.getMensajesEnviados().isEmpty()) {
+					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(0).getTexto());
+				} else {
+					lblEsteHaSido = new JLabel("");
+				}
+				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
+				gbc_lblEsteHaSido.gridwidth = 2;
+				gbc_lblEsteHaSido.anchor = GridBagConstraints.WEST;
+				gbc_lblEsteHaSido.insets = new Insets(0, 0, 5, 5);
+				gbc_lblEsteHaSido.gridx = 1;
+				gbc_lblEsteHaSido.gridy = 2;
+				panel.add(lblEsteHaSido, gbc_lblEsteHaSido);
+
+				panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+				panel.setBackground((isSelected) ? SECONDARY_COLOR : MAIN_COLOR_LIGHT);
+
+				return panel;
+			}
+		};
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {

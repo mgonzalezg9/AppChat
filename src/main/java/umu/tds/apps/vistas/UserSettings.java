@@ -2,7 +2,6 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,7 +14,6 @@ import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
 import java.util.List;
-import java.util.ResourceBundle.Control;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 
@@ -24,7 +22,6 @@ import javax.swing.JOptionPane;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.TexturePaint;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -32,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -95,10 +91,10 @@ class Carrousel {
 	}
 
 	public void removeImagen(int op) {
-		if (imagenes.size() > 1) {
-			Controlador.getInstancia().removeImagenUsuario(op);
+		ImageIcon imgBorrada = Controlador.getInstancia().getUsuarioActual().removeProfilePhoto(op);
+		if (imagenes.size() > 0)
 			desplazar(-1);
-		} else {
+		else {
 			// Pedimos amablemente una imagen
 			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 			jfc.setDialogTitle("Select an image");
@@ -106,21 +102,21 @@ class Carrousel {
 			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG and PNG images", "jpg", "png");
 			jfc.addChoosableFileFilter(filter);
 
-			// Si se ha podido meter otra en su puesto se borra la imagen del carrousel
-			if (addImagen(jfc)) {
-				Controlador.getInstancia().removeImagenUsuario(op);
+			boolean escogida = addImagen(jfc);
+			if (!escogida) {
+				// Deshace el cambio
+				Controlador.getInstancia().addImagenUsuario(imgBorrada);
 			}
 		}
-
 	}
 
 }
 
 public class UserSettings extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Carrousel car;
-	private JTextArea txtrRespetandoElNnn;
+	private JTextArea textAreaSaludo;
 	private JFrame frame;
 
 	/**
@@ -145,8 +141,6 @@ public class UserSettings extends JFrame {
 	public UserSettings() {
 		frame = this;
 		setTitle("Settings");
-		Controlador.getInstancia()
-				.addImagenUsuario(new ImageIcon(Controlador.class.getResource("/umu/tds/apps/resources/user.png")));
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(UserSettings.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,9 +151,9 @@ public class UserSettings extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0, 5, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0, 5, 0, 0 };
 		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel panel = new JPanel();
@@ -173,7 +167,6 @@ public class UserSettings extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(MAIN_COLOR_LIGHT);
-		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
@@ -188,7 +181,7 @@ public class UserSettings extends JFrame {
 		button_3.setBackground(SECONDARY_COLOR);
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int size = Controlador.getInstancia().getImagenesUsuario().size();
+				int size = Controlador.getInstancia().getUsuarioActual().getProfilePhotos().size();
 				String[] elems = new String[size];
 
 				for (int i = 0; i < elems.length; i++) {
@@ -227,7 +220,7 @@ public class UserSettings extends JFrame {
 		panel_1.add(carrousel);
 
 		// Creamos un objeto carrousel para administrarlo
-		car = new Carrousel(profilePhoto, Controlador.getInstancia().getImagenesUsuario(), carrousel);
+		car = new Carrousel(profilePhoto, Controlador.getInstancia().getUsuarioActual().getProfilePhotos(), carrousel);
 		panel_1.add(button_1);
 
 		JButton button_2 = new JButton("+");
@@ -256,7 +249,7 @@ public class UserSettings extends JFrame {
 		gbc_panel_4.gridy = 2;
 		contentPane.add(panel_4, gbc_panel_4);
 
-		JLabel lblNewLabel = new JLabel(Controlador.getInstancia().getNombreUsuario());
+		JLabel lblNewLabel = new JLabel(Controlador.getInstancia().getUsuarioActual().getName());
 		lblNewLabel.setForeground(TEXT_COLOR_LIGHT);
 		panel_4.add(lblNewLabel);
 
@@ -281,16 +274,29 @@ public class UserSettings extends JFrame {
 		gbc_scrollPane.gridy = 4;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		txtrRespetandoElNnn = new JTextArea(Controlador.getInstancia().getSaludo());
-		txtrRespetandoElNnn.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				Controlador.getInstancia().setSaludo(txtrRespetandoElNnn.getText());
+		textAreaSaludo = new JTextArea(Controlador.getInstancia().getUsuarioActual().getSaludo());
+		textAreaSaludo.setBackground(MAIN_COLOR);
+		textAreaSaludo.setForeground(TEXT_COLOR_LIGHT);
+		scrollPane.setViewportView(textAreaSaludo);
+		textAreaSaludo.setPreferredSize(new Dimension(200, 100));
+		textAreaSaludo.setMinimumSize(new Dimension(10, 25));
+
+		JButton btnSaveGreeting = new JButton("SAVE GREETING");
+		btnSaveGreeting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Controlador.getInstancia().setSaludoUsuario(textAreaSaludo.getText());
+				
+				// Cierra la ventana
+				setVisible(false);
+				dispose();
 			}
 		});
-		scrollPane.setViewportView(txtrRespetandoElNnn);
-		txtrRespetandoElNnn.setPreferredSize(new Dimension(200, 100));
-		txtrRespetandoElNnn.setMinimumSize(new Dimension(10, 25));
+		btnSaveGreeting.setBackground(SECONDARY_COLOR);
+		GridBagConstraints gbc_btnSaveGreeting = new GridBagConstraints();
+		gbc_btnSaveGreeting.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSaveGreeting.gridx = 1;
+		gbc_btnSaveGreeting.gridy = 5;
+		contentPane.add(btnSaveGreeting, gbc_btnSaveGreeting);
 	}
 
 }

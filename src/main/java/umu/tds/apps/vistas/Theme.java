@@ -12,4 +12,7 @@ public class Theme {
 	public static Color SENT_MESSAGE_COLOR = Color.GREEN;
 	public static Color INCOMING_MESSAGE_COLOR = Color.LIGHT_GRAY;
 	public static Color WRONG_INPUT_COLOR = Color.RED;
+	public static int MESSAGE_SIZE = 12;
+	public static String GROUP_ICON_PATH = "/umu/tds/apps/resources/group.png";
+	public static String GROUP_MINI_ICON_PATH = "/umu/tds/apps/resources/group20.png";
 }
