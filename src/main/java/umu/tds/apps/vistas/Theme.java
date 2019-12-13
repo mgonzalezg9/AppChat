@@ -12,6 +12,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Theme {
+	private static final String PHOTOS_RELATIVE_PATH = "src/main/java/umu/tds/apps/photos/";
+	private static final String PHOTOS_PACKAGE_PATH = "/umu/tds/apps/photos/";
+	private static final String PROFILE_PHOTO_NAME = "profilePhoto";
+	
 	public static final Color MAIN_COLOR = new Color(141, 110, 99);
 	public static final Color MAIN_COLOR_LIGHT = new Color(190, 156, 145);
 	public static final Color SECONDARY_COLOR = new Color(255, 171, 0);
@@ -23,10 +27,7 @@ public class Theme {
 	public static final Color WRONG_INPUT_COLOR = Color.RED;
 	public static final int MESSAGE_SIZE = 12;
 	public static final String GROUP_ICON_PATH = "/umu/tds/apps/resources/group.png";
-	public static final String GROUP_MINI_ICON_PATH = "/umu/tds/apps/resources/group20.png";
-	private static final String PHOTOS_RELATIVE_PATH = "src/main/java/umu/tds/apps/photos/";
-	private static final String PHOTOS_PACKAGE_PATH = "/umu/tds/apps/photos/";
-	private static final String PROFILE_PHOTO_NAME = "profilePhoto";
+	public static final int ICON_SIZE = 25;
 
 	public static ImageIcon resizeIcon(ImageIcon img, int resolution) {
 		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);

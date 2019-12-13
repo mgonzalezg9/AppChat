@@ -25,7 +25,7 @@ class GraficaUso extends JFrame {
 
 	public GraficaUso() {
 		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage(EstadisticasUso.class.getResource("/umu/tds/apps/resources/icon.png")));
+				.getImage(UsageStatistics.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Graphics");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 410, 213);
@@ -42,7 +42,7 @@ class GraficaUso extends JFrame {
 
 }
 
-public class EstadisticasUso extends JFrame {
+public class UsageStatistics extends JFrame {
 
 	private JPanel contentPane;
 
@@ -53,7 +53,7 @@ public class EstadisticasUso extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EstadisticasUso frame = new EstadisticasUso();
+					UsageStatistics frame = new UsageStatistics();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,9 +65,9 @@ public class EstadisticasUso extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public EstadisticasUso() {
+	public UsageStatistics() {
 		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage(EstadisticasUso.class.getResource("/umu/tds/apps/resources/icon.png")));
+				.getImage(UsageStatistics.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Statistics");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 410, 213);

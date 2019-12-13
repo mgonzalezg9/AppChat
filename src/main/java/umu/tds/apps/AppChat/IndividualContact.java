@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class IndividualContact extends Contact {
@@ -56,6 +55,11 @@ public class IndividualContact extends Contact {
 	// Devuelve el estado del contacto
 	public Optional<Status> getEstado() {
 		return usuario.getEstado();
+	}
+	
+	// Añade al contacto al grupo en cuestion
+	public void addGrupo(Group grupo) {
+		usuario.addGrupo(grupo);
 	}
 
 	// HashCode y equals

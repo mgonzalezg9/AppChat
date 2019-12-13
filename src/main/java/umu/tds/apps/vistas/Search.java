@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 
-public class Busqueda extends JFrame {
+public class Search extends JFrame {
 
 	private JPanel contentPane;
 	private List<Contact> misContactos;
@@ -60,9 +60,9 @@ public class Busqueda extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Busqueda(List<Contact> contacts) {
+	public Search(List<Contact> contacts) {
 		setTitle("Search");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Search.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 606, 462);
 		
@@ -80,7 +80,7 @@ public class Busqueda extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(Busqueda.class.getResource("/umu/tds/apps/resources/icon.png")));
+		label.setIcon(new ImageIcon(Search.class.getResource("/umu/tds/apps/resources/icon.png")));
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.gridheight = 2;
 		gbc_label.insets = new Insets(0, 0, 5, 5);

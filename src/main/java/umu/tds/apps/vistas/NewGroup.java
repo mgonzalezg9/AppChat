@@ -2,52 +2,39 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
 import javax.swing.JList;
-import javax.imageio.ImageIO;
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
 import umu.tds.apps.AppChat.Contact;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 
-public class VentanaNuevoGrupo extends JFrame {
-
+public class NewGroup extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtGroupName;
 	private List<Contact> misContactos;
@@ -71,10 +58,10 @@ public class VentanaNuevoGrupo extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaNuevoGrupo(List<Contact> contacts) {
+	public NewGroup(List<Contact> contacts) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/icon.png")));
+				Toolkit.getDefaultToolkit().getImage(NewGroup.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
 		setBounds(100, 100, 497, 340);
 		
@@ -120,7 +107,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		settings.add(panel, gbc_panel);
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/diego.jpg")));
+		lblNewLabel.setIcon(new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/diego.jpg")));
 		panel.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("Diego Sevilla");
@@ -141,18 +128,18 @@ public class VentanaNuevoGrupo extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Abre la nueva ventana
-				JFrame busquedaWindow = new Busqueda(misContactos);
+				JFrame busquedaWindow = new Search(misContactos);
 				busquedaWindow.setDefaultCloseOperation(HIDE_ON_CLOSE);
 				busquedaWindow.setVisible(true);
 			}
 		});
 		lblNewLabel_2.setIcon(
-				new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/search-white.png")));
+				new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/search-white.png")));
 		panel_1.add(lblNewLabel_2);
 
 		JLabel lblNewLabel_3 = new JLabel("");
 		lblNewLabel_3.setIcon(
-				new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/3points-white.png")));
+				new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/3points-white.png")));
 		panel_1.add(lblNewLabel_3);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -171,7 +158,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		String contactos[] = { "Alfonso favorito", "Manuel negro albino", "Joseliko", "Oscarizado", "Roberto",
 				"Carmelo", "Aitortilla", "Aitormenta", "Javi", "Norberto", "GinesGM", "Perico", "Juan" };
 
-		final DefaultListModel modelContact = new DefaultListModel();
+		final DefaultListModel<String> modelContact = new DefaultListModel<>();
 		for (int i = 0; i < contactos.length; i++)
 			modelContact.add(i, contactos[i]);
 
@@ -203,7 +190,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		gbc_scrollPane_1.gridy = 1;
 		contentPane.add(scrollPane_1, gbc_scrollPane_1);
 
-		final DefaultListModel modelAdded = new DefaultListModel();
+		final DefaultListModel<String> modelAdded = new DefaultListModel<>();
 		final JList<String> addedList = new JList<>(modelAdded);
 		addedList.setBackground(new Color(204, 255, 255));
 		scrollPane_1.setViewportView(addedList);
@@ -277,7 +264,7 @@ public class VentanaNuevoGrupo extends JFrame {
 		});
 
 		btAddedContact.setIcon(
-				new ImageIcon(VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
+				new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
 		GridBagConstraints gbc_btAddedContact = new GridBagConstraints();
 		gbc_btAddedContact.gridwidth = 2;
 		gbc_btAddedContact.fill = GridBagConstraints.HORIZONTAL;
@@ -298,7 +285,7 @@ public class VentanaNuevoGrupo extends JFrame {
 			}
 		});
 		btRemoveContact.setIcon(new ImageIcon(
-				VentanaNuevoGrupo.class.getResource("/umu/tds/apps/resources/flecha-hacia-izquierda.png")));
+				NewGroup.class.getResource("/umu/tds/apps/resources/flecha-hacia-izquierda.png")));
 		GridBagConstraints gbc_btRemoveContact = new GridBagConstraints();
 		gbc_btRemoveContact.gridwidth = 2;
 		gbc_btRemoveContact.fill = GridBagConstraints.HORIZONTAL;

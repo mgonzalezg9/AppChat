@@ -55,6 +55,25 @@ public class Login extends JFrame {
 		initialize();
 	}
 
+	// Funcion con la que el usuario inicia sesion
+	private void login() {
+		// Comprobamos que el login haya sido satisfactorio
+		String user = userField.getText();
+		char[] password = passwordField.getPassword();
+
+		if (controlador.iniciarSesion(user, String.valueOf(password))) {
+			// Oculta la ventana actual
+			Login.this.setVisible(false);
+
+			// Abre la nueva ventana
+			JFrame mainWindow = new Principal();
+			mainWindow.setVisible(true);
+		} else {
+			userField.setBackground(WRONG_INPUT_COLOR);
+			passwordField.setBackground(WRONG_INPUT_COLOR);
+		}
+	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -127,6 +146,12 @@ public class Login extends JFrame {
 		panelCentro.add(userLabel, gbc_userLabel);
 
 		userField = new JTextField();
+		userField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				login();
+			}
+		});
 		userField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -155,6 +180,11 @@ public class Login extends JFrame {
 		panelCentro.add(lblPassword, gbc_lblPassword);
 
 		passwordField = new JPasswordField();
+		passwordField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				login();
+			}
+		});
 		passwordField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -190,22 +220,7 @@ public class Login extends JFrame {
 		btnSignIn.setBackground(SECONDARY_COLOR);
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Comprobamos que el login haya sido satisfactorio
-				String user = userField.getText();
-				char[] password = passwordField.getPassword();
-
-				if (controlador.iniciarSesion(user, String.valueOf(password))) {
-					// Oculta la ventana actual
-					Login.this.setVisible(false);
-
-					// Abre la nueva ventana
-					JFrame mainWindow = new Principal();
-					mainWindow.setVisible(true);
-				} else {
-					userField.setBackground(WRONG_INPUT_COLOR);
-					passwordField.setBackground(WRONG_INPUT_COLOR);
-				}
-
+				login();
 			}
 		});
 		GridBagConstraints gbc_btnSignIn = new GridBagConstraints();

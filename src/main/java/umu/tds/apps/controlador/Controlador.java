@@ -156,9 +156,7 @@ public class Controlador {
 							((IndividualContact) contacto).getMensajesRecibidos(usuarioActual).stream())
 					.sorted().collect(Collectors.toList());
 		} else {
-			return Stream
-					.concat(contacto.getMensajesEnviados().stream(), ((Group) contacto).getMensajesRecibidos().stream())
-					.sorted().collect(Collectors.toList());
+			return ((Group) contacto).getMensajesRecibidos();
 		}
 	}
 
@@ -194,11 +192,22 @@ public class Controlador {
 	// Creo el grupo.
 	public void crearGrupo(String nombre, List<IndividualContact> participantes) {
 		Group nuevoGrupo = new Group(nombre, new LinkedList<Message>(), participantes, usuarioActual);
+		
+		// Se añade el grupo al usuario actual y al resto de participantes
 		usuarioActual.addGrupo(nuevoGrupo);
 		usuarioActual.addGrupoAdmin(nuevoGrupo);
+		participantes.stream().forEach(p -> p.addGrupo(nuevoGrupo));
+		
+		// Conexion con persistencia
 		adaptadorGrupo.registrarGrupo(nuevoGrupo);
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
+		
+		participantes.stream().forEach(p -> {
+			User usuario = p.getUsuario();
+			catalogoUsuarios.addUsuario(usuario);
+			adaptadorUsuario.modificarUsuario(usuario);
+		});
 	}
 
 	public List<Group> getGruposAdminUsuarioActual() {

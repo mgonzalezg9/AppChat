@@ -40,8 +40,6 @@ import javax.swing.Scrollable;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -131,8 +129,10 @@ public class Principal extends JFrame {
 			return;
 		}
 
+		// Borra todas las burbujas del chat anterior
 		chat.removeAll();
 
+		// Coloca las burbujas nuevas
 		Controlador.getInstancia().getMensajes(contacto).stream().map(m -> {
 			String emisor;
 			int direccionMensaje;
@@ -144,7 +144,7 @@ public class Principal extends JFrame {
 				direccionMensaje = BubbleText.SENT;
 			} else {
 				colorBurbuja = INCOMING_MESSAGE_COLOR;
-				emisor = contacto.getNombre();
+				emisor = m.getEmisor().getName();
 				direccionMensaje = BubbleText.RECEIVED;
 			}
 
@@ -153,7 +153,6 @@ public class Principal extends JFrame {
 			}
 			return new BubbleText(chat, m.getTexto(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
 		}).forEach(b -> chat.add(b));
-
 	}
 
 	/**
@@ -193,7 +192,6 @@ public class Principal extends JFrame {
 		JList<Contact> list_contacts = new JList<>(modelContacts);
 		listaContactos = list_contacts;
 		
-
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(MAIN_COLOR);
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -222,7 +220,7 @@ public class Principal extends JFrame {
 		settingsIzq.add(panel_1, gbc_panel_1);
 
 		JLabel lblMiFoto = new JLabel();
-		lblMiFoto.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), 20));
+		lblMiFoto.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), ICON_SIZE));
 		lblMiFoto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -247,7 +245,7 @@ public class Principal extends JFrame {
 		label_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Estados window = new Estados();
+				StatusWindow window = new StatusWindow();
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -278,7 +276,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaNuevoGrupo window = new VentanaNuevoGrupo(Controlador.getInstancia().getContactosUsuarioActual());
+				NewGroup window = new NewGroup(Controlador.getInstancia().getContactosUsuarioActual());
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -289,7 +287,7 @@ public class Principal extends JFrame {
 		mntmModifyGroup.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ModificarGrupo window = new ModificarGrupo();
+				ModifyGroup window = new ModifyGroup();
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -300,7 +298,7 @@ public class Principal extends JFrame {
 		mntmMostrarContactos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Contactos window = new Contactos();
+				ContactWindow window = new ContactWindow();
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -322,7 +320,7 @@ public class Principal extends JFrame {
 		mntmShowStatistics.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				EstadisticasUso window = new EstadisticasUso();
+				UsageStatistics window = new UsageStatistics();
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -389,7 +387,7 @@ public class Principal extends JFrame {
 		label_4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Busqueda ventanaBusqueda = new Busqueda(Controlador.getInstancia().getContactosUsuarioActual());
+				Search ventanaBusqueda = new Search(Controlador.getInstancia().getContactosUsuarioActual());
 				ventanaBusqueda.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				ventanaBusqueda.setVisible(true);
 			}
@@ -447,7 +445,7 @@ public class Principal extends JFrame {
 		
 		JLabel lblContactPhoto = new JLabel("");
 		if (!list_contacts.isSelectionEmpty())
-			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), 20));
+			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), ICON_SIZE));
 		panel_3.add(lblContactPhoto);
 		
 		JLabel lblChatName = new JLabel();
@@ -462,7 +460,7 @@ public class Principal extends JFrame {
 				Contact contactoActual = list_contacts.getSelectedValue();
 				loadChat(contactoActual);
 				lblChatName.setText(contactoActual.getNombre());
-				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), 20));
+				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE));
 			}
 
 		});

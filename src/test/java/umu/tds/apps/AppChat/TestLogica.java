@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,17 +20,19 @@ public class TestLogica {
 	private final static String ADMIN_NICK = "admin";
 	private final static String ADMIN_MAIL = "admin@um.es";
 	private final static int ADMIN_PHONE = 1;
-	private final static ImageIcon iconoEstado = new ImageIcon(TestLogica.class.getResource("/umu/tds/apps/resources/paper plane-white.png"));
-	private Status ADMIN_STATUS;
+	private final static ImageIcon ICONO_ESTADO = new ImageIcon(
+			TestLogica.class.getResource("/umu/tds/apps/resources/paper plane-white.png"));
+	private final static Status ADMIN_STATUS = new Status(ICONO_ESTADO, "Buscadme en Telegram");
 	private final static String NOADMIN_NAME = "No Administrador";
 	private final static String NOADMIN_NICK = "noadmin";
 	private final static String NOADMIN_MAIL = "noadmin@um.es";
 	private final static int NOADMIN_PHONE = 2;
 	private final static String PASSWORD = "1234";
-	private final static ImageIcon ICON = new ImageIcon(TestLogica.class.getResource("/umu/tds/apps/resources/icon.png"));
+	private final static ImageIcon ICON = new ImageIcon(
+			TestLogica.class.getResource("/umu/tds/apps/resources/icon.png"));
 	private final static String GROUP_NAME = "Juernes";
 	private final static int EMOJI = 3;
-	
+
 	// Persistencia
 	private static Controlador controlador;
 
@@ -44,51 +45,47 @@ public class TestLogica {
 	@Test
 	public void test() {
 		ICON.setDescription("/umu/tds/apps/resources/icon.png");
-		iconoEstado.setDescription("/umu/tds/apps/resources/paper plane-white.png");
-		ADMIN_STATUS = new Status(iconoEstado, "Buscadme en Telegram");
-		
+		ICONO_ESTADO.setDescription("/umu/tds/apps/resources/paper plane-white.png");
+
 		// Creacion de la cuenta Admin
-		assertTrue(controlador.crearCuenta(ICON, ADMIN_NICK, PASSWORD, ADMIN_MAIL, ADMIN_NAME, ADMIN_PHONE, LocalDate.now()));
-		
+		assertTrue(controlador.crearCuenta(ICON, ADMIN_NICK, PASSWORD, ADMIN_MAIL, ADMIN_NAME, ADMIN_PHONE,
+				LocalDate.now()));
+
 		// Admin tiene un estado
 		controlador.addEstado(ADMIN_STATUS);
 		controlador.cerrarSesion();
-		
+
 		// Creacion de la cuenta No Admin
-		assertTrue(controlador.crearCuenta(ICON, NOADMIN_NICK, PASSWORD, NOADMIN_MAIL, NOADMIN_NAME, NOADMIN_PHONE, LocalDate.now()));
-		
+		assertTrue(controlador.crearCuenta(ICON, NOADMIN_NICK, PASSWORD, NOADMIN_MAIL, NOADMIN_NAME, NOADMIN_PHONE,
+				LocalDate.now()));
+
 		// No Admin añade como contacto a Admin
 		assertTrue(controlador.crearContacto(ADMIN_NAME, ADMIN_PHONE, new DefaultListModel<Contact>()));
 		controlador.cerrarSesion();
-		
+
 		// Admin inicia sesión
 		assertTrue(controlador.iniciarSesion(ADMIN_NICK, PASSWORD));
-		
+
 		// Admin añade a NoAdmin como contacto
 		assertTrue(controlador.crearContacto(NOADMIN_NAME, NOADMIN_PHONE, new DefaultListModel<Contact>()));
-		
+
 		// Admin crea un grupo compartido por ambos
 		LinkedList<IndividualContact> integrantes = new LinkedList<>();
 		IndividualContact contactoNoAdmin = (IndividualContact) controlador.getContacto(NOADMIN_NAME).get();
 		integrantes.add(contactoNoAdmin);
 		controlador.crearGrupo(GROUP_NAME, integrantes);
-		
+
 		// Admin manda un mensaje a No Admin
 		controlador.enviarMensaje(contactoNoAdmin, "Ya te he metido al grupo!");
 		controlador.cerrarSesion();
-		
+
 		// No Admin inicia sesión y responde por el grupo Juernes
-		/*assertTrue(controlador.iniciarSesion(NOADMIN_NICK, PASSWORD));
+		assertTrue(controlador.iniciarSesion(NOADMIN_NICK, PASSWORD));
 		Group grupo = (Group) controlador.getContacto(GROUP_NAME).get();
-		controlador.enviarMensaje(grupo, EMOJI);*/
-		
+		controlador.enviarMensaje(grupo, EMOJI);
+
 		// NoAdmin cierra sesión
 		controlador.cerrarSesion();
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() {
-		// Borrado (opcional) de los objetos de BD
 	}
 
 }
