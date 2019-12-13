@@ -5,11 +5,7 @@ import static umu.tds.apps.vistas.Theme.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
-import umu.tds.apps.vistas.Principal;
-import umu.tds.apps.vistas.Theme;
 
 public class Group extends Contact {
 	// Properties
@@ -55,7 +51,7 @@ public class Group extends Contact {
 	}
 
 	// Devuelve los mensajes que han enviado el resto de usuarios por el grupo
-	public List<Message> getMensajesEnviados() {
+	public List<Message> getMensajesRecibidos() {
 		return this.contactos.stream().flatMap(c -> c.getUsuario().getContactos().stream())
 				.filter(c -> c instanceof Group).map(c -> (Group) c).filter(g -> g.getCodigo() == this.getCodigo())
 				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());

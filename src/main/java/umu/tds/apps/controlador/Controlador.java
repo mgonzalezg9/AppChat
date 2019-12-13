@@ -153,11 +153,11 @@ public class Controlador {
 		if (contacto instanceof IndividualContact) {
 			return Stream
 					.concat(contacto.getMensajesEnviados().stream(),
-							((IndividualContact) contacto).getMensajesEnviados(usuarioActual).stream())
+							((IndividualContact) contacto).getMensajesRecibidos(usuarioActual).stream())
 					.sorted().collect(Collectors.toList());
 		} else {
 			return Stream
-					.concat(contacto.getMensajesEnviados().stream(), ((Group) contacto).getMensajesEnviados().stream())
+					.concat(contacto.getMensajesEnviados().stream(), ((Group) contacto).getMensajesRecibidos().stream())
 					.sorted().collect(Collectors.toList());
 		}
 	}
@@ -234,7 +234,7 @@ public class Controlador {
 		List<Message> recibidos = usuarioActual.getContactos().stream().flatMap(c -> {
 			List<Message> m;
 			if (c instanceof IndividualContact)
-				m = ((IndividualContact) c).getMensajesEnviados(usuarioActual);
+				m = ((IndividualContact) c).getMensajesRecibidos(usuarioActual);
 			else
 				m = ((Group) c).getMensajesEnviados();
 			return m.stream();

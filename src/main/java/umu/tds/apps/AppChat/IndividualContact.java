@@ -46,8 +46,8 @@ public class IndividualContact extends Contact {
 	}
 
 	// Methods
-	// Devuelve los mensajes que el contacto le envia al usuario pasado como parametro
-	public List<Message> getMensajesEnviados(User usuario) {
+	// Devuelve los mensajes que el usuario pasado como parametro recibe de este contacto
+	public List<Message> getMensajesRecibidos(User usuario) {
 		return this.usuario.getContactos().stream().filter(c -> c instanceof IndividualContact)
 				.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().getNick().equals(usuario.getNick()))
 				.flatMap(c -> c.getMensajesEnviados().stream()).collect(Collectors.toList());
