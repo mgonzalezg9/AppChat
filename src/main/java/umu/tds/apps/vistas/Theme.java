@@ -64,7 +64,6 @@ public class Theme {
 			String name = PROFILE_PHOTO_NAME + id + "_" + pos + ext;
 			File file = new File(PHOTOS_RELATIVE_PATH + name);
 			img.setDescription(PHOTOS_PACKAGE_PATH + name);
-			System.out.println(img.getDescription());
 			ImageIO.write(image, "png", file);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -329,7 +329,9 @@ public class AdaptadorUserTDS implements UserDAO {
 	}
 
 	private String obtenerPathImagenes(List<ImageIcon> imagenes) {
-		return imagenes.stream().map(i -> String.valueOf(i.getDescription())).reduce("", (l, c) -> l + c + "?").trim();
+		String paths = imagenes.stream().map(i -> String.valueOf(i.getDescription())).reduce("", (l, c) -> l + c + "?").trim();
+		//System.out.println(paths.substring(0, paths.length() - 1));
+		return paths.substring(0, paths.length() - 1);
 	}
 
 }

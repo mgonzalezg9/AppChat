@@ -1,8 +1,5 @@
 package umu.tds.apps.controlador;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -12,7 +9,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
@@ -25,10 +21,6 @@ import umu.tds.apps.persistencia.MessageDAO;
 import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
 import umu.tds.apps.vistas.Theme;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.Savepoint;
 
 public class Controlador {
 	// Instancia del controlador.
@@ -132,11 +124,12 @@ public class Controlador {
 	// Añade una imagen al conjunto de imágenes del usuario
 	public void addImagenUsuario(ImageIcon image) {
 		int pos = usuarioActual.addProfilePhoto(image);
+		
+		// Guarda la imagen en el proyecto y con su nueva ruta
+		Theme.saveImage(image, usuarioActual.getCodigo(), pos);
+		
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
-
-		// Guarda la imagen en el proyecto
-		Theme.saveImage(image, usuarioActual.getCodigo(), pos);
 	}
 
 	// Borra una imagen del conjunto de imágenes del usuario
