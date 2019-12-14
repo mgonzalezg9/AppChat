@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -23,6 +24,7 @@ import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
 
@@ -132,7 +134,6 @@ public class Register extends JFrame {
 		panel.add(imgUser, gbc_imgUser);
 
 		imgUser.addMouseListener(new MouseListener() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
@@ -145,9 +146,11 @@ public class Register extends JFrame {
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					BufferedImage img;
 					try {
-						img = ImageIO.read(jfc.getSelectedFile());
+						File file = jfc.getSelectedFile();
+						img = ImageIO.read(file);
 						Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 						ImageIcon icon = new ImageIcon(imgScaled);
+						icon.setDescription(file.getPath());
 						imgUser.setIcon(icon);
 
 						Dimension imageSize = new Dimension(128, 128);
@@ -363,13 +366,13 @@ public class Register extends JFrame {
 		});
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {				
+			public void mouseClicked(MouseEvent arg0) {
 				// Registra al usuario
-				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()), textFieldUser.getText(),
-						textFieldPassword.getText(), textFieldEmail.getText(), textFieldName.getText(),
-						Integer.parseInt(textFieldPNumber.getText()),
+				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()),
+						textFieldUser.getText(), textFieldPassword.getText(), textFieldEmail.getText(),
+						textFieldName.getText(), Integer.parseInt(textFieldPNumber.getText()),
 						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-				
+
 				if (!creada) {
 					textFieldUser.setBackground(WRONG_INPUT_COLOR);
 				} else {

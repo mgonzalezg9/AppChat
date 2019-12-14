@@ -197,7 +197,7 @@ public class Principal extends JFrame {
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsIzq = new GridBagConstraints();
 		gbc_settingsIzq.insets = new Insets(0, 0, 5, 5);
-		gbc_settingsIzq.fill = GridBagConstraints.BOTH;
+		gbc_settingsIzq.fill = GridBagConstraints.HORIZONTAL;
 		gbc_settingsIzq.gridx = 0;
 		gbc_settingsIzq.gridy = 0;
 		contentPane.add(settingsIzq, gbc_settingsIzq);
@@ -214,7 +214,7 @@ public class Principal extends JFrame {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_1.gridx = 0;
 		gbc_panel_1.gridy = 0;
 		settingsIzq.add(panel_1, gbc_panel_1);
@@ -236,7 +236,7 @@ public class Principal extends JFrame {
 		FlowLayout flowLayout_1 = (FlowLayout) panel_2.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.RIGHT);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_2.gridx = 1;
 		gbc_panel_2.gridy = 0;
 		settingsIzq.add(panel_2, gbc_panel_2);
@@ -344,7 +344,7 @@ public class Principal extends JFrame {
 		settingsDer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsDer = new GridBagConstraints();
 		gbc_settingsDer.insets = new Insets(0, 0, 5, 0);
-		gbc_settingsDer.fill = GridBagConstraints.BOTH;
+		gbc_settingsDer.fill = GridBagConstraints.HORIZONTAL;
 		gbc_settingsDer.gridx = 1;
 		gbc_settingsDer.gridy = 0;
 		contentPane.add(settingsDer, gbc_settingsDer);

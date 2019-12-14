@@ -100,11 +100,13 @@ public class Controlador {
 		if (u == null) {
 			User nuevoUsuario = new User(Arrays.asList(imagen), name, fechaNacimiento, numTelefono, nick, password,
 					false, null, null);
-			catalogoUsuarios.addUsuario(nuevoUsuario);
-			adaptadorUsuario.registrarUsuario(nuevoUsuario);
 
 			// Guarda la imagen en el proyecto
 			Theme.saveImage(imagen, nuevoUsuario.getCodigo(), 1);
+
+			// Conexion con la persistencia
+			catalogoUsuarios.addUsuario(nuevoUsuario);
+			adaptadorUsuario.registrarUsuario(nuevoUsuario);
 
 			return iniciarSesion(nick, password);
 		}
@@ -124,10 +126,10 @@ public class Controlador {
 	// Añade una imagen al conjunto de imágenes del usuario
 	public void addImagenUsuario(ImageIcon image) {
 		int pos = usuarioActual.addProfilePhoto(image);
-		
+
 		// Guarda la imagen en el proyecto y con su nueva ruta
 		Theme.saveImage(image, usuarioActual.getCodigo(), pos);
-		
+
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
@@ -197,17 +199,17 @@ public class Controlador {
 	// Creo el grupo.
 	public Group crearGrupo(String nombre, List<IndividualContact> participantes) {
 		Group nuevoGrupo = new Group(nombre, new LinkedList<Message>(), participantes, usuarioActual);
-		
+
 		// Se añade el grupo al usuario actual y al resto de participantes
 		usuarioActual.addGrupo(nuevoGrupo);
 		usuarioActual.addGrupoAdmin(nuevoGrupo);
 		participantes.stream().forEach(p -> p.addGrupo(nuevoGrupo));
-		
+
 		// Conexion con persistencia
 		adaptadorGrupo.registrarGrupo(nuevoGrupo);
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
-		
+
 		participantes.stream().forEach(p -> {
 			User usuario = p.getUsuario();
 			catalogoUsuarios.addUsuario(usuario);
