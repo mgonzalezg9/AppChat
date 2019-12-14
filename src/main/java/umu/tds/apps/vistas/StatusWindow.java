@@ -8,14 +8,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.AppChat.Status;
-import umu.tds.apps.AppChat.User;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JLabel;
@@ -23,33 +22,156 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 import java.awt.Font;
-import javax.swing.ScrollPaneConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.border.BevelBorder;
 
-public class StatusWindow extends JFrame {
+class StatusChooser extends JFrame {
+	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
+	private JTextField textField;
+	private File fileChoosen;
+
+	StatusChooser() {
+		fileChoosen = null;
+
+		setTitle("Create status");
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(StatusWindow.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setBounds(100, 100, 342, 203);
+		contentPane = new JPanel();
+		contentPane.setBackground(MAIN_COLOR_LIGHT);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[] { 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		contentPane.setLayout(gbl_contentPane);
+
+		JPanel panelImagen = new JPanel();
+		panelImagen.setBackground(MAIN_COLOR_LIGHT);
+		GridBagConstraints gbc_panelImagen = new GridBagConstraints();
+		gbc_panelImagen.insets = new Insets(0, 0, 5, 0);
+		gbc_panelImagen.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelImagen.gridx = 0;
+		gbc_panelImagen.gridy = 0;
+		contentPane.add(panelImagen, gbc_panelImagen);
+
+		JLabel lblChooseAnImage = new JLabel("Choose an image:");
+		panelImagen.add(lblChooseAnImage);
+
+		JButton btnChooseImage = new JButton("Choose image");
+		btnChooseImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+				jfc.setDialogTitle("Select an image for your status");
+				jfc.setAcceptAllFileFilterUsed(false);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG and PNG images", "jpg", "png");
+				jfc.addChoosableFileFilter(filter);
+
+				int returnValue = jfc.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					fileChoosen = jfc.getSelectedFile();
+					lblChooseAnImage.setText(fileChoosen.getName());
+				}
+			}
+		});
+		btnChooseImage.setBackground(SECONDARY_COLOR);
+		panelImagen.add(btnChooseImage);
+
+		JPanel panelFrase = new JPanel();
+		panelFrase.setBackground(MAIN_COLOR_LIGHT);
+		GridBagConstraints gbc_panelFrase = new GridBagConstraints();
+		gbc_panelFrase.insets = new Insets(0, 0, 5, 0);
+		gbc_panelFrase.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelFrase.gridx = 0;
+		gbc_panelFrase.gridy = 1;
+		contentPane.add(panelFrase, gbc_panelFrase);
+
+		JLabel lblChooseYourText = new JLabel("Enter your text:");
+		panelFrase.add(lblChooseYourText);
+
+		textField = new JTextField();
+		textField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textField.setBackground(Theme.MAIN_COLOR);
+		textField.setForeground(Theme.TEXT_COLOR_LIGHT);
+		panelFrase.add(textField);
+		textField.setColumns(10);
+
+		JButton btnSubmit = new JButton("SUBMIT");
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BufferedImage img;
+				try {
+					// Lectura de la imagen
+					img = ImageIO.read(fileChoosen);
+					Image imgScaled = img.getScaledInstance(Theme.STATUS_IMAGE_SIZE, Theme.STATUS_IMAGE_SIZE,
+							Image.SCALE_DEFAULT);
+					ImageIcon icon = new ImageIcon(imgScaled);
+					icon.setDescription(fileChoosen.getPath());
+
+					// Lectura de la frase
+					String frase = textField.getText();
+
+					if (!frase.isEmpty()) {
+						Controlador.getInstancia().addEstado(icon, frase);
+						StatusChooser.this.setVisible(false);
+					} else {
+						Toolkit.getDefaultToolkit().beep();
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (IllegalArgumentException e2) {
+					Toolkit.getDefaultToolkit().beep();
+				}
+			}
+		});
+		btnSubmit.setBackground(SECONDARY_COLOR);
+		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
+		gbc_btnSubmit.gridx = 0;
+		gbc_btnSubmit.gridy = 2;
+		contentPane.add(btnSubmit, gbc_btnSubmit);
+	}
+}
+
+public class StatusWindow extends JFrame {
+	private static final Status DEFAULT_STATUS = new Status(
+			new ImageIcon(StatusWindow.class.getResource("/umu/tds/apps/resources/icon.png")), "AppChat");
+	private static final long serialVersionUID = 1L;
+
+	private JPanel contentPane, panelMiNombre, panelMiEstado;
 	private JLabel lblFraseProfunda;
 	private JLabel lblEstadoSeleccionado;
-	private JLabel lblNewLabel;
-	private JList<Contact> list;
+	private JLabel lblNombreContacto;
+	private JList<IndividualContact> list;
 
 	/**
 	 * Launch the application.
@@ -72,8 +194,8 @@ public class StatusWindow extends JFrame {
 	 */
 	public StatusWindow() {
 		setTitle("Status");
-		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(StatusWindow.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(StatusWindow.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 382);
 		contentPane = new JPanel();
@@ -102,54 +224,77 @@ public class StatusWindow extends JFrame {
 		gbl_panelIzq.rowWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		panelIzq.setLayout(gbl_panelIzq);
 
-		JPanel panelMiEstado = new JPanel();
-		panelMiEstado.setBackground(MAIN_COLOR_LIGHT);
+		JPanel panelMisContactos = new JPanel();
+		panelMisContactos.setBackground(MAIN_COLOR_LIGHT);
 
-		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(MAIN_COLOR);
-		panel_2.addMouseListener(new MouseAdapter() {
+		panelMiEstado = new JPanel();
+		panelMiEstado.setBackground(MAIN_COLOR);
+		panelMiEstado.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-				panel_2.setBackground(SECONDARY_COLOR);
-				list.clearSelection();
 				Optional<Status> s = Controlador.getInstancia().getUsuarioActual().getEstado();
+				// Si tiene estado se muestra
 				if (s.isPresent()) {
-					lblEstadoSeleccionado.setIcon(s.get().getImg());
+					list.clearSelection();
+					lblNombreContacto.setFont(new Font("Tahoma", Font.BOLD, 18));
+					panelMiEstado.setBackground(SECONDARY_COLOR);
+					panelMiNombre.setBackground(SECONDARY_COLOR);
+					lblEstadoSeleccionado.setIcon(resizeIcon(s.get().getImg(), STATUS_IMAGE_SIZE));
 					lblFraseProfunda.setText(s.get().getFrase());
+				} else {
+					lblEstadoSeleccionado.setIcon(DEFAULT_STATUS.getImg());
+					lblFraseProfunda.setText(DEFAULT_STATUS.getFrase());
 				}
 			}
 		});
-		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
-		gbc_panel_2.gridx = 0;
-		gbc_panel_2.gridy = 0;
-		panelIzq.add(panel_2, gbc_panel_2);
-
-		lblNewLabel = new JLabel("My status");
-		panel_2.add(lblNewLabel);
-		lblNewLabel.setForeground(TEXT_COLOR_LIGHT);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-
-		JLabel label = new JLabel("");
-		panel_2.add(label);
-		label.setIcon(new ImageIcon(StatusWindow.class.getResource("/umu/tds/apps/resources/diego.jpg")));
-		panelMiEstado.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelMiEstado.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_panelMiEstado = new GridBagConstraints();
 		gbc_panelMiEstado.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelMiEstado.insets = new Insets(0, 0, 5, 0);
 		gbc_panelMiEstado.gridx = 0;
-		gbc_panelMiEstado.gridy = 1;
+		gbc_panelMiEstado.gridy = 0;
 		panelIzq.add(panelMiEstado, gbc_panelMiEstado);
-		panelMiEstado.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelMiEstado.setLayout(new BorderLayout(0, 0));
+
+		panelMiNombre = new JPanel();
+		panelMiNombre.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		panelMiNombre.setBackground(MAIN_COLOR);
+		panelMiEstado.add(panelMiNombre, BorderLayout.CENTER);
+
+		JLabel lblImagenContacto = new JLabel();
+		panelMiNombre.add(lblImagenContacto);
+		lblImagenContacto
+				.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), ICON_SIZE));
+
+		lblNombreContacto = new JLabel(Controlador.getInstancia().getUsuarioActual().getName());
+		panelMiNombre.add(lblNombreContacto);
+		lblNombreContacto.setForeground(TEXT_COLOR_LIGHT);
+		lblNombreContacto.setFont(new Font("Tahoma", Font.PLAIN, 18));
+
+		JButton btnNuevoEstado = new JButton("+");
+		btnNuevoEstado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame ventanaEstado = new StatusChooser();
+				ventanaEstado.setVisible(true);
+				StatusWindow.this.setVisible(false);
+			}
+		});
+		btnNuevoEstado.setBackground(SECONDARY_COLOR);
+		panelMiEstado.add(btnNuevoEstado, BorderLayout.EAST);
+		panelMisContactos.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		panelMisContactos.setBackground(MAIN_COLOR);
+		GridBagConstraints gbc_panelMisContactos = new GridBagConstraints();
+		gbc_panelMisContactos.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelMisContactos.insets = new Insets(0, 0, 5, 0);
+		gbc_panelMisContactos.gridx = 0;
+		gbc_panelMisContactos.gridy = 1;
+		panelIzq.add(panelMisContactos, gbc_panelMisContactos);
+		panelMisContactos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JLabel label_1 = new JLabel("My contacts");
 		label_1.setHorizontalAlignment(SwingConstants.CENTER);
 		label_1.setForeground(TEXT_COLOR_LIGHT);
 		label_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		panelMiEstado.add(label_1);
+		panelMisContactos.add(label_1);
 
 		JPanel listaEstados = new JPanel();
 		panelIzq.setBackground(MAIN_COLOR_LIGHT);
@@ -160,44 +305,35 @@ public class StatusWindow extends JFrame {
 		panelIzq.add(listaEstados, gbc_listaEstados);
 		listaEstados.setLayout(new BorderLayout(0, 0));
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(MAIN_COLOR_LIGHT);
-		panel_3.setBorder(null);
-		listaEstados.add(panel_3);
-		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
-
-		JPanel panel = new JPanel();
-		panel.setBackground(MAIN_COLOR_LIGHT);
-		panel_3.add(panel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 256, 0 };
-		gbl_panel.rowHeights = new int[] { 128, 0 };
-		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
-		panel.setLayout(gbl_panel);
+		JPanel panelRender = new JPanel();
+		panelRender.setBackground(MAIN_COLOR_LIGHT);
+		panelRender.setBorder(null);
+		listaEstados.add(panelRender);
+		panelRender.setLayout(new BoxLayout(panelRender, BoxLayout.Y_AXIS));
 
 		JScrollPane scrollPane = new JScrollPane();
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.fill = GridBagConstraints.VERTICAL;
-		gbc_scrollPane.gridx = 0;
-		gbc_scrollPane.gridy = 0;
-		panel.add(scrollPane, gbc_scrollPane);
+		panelRender.add(scrollPane);
 		scrollPane.setBorder(null);
 
-		DefaultListModel<Contact> listModel = new DefaultListModel<>();
+		DefaultListModel<IndividualContact> listModel = new DefaultListModel<>();
 		Controlador.getInstancia().getContactosEstado().stream().forEach(c -> listModel.addElement(c));
 
-		list = new JList<Contact>();
-		list.setBackground(MAIN_COLOR);
+		list = new JList<IndividualContact>();
+		list.setBackground(MAIN_COLOR_LIGHT);
 		list.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		list.setCellRenderer(createListRenderer());
 		list.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-				panel_2.setBackground(MAIN_COLOR);
-				Status estado = ((IndividualContact) list.getSelectedValue()).getEstado().get();
-				lblFraseProfunda.setText(estado.getFrase());
-				lblEstadoSeleccionado.setIcon(estado.getImg());
+				lblNombreContacto.setFont(new Font("Tahoma", Font.PLAIN, 18));
+				panelMiEstado.setBackground(MAIN_COLOR);
+				panelMiNombre.setBackground(MAIN_COLOR);
+
+				if (list.getSelectedValue() != null) {
+					Status estado = list.getSelectedValue().getEstado().get();
+					lblFraseProfunda.setText(estado.getFrase());
+					lblEstadoSeleccionado.setIcon(estado.getImg());
+				}
 			}
 
 			@Override
@@ -210,8 +346,8 @@ public class StatusWindow extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-				panel_2.setBackground(MAIN_COLOR);
+				lblNombreContacto.setFont(new Font("Tahoma", Font.PLAIN, 18));
+				panelMiEstado.setBackground(MAIN_COLOR);
 			}
 
 			@Override
@@ -222,7 +358,6 @@ public class StatusWindow extends JFrame {
 		list.setSelectionBackground(SECONDARY_COLOR);
 		list.setSelectionForeground(TEXT_COLOR_LIGHT);
 		list.setBorder(null);
-		list.setCellRenderer(createListRenderer());
 		scrollPane.setViewportView(list);
 		list.setModel(listModel);
 
@@ -241,7 +376,7 @@ public class StatusWindow extends JFrame {
 		panelDer.setLayout(gbl_panelDer);
 
 		lblEstadoSeleccionado = new JLabel("");
-		lblEstadoSeleccionado.setIcon(new ImageIcon(StatusWindow.class.getResource("/umu/tds/apps/resources/icon.png")));
+		lblEstadoSeleccionado.setIcon(DEFAULT_STATUS.getImg());
 		GridBagConstraints gbc_lblEstadoSeleccionado = new GridBagConstraints();
 		gbc_lblEstadoSeleccionado.insets = new Insets(0, 0, 5, 0);
 		gbc_lblEstadoSeleccionado.gridx = 0;
@@ -250,7 +385,7 @@ public class StatusWindow extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(MAIN_COLOR_LIGHT);
-		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_1.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.anchor = GridBagConstraints.SOUTH;
 		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
@@ -258,92 +393,70 @@ public class StatusWindow extends JFrame {
 		gbc_panel_1.gridy = 1;
 		panelDer.add(panel_1, gbc_panel_1);
 
-		lblFraseProfunda = new JLabel("Status");
+		lblFraseProfunda = new JLabel(DEFAULT_STATUS.getFrase());
 		lblFraseProfunda.setForeground(TEXT_COLOR_LIGHT);
 		panel_1.add(lblFraseProfunda);
 		lblFraseProfunda.setBorder(null);
 	}
 
-	private static ListCellRenderer<? super Contact> createListRenderer() {
+	private static ListCellRenderer<? super IndividualContact> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
-				Contact contacto = (Contact) value;
-				IndividualContact contactoIndividual = null;
-				boolean isIndividual = false;
-
-				if (contacto instanceof IndividualContact) {
-					isIndividual = true;
-					contactoIndividual = (IndividualContact) contacto;
-				}
+				IndividualContact contacto = (IndividualContact) value;
 
 				JPanel panel = new JPanel();
-				GridBagLayout gbl_contentPane = new GridBagLayout();
-				gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
-				gbl_contentPane.rowHeights = new int[] { 10, 26, 5, 10, 0 };
-				gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
-				gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-				panel.setLayout(gbl_contentPane);
-
-				JLabel label = new JLabel("");
-				if (isIndividual) {
-					label.setIcon(contactoIndividual.getUsuario().getProfilePhoto());
-				} else {
-					label.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/group.png"))); // ICONO
-																													// POR
-																													// DEFECTO
-																													// PARA
-																													// LOS
-																													// GRUPOS
-				}
-				GridBagConstraints gbc_label = new GridBagConstraints();
-				gbc_label.anchor = GridBagConstraints.SOUTH;
-				gbc_label.gridheight = 2;
-				gbc_label.insets = new Insets(0, 0, 5, 5);
-				gbc_label.gridx = 0;
-				gbc_label.gridy = 1;
-				panel.add(label, gbc_label);
-
-				JLabel lblNewLabel = new JLabel(contacto.getNombre());
-				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
-				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-				gbc_lblNewLabel.gridx = 1;
-				gbc_lblNewLabel.gridy = 1;
-				panel.add(lblNewLabel, gbc_lblNewLabel);
-
-				JLabel lblNewLabel_1;
-				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(0).getHora().toString());
-				} else {
-					lblNewLabel_1 = new JLabel("");
-				}
-				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
-				gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
-				gbc_lblNewLabel_1.gridx = 2;
-				gbc_lblNewLabel_1.gridy = 1;
-				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
-
-				JLabel lblEsteHaSido;
-				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(0).getTexto());
-				} else {
-					lblEsteHaSido = new JLabel("");
-				}
-				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
-				gbc_lblEsteHaSido.gridwidth = 2;
-				gbc_lblEsteHaSido.anchor = GridBagConstraints.WEST;
-				gbc_lblEsteHaSido.insets = new Insets(0, 0, 5, 5);
-				gbc_lblEsteHaSido.gridx = 1;
-				gbc_lblEsteHaSido.gridy = 2;
-				panel.add(lblEsteHaSido, gbc_lblEsteHaSido);
+				ImageIcon img = contacto.getFoto();
+				panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 				panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-				panel.setBackground((isSelected) ? SECONDARY_COLOR : MAIN_COLOR_LIGHT);
+				panel.setBackground(MAIN_COLOR_LIGHT);
+
+				JPanel panelFoto = new JPanel();
+				panelFoto.setBackground(MAIN_COLOR_LIGHT);
+				panel.add(panelFoto);
+
+				JLabel label = new JLabel("");
+				panelFoto.add(label);
+				label.setIcon(resizeIcon(img, Theme.ICON_SIZE));
+
+				JPanel panelDatos = new JPanel();
+				panelDatos.setBackground(MAIN_COLOR_LIGHT);
+				panel.add(panelDatos);
+				GridBagLayout gbl_panel_2 = new GridBagLayout();
+				gbl_panel_2.columnWidths = new int[] { 0, 0 };
+				gbl_panel_2.rowHeights = new int[] { 0, 0, 0 };
+				gbl_panel_2.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+				gbl_panel_2.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+				panelDatos.setLayout(gbl_panel_2);
+
+				JLabel lblNewLabel = new JLabel(contacto.getNombre());
+				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+				gbc_lblNewLabel.gridx = 0;
+				gbc_lblNewLabel.gridy = 0;
+				panelDatos.add(lblNewLabel, gbc_lblNewLabel);
+
+				JLabel lblFrase = new JLabel(contacto.getEstado().get().getFrase());
+				GridBagConstraints gbc_lblFrase = new GridBagConstraints();
+				gbc_lblFrase.gridx = 0;
+				gbc_lblFrase.gridy = 1;
+				panelDatos.add(lblFrase, gbc_lblFrase);
+
+				// Seleccion del color
+				if (isSelected) {
+					panel.setBackground(SECONDARY_COLOR);
+					panelFoto.setBackground(SECONDARY_COLOR);
+					panelDatos.setBackground(SECONDARY_COLOR);
+				} else {
+					panel.setBackground(MAIN_COLOR_LIGHT);
+					panelFoto.setBackground(MAIN_COLOR_LIGHT);
+					panelDatos.setBackground(MAIN_COLOR_LIGHT);
+				}
 
 				return panel;
 			}

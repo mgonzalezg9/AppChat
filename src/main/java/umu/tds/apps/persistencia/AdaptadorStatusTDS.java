@@ -88,11 +88,10 @@ public class AdaptadorStatusTDS implements StatusDAO {
 		Entidad eStatus = servPersistencia.recuperarEntidad(codigo);
 
 		// recuperar propiedades que no son objetos
-		String mensaje = null;
-		mensaje = servPersistencia.recuperarPropiedadEntidad(eStatus, "mensaje");
+		String mensaje = servPersistencia.recuperarPropiedadEntidad(eStatus, "mensaje");
 
 		ImageIcon img = null;
-		img = new ImageIcon(servPersistencia.recuperarPropiedadEntidad(eStatus, "imagen"));
+		img = new ImageIcon(this.getClass().getResource(servPersistencia.recuperarPropiedadEntidad(eStatus, "imagen")));
 
 		Status status = new Status(img, mensaje);
 		status.setCodigo(codigo);

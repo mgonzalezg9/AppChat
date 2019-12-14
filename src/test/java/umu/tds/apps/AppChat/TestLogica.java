@@ -20,9 +20,9 @@ public class TestLogica {
 	private final static String ADMIN_NICK = "admin";
 	private final static String ADMIN_MAIL = "admin@um.es";
 	private final static int ADMIN_PHONE = 1;
-	private final static ImageIcon ICONO_ESTADO = new ImageIcon(
+	private final static ImageIcon STATUS_ICON = new ImageIcon(
 			TestLogica.class.getResource("/umu/tds/apps/resources/paper plane-white.png"));
-	private final static Status ADMIN_STATUS = new Status(ICONO_ESTADO, "Buscadme en Telegram");
+	private final static String STATUS_PHRASE = "Buscadme en Telegram";
 	private final static String NOADMIN_NAME = "No Administrador";
 	private final static String NOADMIN_NICK = "noadmin";
 	private final static String NOADMIN_MAIL = "noadmin@um.es";
@@ -45,14 +45,14 @@ public class TestLogica {
 	@Test
 	public void test() {
 		ICON.setDescription("/umu/tds/apps/resources/icon.png");
-		ICONO_ESTADO.setDescription("/umu/tds/apps/resources/paper plane-white.png");
+		STATUS_ICON.setDescription("/umu/tds/apps/resources/paper plane-white.png");
 
 		// Creacion de la cuenta Admin
 		assertTrue(controlador.crearCuenta(ICON, ADMIN_NICK, PASSWORD, ADMIN_MAIL, ADMIN_NAME, ADMIN_PHONE,
 				LocalDate.now()));
 
 		// Admin tiene un estado
-		controlador.addEstado(ADMIN_STATUS);
+		controlador.addEstado(STATUS_ICON, STATUS_PHRASE);
 		controlador.cerrarSesion();
 
 		// Creacion de la cuenta No Admin
