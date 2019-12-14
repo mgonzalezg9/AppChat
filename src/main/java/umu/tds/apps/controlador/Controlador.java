@@ -147,6 +147,11 @@ public class Controlador {
 		User u = catalogoUsuarios.getUsuario(usuarioActual.getCodigo());
 		return u.getContactos();
 	}
+	
+	// Devuelvo mi lista de contactos individuales.
+		public List<IndividualContact> getContactosIndividualesUsuarioActual() {
+			return getContactosUsuarioActual().stream().filter(c -> c instanceof IndividualContact).map(c -> (IndividualContact) c).collect(Collectors.toList());
+		}
 
 	// Devuelvo mi lista de mensajes con ese contacto
 	public List<Message> getMensajes(Contact contacto) {
@@ -168,12 +173,12 @@ public class Controlador {
 		return mensajes.get(mensajes.size() - 1);
 	}
 
-	// Creo el contacto. Da error si tiene como nombre el de otro ya creado.
-	public boolean crearContacto(String nombre, int numTelefono, DefaultListModel<Contact> modelContacts) {
+	// Creo el contacto. Da error si tiene como telefono de otro ya creado.
+	public IndividualContact crearContacto(String nombre, int numTelefono) {
 		boolean existeContacto = false;
 		if (!usuarioActual.getContactos().isEmpty()) {
 			existeContacto = usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
-					.map(c -> (IndividualContact) c).anyMatch(c -> c.getNombre().equals(nombre));
+					.map(c -> (IndividualContact) c).anyMatch(c -> c.getMovil() == numTelefono);
 		}
 
 		if (!existeContacto) {
@@ -182,15 +187,15 @@ public class Controlador {
 			IndividualContact nuevoContacto = new IndividualContact(nombre, numTelefono, usuario);
 			usuarioActual.addContacto(nuevoContacto);
 			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
+			catalogoUsuarios.addUsuario(usuarioActual);
 			adaptadorUsuario.modificarUsuario(usuarioActual);
-			modelContacts.add(modelContacts.size(), nuevoContacto);
-			return true;
+			return nuevoContacto;
 		}
-		return false;
+		return null;
 	}
 
 	// Creo el grupo.
-	public void crearGrupo(String nombre, List<IndividualContact> participantes) {
+	public Group crearGrupo(String nombre, List<IndividualContact> participantes) {
 		Group nuevoGrupo = new Group(nombre, new LinkedList<Message>(), participantes, usuarioActual);
 		
 		// Se añade el grupo al usuario actual y al resto de participantes
@@ -208,6 +213,8 @@ public class Controlador {
 			catalogoUsuarios.addUsuario(usuario);
 			adaptadorUsuario.modificarUsuario(usuario);
 		});
+		
+		return nuevoGrupo;
 	}
 
 	public List<Group> getGruposAdminUsuarioActual() {

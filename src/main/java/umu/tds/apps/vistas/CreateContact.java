@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
@@ -154,13 +155,13 @@ public class CreateContact extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Creamos el contacto
-				boolean creado = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()), modelContacts);
-				if (!creado) {
+				IndividualContact nuevoContacto = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()));
+				if (nuevoContacto == null) {
 					// No se ha podido crear el usuario
 					
 				} else {
 					// Usuario creado
-					
+					modelContacts.add(modelContacts.size(), nuevoContacto);
 				}
 			}
 		});

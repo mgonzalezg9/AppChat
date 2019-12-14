@@ -95,8 +95,8 @@ public class Group extends Contact {
 	}
 
 	// toString
-	@Override
+	/*@Override
 	public String toString() {
 		return "Group [contactos=" + contactos + ", admin=" + admin + "]";
-	}
+	}*/
 }

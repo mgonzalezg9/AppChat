@@ -276,7 +276,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewGroup window = new NewGroup(Controlador.getInstancia().getContactosUsuarioActual());
+				NewGroup window = new NewGroup(modelContacts);
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}

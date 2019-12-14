@@ -60,14 +60,14 @@ public class TestLogica {
 				LocalDate.now()));
 
 		// No Admin añade como contacto a Admin
-		assertTrue(controlador.crearContacto(ADMIN_NAME, ADMIN_PHONE, new DefaultListModel<Contact>()));
+		assertNotNull(controlador.crearContacto(ADMIN_NAME, ADMIN_PHONE));
 		controlador.cerrarSesion();
 
 		// Admin inicia sesión
 		assertTrue(controlador.iniciarSesion(ADMIN_NICK, PASSWORD));
 
 		// Admin añade a NoAdmin como contacto
-		assertTrue(controlador.crearContacto(NOADMIN_NAME, NOADMIN_PHONE, new DefaultListModel<Contact>()));
+		assertNotNull(controlador.crearContacto(NOADMIN_NAME, NOADMIN_PHONE));
 
 		// Admin crea un grupo compartido por ambos
 		LinkedList<IndividualContact> integrantes = new LinkedList<>();

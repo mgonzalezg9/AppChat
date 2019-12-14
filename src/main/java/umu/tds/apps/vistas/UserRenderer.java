@@ -1,4 +1,4 @@
-package umu.tds.apps.vistas;
+/*package umu.tds.apps.vistas;
 
 import java.awt.Component;
 
@@ -28,4 +28,4 @@ public class UserRenderer extends JLabel implements ListCellRenderer<User> {
 
 		return this;
 	}
-}
+}*/

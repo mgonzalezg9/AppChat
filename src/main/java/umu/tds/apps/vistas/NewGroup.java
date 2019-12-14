@@ -16,19 +16,27 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
 import javax.swing.JList;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
 import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.Group;
+import umu.tds.apps.AppChat.IndividualContact;
+import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -37,7 +45,7 @@ public class NewGroup extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtGroupName;
-	private List<Contact> misContactos;
+	private DefaultListModel<Contact> modelContacts;
 
 	/**
 	 * Launch the application.
@@ -58,14 +66,14 @@ public class NewGroup extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NewGroup(List<Contact> contacts) {
+	public NewGroup(DefaultListModel<Contact> modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(NewGroup.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
 		setBounds(100, 100, 497, 340);
 		
-		misContactos = contacts;
+		this.modelContacts = modelo;
 		
 		contentPane = new JPanel();
 		contentPane.setBackground(MAIN_COLOR_LIGHT);
@@ -128,7 +136,7 @@ public class NewGroup extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Abre la nueva ventana
-				JFrame busquedaWindow = new Search(misContactos);
+				JFrame busquedaWindow = new Search(Controlador.getInstancia().getContactosUsuarioActual());
 				busquedaWindow.setDefaultCloseOperation(HIDE_ON_CLOSE);
 				busquedaWindow.setVisible(true);
 			}
@@ -155,14 +163,16 @@ public class NewGroup extends JFrame {
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		String contactos[] = { "Alfonso favorito", "Manuel negro albino", "Joseliko", "Oscarizado", "Roberto",
-				"Carmelo", "Aitortilla", "Aitormenta", "Javi", "Norberto", "GinesGM", "Perico", "Juan" };
+		//String contactos[] = { "Alfonso favorito", "Manuel negro albino", "Joseliko", "Oscarizado", "Roberto",
+				//"Carmelo", "Aitortilla", "Aitormenta", "Javi", "Norberto", "GinesGM", "Perico", "Juan" };
 
-		final DefaultListModel<String> modelContact = new DefaultListModel<>();
-		for (int i = 0; i < contactos.length; i++)
-			modelContact.add(i, contactos[i]);
+		final DefaultListModel<IndividualContact> modelContact = new DefaultListModel<>();
+		List<IndividualContact> contactosIndividuales = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
+		for (int i = 0; i < contactosIndividuales.size(); i++)
+			modelContact.add(i, contactosIndividuales.get(i));
 
-		final JList<String> contactList = new JList<>(modelContact);
+		final JList<IndividualContact> contactList = new JList<>(modelContact);
+		contactList.setCellRenderer(createListRenderer());
 		contactList.setBackground(new Color(255, 204, 153));
 		scrollPane.setViewportView(contactList);
 
@@ -190,8 +200,9 @@ public class NewGroup extends JFrame {
 		gbc_scrollPane_1.gridy = 1;
 		contentPane.add(scrollPane_1, gbc_scrollPane_1);
 
-		final DefaultListModel<String> modelAdded = new DefaultListModel<>();
-		final JList<String> addedList = new JList<>(modelAdded);
+		final DefaultListModel<IndividualContact> modelAdded = new DefaultListModel<>();
+		final JList<IndividualContact> addedList = new JList<>(modelAdded);
+		addedList.setCellRenderer(createListRenderer());
 		addedList.setBackground(new Color(204, 255, 255));
 		scrollPane_1.setViewportView(addedList);
 
@@ -199,7 +210,7 @@ public class NewGroup extends JFrame {
 		btAddedContact.setBackground(SECONDARY_COLOR);
 		btAddedContact.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String selected = (String) contactList.getSelectedValue();
+				IndividualContact selected = (IndividualContact) contactList.getSelectedValue();
 				if (selected != null) {
 					modelAdded.add(modelAdded.getSize(), selected);
 					modelContact.remove(contactList.getSelectedIndex());
@@ -211,7 +222,7 @@ public class NewGroup extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					String selected = (String) contactList.getSelectedValue();
+					IndividualContact selected = (IndividualContact) contactList.getSelectedValue();
 					modelAdded.add(modelAdded.getSize(), selected);
 					modelContact.remove(contactList.getSelectedIndex());
 				}
@@ -239,7 +250,7 @@ public class NewGroup extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					String selected = (String) addedList.getSelectedValue();
+					IndividualContact selected = (IndividualContact) addedList.getSelectedValue();
 					modelContact.add(modelContact.getSize(), selected);
 					modelAdded.remove(addedList.getSelectedIndex());
 				}
@@ -277,7 +288,7 @@ public class NewGroup extends JFrame {
 		btRemoveContact.setBackground(SECONDARY_COLOR);
 		btRemoveContact.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String selected = (String) addedList.getSelectedValue();
+				IndividualContact selected = (IndividualContact) addedList.getSelectedValue();
 				if (selected != null) {
 					modelContact.add(modelContact.getSize(), selected);
 					modelAdded.remove(addedList.getSelectedIndex());
@@ -295,6 +306,16 @@ public class NewGroup extends JFrame {
 		contentPane.add(btRemoveContact, gbc_btRemoveContact);
 
 		JButton btnNewButton = new JButton("CREATE GROUP");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				List<IndividualContact> participantes = new LinkedList<>();
+				for (int i = 0; i < modelAdded.size(); i++)
+					participantes.add(modelAdded.get(i));
+				Group nuevoGrupo = Controlador.getInstancia().crearGrupo(txtGroupName.getText(), participantes);
+				
+				modelContacts.add(modelContacts.getSize(), nuevoGrupo);
+			}
+		});
 		btnNewButton.setBackground(SECONDARY_COLOR);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
@@ -303,6 +324,24 @@ public class NewGroup extends JFrame {
 		gbc_btnNewButton.gridx = 4;
 		gbc_btnNewButton.gridy = 8;
 		contentPane.add(btnNewButton, gbc_btnNewButton);
+	}
+	
+	private static ListCellRenderer<? super Contact> createListRenderer() {
+		return new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				JPanel panel = new JPanel();
+				JLabel label = new JLabel(); 
+				IndividualContact contacto = (IndividualContact) value;
+				label.setText(contacto.getNombre());
+				panel.add(label);
+				panel.setBackground((isSelected) ? SECONDARY_COLOR : list.getBackground());
+				return panel;
+			}
+		};
 	}
 
 }
