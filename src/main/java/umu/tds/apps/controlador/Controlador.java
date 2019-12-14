@@ -223,6 +223,55 @@ public class Controlador {
 		
 		return nuevoGrupo;
 	}
+	
+	// Modifico el grupo.
+	public Group modificarGrupo(Group grupo, String nombre, List<IndividualContact> participantes) {
+		grupo.setNombre(nombre);
+		
+		// Creo una lista con los nuevos participantes, los participantes eliminados y los que mantengo
+		List<IndividualContact> nuevos = new LinkedList<>();
+		List<IndividualContact> eliminados = new LinkedList<>();
+		List<IndividualContact> mantenidos = new LinkedList<>();
+		for (IndividualContact participante : grupo.getContactos()) {
+			if (participantes.stream().anyMatch(p -> p.getCodigo() == participante.getCodigo())) {
+				mantenidos.add(participante);
+			} else {
+				eliminados.add(participante);
+			}
+		}
+		
+		for (IndividualContact participanteNuevo : participantes)
+			if (!grupo.getContactos().stream().anyMatch(p -> p.getCodigo() == participanteNuevo.getCodigo()))
+				nuevos.add(participanteNuevo);
+		
+		grupo.modificarIntegrantes(participantes);
+
+		// Se añade el grupo al usuario actual y al resto de participantes
+		usuarioActual.modificarGrupo(grupo);
+		usuarioActual.modificarGrupoAdmin(grupo);
+		// Le modifico el grupo si el usuario ya existia, si es nuevo, se lo añado
+		mantenidos.stream().forEach(p -> p.modificarGrupo(grupo));
+		nuevos.stream().forEach(p -> p.addGrupo(grupo));
+		
+		//TODO elimino el grupo de los participantes que ya no lo tienen
+		eliminados.stream().forEach(p -> {
+			p.eliminarGrupo(grupo);
+			adaptadorUsuario.modificarUsuario(p.getUsuario());
+		});
+
+		// Conexion con persistencia
+		adaptadorGrupo.modificarGrupo(grupo);
+		catalogoUsuarios.addUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+
+		participantes.stream().forEach(p -> {
+			User usuario = p.getUsuario();
+			catalogoUsuarios.addUsuario(usuario);
+			adaptadorUsuario.modificarUsuario(usuario);
+		});
+		
+		return grupo;
+	}
 
 	public List<Group> getGruposAdminUsuarioActual() {
 		// Devuelvo una lista de mis grupos. Saco el código del usuario actual.

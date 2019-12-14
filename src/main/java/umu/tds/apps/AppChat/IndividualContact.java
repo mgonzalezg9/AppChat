@@ -61,6 +61,19 @@ public class IndividualContact extends Contact {
 	public void addGrupo(Group grupo) {
 		usuario.addGrupo(grupo);
 	}
+	
+	// Expulsamos al contacto del grupo en cuestión
+	public void eliminarGrupo(Group grupo) {
+		usuario.removeContact(grupo);
+	}
+	
+	// Modifica el grupo del contacto
+	public void modificarGrupo(Group g) {
+		List<Group> grupos = usuario.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c).collect(Collectors.toList());
+		for (int i = 0; i < grupos.size(); i++)
+			if (grupos.get(i).getCodigo() == g.getCodigo())
+				grupos.set(i, g);
+	}
 
 	// HashCode y equals
 	@Override

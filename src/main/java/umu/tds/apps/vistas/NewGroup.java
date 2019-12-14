@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
 import javax.swing.JList;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
@@ -167,8 +166,18 @@ public class NewGroup extends JFrame {
 
 		final DefaultListModel<IndividualContact> modelContact = new DefaultListModel<>();
 		List<IndividualContact> contactosIndividuales = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
-		for (int i = 0; i < contactosIndividuales.size(); i++)
-			modelContact.add(i, contactosIndividuales.get(i));
+		List<IndividualContact> participantes = new LinkedList<>();
+		if (groupToModify != null)
+			participantes = groupToModify.getContactos();
+		
+		int z = 0;
+		for (int i = 0; i < contactosIndividuales.size(); i++) {
+			IndividualContact contacto = contactosIndividuales.get(i);
+			if (groupToModify == null || !participantes.stream().anyMatch(p -> p.getMovil() == contacto.getMovil())) {
+				modelContact.add(z, contacto);
+				z++;
+			}
+		}
 
 		final JList<IndividualContact> contactList = new JList<>(modelContact);
 		contactList.setCellRenderer(createListRenderer());
@@ -176,7 +185,11 @@ public class NewGroup extends JFrame {
 		scrollPane.setViewportView(contactList);
 
 		txtGroupName = new JTextField();
-		txtGroupName.setText("Group name..");
+		if (groupToModify != null) {
+			txtGroupName.setText(groupToModify.getNombre());
+		} else {
+			txtGroupName.setText("Group name..");
+		}
 		GridBagConstraints gbc_txtGroupName = new GridBagConstraints();
 		gbc_txtGroupName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtGroupName.gridwidth = 4;
@@ -200,6 +213,13 @@ public class NewGroup extends JFrame {
 		contentPane.add(scrollPane_1, gbc_scrollPane_1);
 
 		final DefaultListModel<IndividualContact> modelAdded = new DefaultListModel<>();
+		
+		if (groupToModify != null) {
+			List<IndividualContact> integrantes = groupToModify.getContactos();
+			for (int i = 0; i < integrantes.size(); i++)
+				modelAdded.add(i, integrantes.get(i));
+		}
+		
 		final JList<IndividualContact> addedList = new JList<>(modelAdded);
 		addedList.setCellRenderer(createListRenderer());
 		addedList.setBackground(new Color(204, 255, 255));
@@ -304,15 +324,23 @@ public class NewGroup extends JFrame {
 		gbc_btRemoveContact.gridy = 4;
 		contentPane.add(btRemoveContact, gbc_btRemoveContact);
 
-		JButton btnNewButton = new JButton("CREATE GROUP");
+		JButton btnNewButton = new JButton((groupToModify == null) ? "CREATE GROUP" : "MODIFY GROUP");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<IndividualContact> participantes = new LinkedList<>();
 				for (int i = 0; i < modelAdded.size(); i++)
 					participantes.add(modelAdded.get(i));
-				Group nuevoGrupo = Controlador.getInstancia().crearGrupo(txtGroupName.getText(), participantes);
-				
-				modelContacts.add(modelContacts.getSize(), nuevoGrupo);
+				if (groupToModify != null) {
+					Group grupoModificado = Controlador.getInstancia().modificarGrupo(groupToModify, txtGroupName.getText(), participantes);
+					int i = 0;
+					while (modelContacts.get(i).getCodigo() != grupoModificado.getCodigo() && i < modelContacts.size())
+						i++;
+					if (modelContacts.get(i).getCodigo() == grupoModificado.getCodigo())
+						modelContacts.set(i, grupoModificado);
+				} else {
+					Group nuevoGrupo = Controlador.getInstancia().crearGrupo(txtGroupName.getText(), participantes);
+					modelContacts.add(modelContacts.getSize(), nuevoGrupo);
+				}
 			}
 		});
 		btnNewButton.setBackground(SECONDARY_COLOR);

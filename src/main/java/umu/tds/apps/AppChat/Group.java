@@ -49,6 +49,10 @@ public class Group extends Contact {
 	public void cambiarAdmin(User u) {
 		admin = u;
 	}
+	
+	public void modificarIntegrantes (List<IndividualContact> contactos) {
+		this.contactos = contactos;
+	}
 
 	// Devuelve los mensajes que han enviado el resto de usuarios por el grupo
 	public List<Message> getMensajesRecibidos() {

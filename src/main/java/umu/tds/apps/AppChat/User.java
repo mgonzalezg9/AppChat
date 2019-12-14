@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 
@@ -144,6 +145,12 @@ public class User {
 	public void addGrupoAdmin(Group g) {
 		gruposAdmin.add(g);
 	}
+	
+	public void modificarGrupoAdmin(Group g) {
+		for (int i = 0; i < gruposAdmin.size(); i++)
+			if (gruposAdmin.get(i).getCodigo() == g.getCodigo())
+				gruposAdmin.set(i, g);
+	}
 
 	public void addContacto(IndividualContact c) {
 		contactos.add(c);
@@ -151,6 +158,13 @@ public class User {
 
 	public void addGrupo(Group g) {
 		contactos.add(g);
+	}
+	
+	public void modificarGrupo(Group g) {
+		List<Group> grupos = contactos.stream().filter(c -> c instanceof Group).map(c -> (Group) c).collect(Collectors.toList());
+		for (int i = 0; i < grupos.size(); i++)
+			if (grupos.get(i).getCodigo() == g.getCodigo())
+				grupos.set(i, g);
 	}
 	
 	public void removeContact(Contact c) {

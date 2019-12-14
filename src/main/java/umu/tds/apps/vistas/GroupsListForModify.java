@@ -21,6 +21,7 @@ import umu.tds.apps.controlador.Controlador;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -101,10 +102,15 @@ public class GroupsListForModify extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				Group selected = (Group) comboBox.getSelectedItem();
 				if (selected != null) {
-					System.out.println(selected.getNombre());
-					NewGroup window = new NewGroup(modelContacts, (Group) comboBox.getSelectedItem());
-					window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-					window.setVisible(true);
+					if (selected.getAdmin().getCodigo() == Controlador.getInstancia().getUsuarioActual().getCodigo()) {
+						NewGroup window = new NewGroup(modelContacts, (Group) comboBox.getSelectedItem());
+						window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+						window.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(GroupsListForModify.this,
+								"Unable to modify the group. Please check your privileges.", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
