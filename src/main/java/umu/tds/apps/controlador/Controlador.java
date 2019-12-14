@@ -152,8 +152,13 @@ public class Controlador {
 	
 	// Devuelvo mi lista de contactos individuales.
 		public List<IndividualContact> getContactosIndividualesUsuarioActual() {
-			return getContactosUsuarioActual().stream().filter(c -> c instanceof IndividualContact).map(c -> (IndividualContact) c).collect(Collectors.toList());
-		}
+		return getContactosUsuarioActual().stream().filter(c -> c instanceof IndividualContact).map(c -> (IndividualContact) c).collect(Collectors.toList());
+	}
+	
+	// Devuelvo la lista de mis grupos.
+	public List<Group> getGruposUsuarioActual() {
+		return getContactosUsuarioActual().stream().filter(c -> c instanceof Group).map(c -> (Group) c).collect(Collectors.toList());
+	}
 
 	// Devuelvo mi lista de mensajes con ese contacto
 	public List<Message> getMensajes(Contact contacto) {

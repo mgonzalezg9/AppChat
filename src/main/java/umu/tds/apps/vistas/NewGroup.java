@@ -46,6 +46,7 @@ public class NewGroup extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtGroupName;
 	private DefaultListModel<Contact> modelContacts;
+	private Group groupToModify;
 
 	/**
 	 * Launch the application.
@@ -66,7 +67,7 @@ public class NewGroup extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NewGroup(DefaultListModel<Contact> modelo) {
+	public NewGroup(DefaultListModel<Contact> modelo, Group grupo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(NewGroup.class.getResource("/umu/tds/apps/resources/icon.png")));
@@ -74,6 +75,7 @@ public class NewGroup extends JFrame {
 		setBounds(100, 100, 497, 340);
 		
 		this.modelContacts = modelo;
+		this.groupToModify = grupo;
 		
 		contentPane = new JPanel();
 		contentPane.setBackground(MAIN_COLOR_LIGHT);
@@ -162,9 +164,6 @@ public class NewGroup extends JFrame {
 		gbc_scrollPane.gridx = 1;
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
-
-		//String contactos[] = { "Alfonso favorito", "Manuel negro albino", "Joseliko", "Oscarizado", "Roberto",
-				//"Carmelo", "Aitortilla", "Aitormenta", "Javi", "Norberto", "GinesGM", "Perico", "Juan" };
 
 		final DefaultListModel<IndividualContact> modelContact = new DefaultListModel<>();
 		List<IndividualContact> contactosIndividuales = Controlador.getInstancia().getContactosIndividualesUsuarioActual();

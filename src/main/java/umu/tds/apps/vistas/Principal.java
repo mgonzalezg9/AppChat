@@ -276,7 +276,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewGroup window = new NewGroup(modelContacts);
+				NewGroup window = new NewGroup(modelContacts, null);
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -287,7 +287,7 @@ public class Principal extends JFrame {
 		mntmModifyGroup.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ModifyGroup window = new ModifyGroup();
+				GroupsListForModify window = new GroupsListForModify(modelContacts);
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
