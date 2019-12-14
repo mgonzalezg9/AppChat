@@ -54,12 +54,12 @@ public class Group extends Contact {
 	public List<Message> getMensajesRecibidos() {
 		return this.contactos.stream().flatMap(c -> c.getUsuario().getContactos().stream())
 				.filter(c -> c instanceof Group).map(c -> (Group) c).filter(g -> g.getCodigo() == this.getCodigo())
-				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
+				.flatMap(g -> g.getMensajesEnviados().stream())
+				.collect(Collectors.toList());
 	}
 
-	public List<Message> getMensajesAdmin() {
-		return this.admin.getGruposAdmin().stream().filter(g -> g.getCodigo() == this.getCodigo())
-				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
+	public List<Message> getMensajesGrupo() {
+		return getMensajesEnviados();
 	}
 
 	// hashCode y equals

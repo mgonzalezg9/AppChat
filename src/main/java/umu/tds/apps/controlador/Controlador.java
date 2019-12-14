@@ -163,7 +163,7 @@ public class Controlador {
 							((IndividualContact) contacto).getMensajesRecibidos(usuarioActual).stream())
 					.sorted().collect(Collectors.toList());
 		} else {
-			return ((Group) contacto).getMensajesRecibidos();
+			return ((Group) contacto).getMensajesGrupo();
 		}
 	}
 
