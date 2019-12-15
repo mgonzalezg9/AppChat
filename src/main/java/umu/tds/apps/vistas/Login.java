@@ -71,6 +71,7 @@ public class Login extends JFrame {
 		} else {
 			userField.setBackground(WRONG_INPUT_COLOR);
 			passwordField.setBackground(WRONG_INPUT_COLOR);
+			Toolkit.getDefaultToolkit().beep();
 		}
 	}
 

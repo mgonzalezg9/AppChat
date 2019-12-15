@@ -102,7 +102,7 @@ public class Controlador {
 					false, null, null);
 
 			// Guarda la imagen en el proyecto
-			Theme.saveImage(imagen, nuevoUsuario.getCodigo(), 1);
+			Theme.saveImage(imagen, Theme.PROFILE_PHOTO_NAME, nuevoUsuario.getCodigo(), 1);
 
 			// Conexion con la persistencia
 			catalogoUsuarios.addUsuario(nuevoUsuario);
@@ -128,7 +128,7 @@ public class Controlador {
 		int pos = usuarioActual.addProfilePhoto(image);
 
 		// Guarda la imagen en el proyecto y con su nueva ruta
-		Theme.saveImage(image, usuarioActual.getCodigo(), pos);
+		Theme.saveImage(image, Theme.PROFILE_PHOTO_NAME, usuarioActual.getCodigo(), pos);
 
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
@@ -331,7 +331,11 @@ public class Controlador {
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
-	public void addEstado(Status estado) {
+	public void addEstado(ImageIcon icono, String frase) {
+		// Se guarda para poder recuperarla después
+		Theme.saveImage(icono, Theme.STATUS_NAME, usuarioActual.getCodigo(), 0);
+		
+		Status estado = new Status(icono, frase);
 		usuarioActual.setEstado(Optional.of(estado));
 		adaptadorEstado.registrarEstado(estado);
 		catalogoUsuarios.addUsuario(usuarioActual);
@@ -367,9 +371,10 @@ public class Controlador {
 	}
 
 	// Devuelve los contactos del usuario actual que tienen un estado
-	public List<Contact> getContactosEstado() {
+	public List<IndividualContact> getContactosEstado() {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
-				.filter(c -> ((IndividualContact) c).getEstado().isPresent()).collect(Collectors.toList());
+				.map(c -> (IndividualContact) c)
+				.filter(c -> c.getEstado().isPresent()).collect(Collectors.toList());
 	}
 
 	public Optional<Contact> getContacto(String nombre) {

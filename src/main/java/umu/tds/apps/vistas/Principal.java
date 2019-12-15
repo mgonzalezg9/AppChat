@@ -220,7 +220,7 @@ public class Principal extends JFrame {
 		settingsIzq.add(panel_1, gbc_panel_1);
 
 		JLabel lblMiFoto = new JLabel();
-		lblMiFoto.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), ICON_SIZE));
+		lblMiFoto.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), ICON_SIZE_MINI));
 		lblMiFoto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -445,7 +445,7 @@ public class Principal extends JFrame {
 		
 		JLabel lblContactPhoto = new JLabel("");
 		if (!list_contacts.isSelectionEmpty())
-			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), ICON_SIZE));
+			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), ICON_SIZE_MINI));
 		panel_3.add(lblContactPhoto);
 		
 		JLabel lblChatName = new JLabel();
@@ -460,7 +460,7 @@ public class Principal extends JFrame {
 				Contact contactoActual = list_contacts.getSelectedValue();
 				loadChat(contactoActual);
 				lblChatName.setText(contactoActual.getNombre());
-				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE));
+				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));
 			}
 
 		});
@@ -636,7 +636,7 @@ public class Principal extends JFrame {
 
 				JLabel label = new JLabel("");
 				if (isIndividual) {
-					ImageIcon img = contactoIndividual.getUsuario().getProfilePhoto();
+					ImageIcon img = contactoIndividual.getFoto();
 					label.setIcon(resizeIcon(img, 50));
 				} else {
 					ImageIcon imagen = new ImageIcon(Principal.class.getResource(GROUP_ICON_PATH));
