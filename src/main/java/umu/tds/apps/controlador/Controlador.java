@@ -282,7 +282,7 @@ public class Controlador {
 	// estamos.
 	public List<String> getNombresGrupo(IndividualContact contacto) {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
-				.filter(g -> g.getContactos().stream().anyMatch(c -> c.getNombre().equals(contacto.getNombre())))
+				.filter(g -> g.getContactos().stream().anyMatch(c -> c.getMovil() == contacto.getMovil()) || g.getAdmin().getNumTelefono() == contacto.getMovil())
 				.map(g -> g.getNombre()).collect(Collectors.toList());
 	}
 
@@ -380,5 +380,4 @@ public class Controlador {
 	public Optional<Contact> getContacto(String nombre) {
 		return getContactosUsuarioActual().stream().filter(c -> c.getNombre().equals(nombre)).findAny();
 	}
-
 }

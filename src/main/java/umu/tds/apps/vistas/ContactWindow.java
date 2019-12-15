@@ -33,6 +33,7 @@ import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -96,8 +97,6 @@ public class ContactWindow extends JFrame {
 		List<IndividualContact> contactosIndividuales = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
 		for (int i = 0; i < contactosIndividuales.size(); i++)
 			modelContact.add(i, contactosIndividuales.get(i));
-		for (int i = contactosIndividuales.size(); i < contactosIndividuales.size()+contactosIndividuales.size(); i++)
-			modelContact.add(i, contactosIndividuales.get(i-contactosIndividuales.size()));
 				
 		list = new JList<>(modelContact);
 		scrollPane.setViewportView(list);
@@ -115,7 +114,16 @@ public class ContactWindow extends JFrame {
 		btnNewButton_2 = new JButton("Show shared groups");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Muestro los grupos que tengo compartidos con ese usuario");
+				IndividualContact selected = list.getSelectedValue();
+				if (selected != null) {
+					SharedGroups window = new SharedGroups(selected);
+					window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+					window.setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(ContactWindow.this,
+							"Please select any contact.", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnNewButton_2.setBackground(SECONDARY_COLOR);
