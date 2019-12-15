@@ -28,6 +28,11 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.controlador.Controlador;
@@ -36,6 +41,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
@@ -132,9 +139,19 @@ public class ContactWindow extends JFrame {
 		btnNewButton_1 = new JButton("EXPORT");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Exporto a PDF la información de ese usuario");
-			}
-		});
+				// TODO Exporto a PDF toda la información
+				try {
+					FileOutputStream archivo;
+					archivo = new FileOutputStream("C:\\Users\\Alfonso\\hola.pdf");
+				     Document documento = new Document();
+				     PdfWriter.getInstance(documento, archivo);
+				     documento.open();
+				     documento.add(new Paragraph("Hola Mundo!"));
+				     documento.close();
+				} catch (DocumentException | FileNotFoundException e1 ) {
+					e1.printStackTrace();
+				}
+		}});
 		btnNewButton_1.setBackground(SECONDARY_COLOR);
 		panel_1.add(btnNewButton_1);
 	}
