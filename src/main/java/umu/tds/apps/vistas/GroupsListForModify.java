@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -39,7 +40,7 @@ public class GroupsListForModify extends JFrame {
 
 	private JPanel contentPane;
 	private DefaultListModel<Contact> modelContacts;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -47,8 +48,8 @@ public class GroupsListForModify extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//GroupsListForModify frame = new GroupsListForModify();
-					//frame.setVisible(true);
+					// GroupsListForModify frame = new GroupsListForModify();
+					// frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,35 +61,37 @@ public class GroupsListForModify extends JFrame {
 	 * Create the frame.
 	 */
 	public GroupsListForModify(DefaultListModel<Contact> modelo) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setTitle("Modify group");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 165);
-		
+
 		this.modelContacts = modelo;
-		
+
 		contentPane = new JPanel();
 		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 0};
-		gbl_contentPane.rowHeights = new int[]{10, 0, 0, 0, 10, 0};
-		gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[] { 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 10, 0, 0, 0, 10, 0 };
+		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
-		
-		JLabel lblSeleccioneElGrupo = new JLabel("Seleccione el grupo a modificar:");
+
+		JLabel lblSeleccioneElGrupo = new JLabel("Choose the group to modify:");
 		lblSeleccioneElGrupo.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblSeleccioneElGrupo = new GridBagConstraints();
 		gbc_lblSeleccioneElGrupo.insets = new Insets(0, 0, 5, 0);
 		gbc_lblSeleccioneElGrupo.gridx = 0;
 		gbc_lblSeleccioneElGrupo.gridy = 1;
 		contentPane.add(lblSeleccioneElGrupo, gbc_lblSeleccioneElGrupo);
-		
+
 		List<Group> grupos = Controlador.getInstancia().getGruposUsuarioActual();
 		DefaultComboBoxModel<Group> model = new DefaultComboBoxModel();
 		for (int i = 0; i < grupos.size(); i++)
 			model.addElement(grupos.get(i));
-		
+
 		JComboBox<Group> comboBox = new JComboBox<>(model);
 		comboBox.setRenderer(createComboBoxRenderer());
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
@@ -96,16 +99,18 @@ public class GroupsListForModify extends JFrame {
 		gbc_comboBox.gridx = 0;
 		gbc_comboBox.gridy = 2;
 		contentPane.add(comboBox, gbc_comboBox);
-		
-		JButton btnModificar = new JButton("Modificar");
+
+		JButton btnModificar = new JButton("Modify");
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Group selected = (Group) comboBox.getSelectedItem();
 				if (selected != null) {
+					// Si soy el administrador puedo modificar el grupo
 					if (selected.getAdmin().getCodigo() == Controlador.getInstancia().getUsuarioActual().getCodigo()) {
 						NewGroup window = new NewGroup(modelContacts, (Group) comboBox.getSelectedItem());
 						window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 						window.setVisible(true);
+						GroupsListForModify.this.setVisible(false);
 					} else {
 						JOptionPane.showMessageDialog(GroupsListForModify.this,
 								"Unable to modify the group. Please check your privileges.", "Error",
@@ -121,7 +126,7 @@ public class GroupsListForModify extends JFrame {
 		gbc_btnModificar.gridy = 3;
 		contentPane.add(btnModificar, gbc_btnModificar);
 	}
-	
+
 	private static ListCellRenderer<? super Group> createComboBoxRenderer() {
 		return new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
@@ -130,7 +135,7 @@ public class GroupsListForModify extends JFrame {
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				JPanel panel = new JPanel();
-				JLabel label = new JLabel(); 
+				JLabel label = new JLabel();
 				Group contacto = (Group) value;
 				label.setText(contacto.getNombre());
 				panel.add(label);
