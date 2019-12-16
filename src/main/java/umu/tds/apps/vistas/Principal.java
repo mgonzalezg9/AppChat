@@ -421,9 +421,8 @@ public class Principal extends JFrame {
 					// Borra los mensajes de la conversación de la base de datos
 					Controlador.getInstancia().deleteChat(list_contacts.getSelectedValue());
 
-					loadChat(list_contacts.getSelectedValue());
-					/*chat.removeAll();
-					chat.updateUI();*/
+					chat.removeAll();
+					chat.updateUI();
 				}
 			}
 		});

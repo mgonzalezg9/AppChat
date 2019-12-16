@@ -270,7 +270,8 @@ public class StatusWindow extends JFrame {
 		lblNombreContacto.setForeground(TEXT_COLOR_LIGHT);
 		lblNombreContacto.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
-		JButton btnNuevoEstado = new JButton("+");
+		JButton btnNuevoEstado = new JButton("    +    ");
+		btnNuevoEstado.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnNuevoEstado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame ventanaEstado = new StatusChooser();
@@ -332,7 +333,7 @@ public class StatusWindow extends JFrame {
 				if (list.getSelectedValue() != null) {
 					Status estado = list.getSelectedValue().getEstado().get();
 					lblFraseProfunda.setText(estado.getFrase());
-					lblEstadoSeleccionado.setIcon(estado.getImg());
+					lblEstadoSeleccionado.setIcon(resizeIcon(estado.getImg(), STATUS_IMAGE_SIZE));
 				}
 			}
 

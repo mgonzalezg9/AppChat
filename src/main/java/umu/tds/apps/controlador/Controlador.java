@@ -382,17 +382,12 @@ public class Controlador {
 			recibidos = ((IndividualContact) contacto).removeMensajesRecibidos(usuarioActual);
 			
 			// Actualiza al otro usuario en catalogo
-			//catalogoUsuarios.addUsuario(((IndividualContact) contacto).getUsuario());
-			adaptadorUsuario.modificarUsuario(((IndividualContact) contacto).getUsuario());
+			//adaptadorUsuario.modificarUsuario(((IndividualContact) contacto).getUsuario());
 		} else {
 			recibidos = ((Group) contacto).removeMensajesRecibidos();
-			
-			//adaptadorUsuario.modificarUsuario(((Group) contacto).);
 		}
 
 		// Actualiza la base de datos
-		//adaptadorUsuario.modificarUsuario(usuarioActual);
-		adaptadorUsuario.modificarUsuario(((IndividualContact) contacto).getUsuario());
 		if (contacto instanceof IndividualContact) {
 			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
 			adaptadorContactoIndividual.modificarContacto(((IndividualContact) contacto).getContacto(usuarioActual));
