@@ -286,14 +286,17 @@ public class Controlador {
 				.map(g -> g.getNombre()).collect(Collectors.toList());
 	}
 
-	public void hacerPremium() { // MANUELITO
-		// TODO Ponerle algun descuento segun convenga
+	public void hacerPremium() {
 		usuarioActual.setPremium();
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
+	
+	public double getPrecio() {
+		return usuarioActual.getPrecio();
+	}
 
-	public void cerrarSesion() { // MANUELITO
+	public void cerrarSesion() {
 		usuarioActual = null;
 	}
 

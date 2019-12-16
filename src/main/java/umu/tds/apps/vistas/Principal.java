@@ -51,7 +51,7 @@ import javax.swing.SwingConstants;
 // Clase para que desaparezca la scrollbar horizontal
 class ChatBurbujas extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return true;
@@ -178,8 +178,7 @@ public class Principal extends JFrame {
 
 		iconsVisible = false;
 		format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		
-		
+
 		// Contactos de ejemplo
 		List<Contact> contactos = controlador.getContactosUsuarioActual();
 
@@ -188,10 +187,10 @@ public class Principal extends JFrame {
 
 		// Rellenamos el modelo
 		contactos.stream().forEach(c -> modelContacts.addElement(c));
-		
+
 		JList<Contact> list_contacts = new JList<>(modelContacts);
 		listaContactos = list_contacts;
-		
+
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(MAIN_COLOR);
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -320,9 +319,16 @@ public class Principal extends JFrame {
 		mntmShowStatistics.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				UsageStatistics window = new UsageStatistics();
-				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-				window.setVisible(true);
+				if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
+					UsageStatistics window = new UsageStatistics();
+					window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+					window.setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(Principal.this,
+							"Become premium to have access to this funcionality.", "Premium",
+							JOptionPane.ERROR_MESSAGE);
+					Toolkit.getDefaultToolkit().beep();
+				}
 			}
 		});
 		popupSettsGrupos.add(mntmShowStatistics);
@@ -353,8 +359,8 @@ public class Principal extends JFrame {
 		gbl_settingsDer.rowHeights = new int[] { 0, 0 };
 		gbl_settingsDer.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
 		gbl_settingsDer.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
-		settingsDer.setLayout(gbl_settingsDer);		
-		
+		settingsDer.setLayout(gbl_settingsDer);
+
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(MAIN_COLOR);
 		panel_3.addMouseListener(new MouseAdapter() {
@@ -441,17 +447,15 @@ public class Principal extends JFrame {
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		
-		
 		JLabel lblContactPhoto = new JLabel("");
 		if (!list_contacts.isSelectionEmpty())
 			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), ICON_SIZE_MINI));
 		panel_3.add(lblContactPhoto);
-		
+
 		JLabel lblChatName = new JLabel();
 		lblChatName.setForeground(TEXT_COLOR_LIGHT);
 		panel_3.add(lblChatName);
-		
+
 		list_contacts.setBorder(null);
 		list_contacts.setBackground(MAIN_COLOR_LIGHT);
 		list_contacts.setCellRenderer(createListRenderer());
@@ -466,7 +470,7 @@ public class Principal extends JFrame {
 		});
 
 		scrollPane.setViewportView(list_contacts);
-		
+
 		JPanel chatPersonal = new JPanel();
 		chatPersonal.setBackground(CHAT_COLOR);
 		chatPersonal.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -661,7 +665,8 @@ public class Principal extends JFrame {
 
 				JLabel lblNewLabel_1;
 				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getHora().format(format).toString());
+					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados()
+							.get(contacto.getMensajesEnviados().size() - 1).getHora().format(format).toString());
 				} else {
 					lblNewLabel_1 = new JLabel("");
 				}
@@ -674,7 +679,8 @@ public class Principal extends JFrame {
 
 				JLabel lblEsteHaSido;
 				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblEsteHaSido = new JLabel(contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getTexto());
+					lblEsteHaSido = new JLabel(
+							contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getTexto());
 				} else {
 					lblEsteHaSido = new JLabel("");
 				}
