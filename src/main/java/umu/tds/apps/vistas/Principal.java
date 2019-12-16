@@ -110,7 +110,7 @@ public class Principal extends JFrame {
 	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) throws IllegalArgumentException {
 		Controlador.getInstancia().enviarMensaje(contacto, textField.getText());
 
-		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT,
+		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "You", BubbleText.SENT,
 				MESSAGE_SIZE);
 		chat.add(burbuja);
 		textField.setText(null);
@@ -120,7 +120,7 @@ public class Principal extends JFrame {
 	private void sendIcon(JPanel panel, int iconID, Contact contacto) throws IllegalArgumentException {
 		Controlador.getInstancia().enviarMensaje(contacto, iconID);
 
-		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "Tú", BubbleText.SENT, MESSAGE_SIZE);
+		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "You", BubbleText.SENT, MESSAGE_SIZE);
 		chat.add(burbuja);
 	}
 
@@ -140,7 +140,7 @@ public class Principal extends JFrame {
 
 			if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
 				colorBurbuja = SENT_MESSAGE_COLOR;
-				emisor = "Tú";
+				emisor = "You";
 				direccionMensaje = BubbleText.SENT;
 			} else {
 				colorBurbuja = INCOMING_MESSAGE_COLOR;
@@ -304,34 +304,38 @@ public class Principal extends JFrame {
 		});
 		popupSettsGrupos.add(mntmMostrarContactos);
 
-		JMenuItem mntmGetPremium = new JMenuItem("Get Premium");
-		mntmGetPremium.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Premium window = new Premium();
-				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-				window.setVisible(true);
-			}
-		});
-		popupSettsGrupos.add(mntmGetPremium);
-
-		JMenuItem mntmShowStatistics = new JMenuItem("Show statistics");
-		mntmShowStatistics.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
-					UsageStatistics window = new UsageStatistics();
+		if (!Controlador.getInstancia().getUsuarioActual().isPremium()) {
+			JMenuItem mntmGetPremium = new JMenuItem("Get Premium");
+			mntmGetPremium.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Premium window = new Premium();
 					window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 					window.setVisible(true);
-				} else {
-					JOptionPane.showMessageDialog(Principal.this,
-							"Become premium to have access to this funcionality.", "Premium",
-							JOptionPane.ERROR_MESSAGE);
-					Toolkit.getDefaultToolkit().beep();
 				}
-			}
-		});
-		popupSettsGrupos.add(mntmShowStatistics);
+			});
+			popupSettsGrupos.add(mntmGetPremium);
+		}
+		
+		if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
+			JMenuItem mntmShowStatistics = new JMenuItem("Show Statistics");
+			mntmShowStatistics.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
+						UsageStatistics window = new UsageStatistics();
+						window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+						window.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(Principal.this,
+								"Become premium to have access to this funcionality.", "Premium",
+								JOptionPane.ERROR_MESSAGE);
+						Toolkit.getDefaultToolkit().beep();
+					}
+				}
+			});
+			popupSettsGrupos.add(mntmShowStatistics);
+		}
 
 		JMenuItem mntmLogout = new JMenuItem("Sign out");
 		mntmLogout.addActionListener(new ActionListener() {
@@ -412,6 +416,9 @@ public class Principal extends JFrame {
 		mntmRemoveAllMessages.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Borra los mensajes de la conversación de la base de datos
+				
+				
 				chat.removeAll();
 				chat.updateUI();
 			}
