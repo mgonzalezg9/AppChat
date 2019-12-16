@@ -118,7 +118,8 @@ public class NewGroup extends JFrame {
 		settings.add(panel, gbc_panel);
 
 		JLabel lblProfilePhoto = new JLabel();
-		lblProfilePhoto.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), ICON_SIZE_MINI));
+		lblProfilePhoto
+				.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), ICON_SIZE_MINI));
 		panel.add(lblProfilePhoto);
 
 		JLabel lblUserName = new JLabel(Controlador.getInstancia().getUsuarioActual().getName());
@@ -144,7 +145,8 @@ public class NewGroup extends JFrame {
 				busquedaWindow.setVisible(true);
 			}
 		});
-		lblSearchMessages.setIcon(new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/search-white.png")));
+		lblSearchMessages
+				.setIcon(new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/search-white.png")));
 		panel_1.add(lblSearchMessages);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -334,12 +336,6 @@ public class NewGroup extends JFrame {
 				for (int i = 0; i < modelAdded.size(); i++)
 					participantes.add(modelAdded.get(i));
 
-				// La lista de participantes no puede estar vacia
-				if (participantes.isEmpty()) {
-					Toolkit.getDefaultToolkit().beep();
-					return;
-				}
-				
 				if (groupToModify != null) {
 					Group grupoModificado = Controlador.getInstancia().modificarGrupo(groupToModify,
 							txtGroupName.getText(), participantes);
@@ -352,7 +348,7 @@ public class NewGroup extends JFrame {
 					Group nuevoGrupo = Controlador.getInstancia().crearGrupo(txtGroupName.getText(), participantes);
 					modelContacts.add(modelContacts.getSize(), nuevoGrupo);
 				}
-				
+
 				NewGroup.this.setVisible(false);
 			}
 		});

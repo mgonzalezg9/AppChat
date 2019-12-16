@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 
 public class User {
+	private static final double PRECIO_PREMIUM = 19.90;
+	private static final LocalDate FECHA_JOVEN = LocalDate.of(2003, 1, 1);
+	private static final LocalDate FECHA_ADULTO = LocalDate.of(1955, 1, 1);
+
 	// Properties
 	private int codigo;
 	private List<ImageIcon> profilePhotos;
@@ -26,15 +30,15 @@ public class User {
 	private Optional<Discount> descuento;
 
 	// Constructores
-	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
-			boolean premium, Discount descuento, String saludo) {
+	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick,
+			String password, boolean premium, Discount descuento, String saludo) {
 		this(iconList, name, fechaNacimiento, numTelefono, nick, password, premium, null, saludo, new LinkedList<>(),
 				new LinkedList<>(), descuento);
 	}
 
-	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick, String password,
-			boolean premium, Status estado, String saludo, List<Group> gruposAdmin, List<Contact> contactos,
-			Discount descuento) {
+	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick,
+			String password, boolean premium, Status estado, String saludo, List<Group> gruposAdmin,
+			List<Contact> contactos, Discount descuento) {
 		this.codigo = 0;
 		this.profilePhotos = iconList;
 		this.name = name;
@@ -47,6 +51,15 @@ public class User {
 		this.saludo = saludo;
 		this.gruposAdmin = gruposAdmin;
 		this.contactos = contactos;
+		
+		if (descuento == null) {
+			// Si es joven descuento para jovenes, si es muy mayor para mayores
+			if (fechaNacimiento.isAfter(FECHA_JOVEN)) {
+				descuento = new JuniorDiscount();
+			} else if (fechaNacimiento.isBefore(FECHA_ADULTO)) {
+				descuento = new SeniorDiscount();
+			}
+		}
 		this.descuento = Optional.ofNullable(descuento);
 	}
 
@@ -124,6 +137,13 @@ public class User {
 		premium = true;
 	}
 
+	public double getPrecio() {
+		if (descuento.isPresent()) {
+			return descuento.get().getDescuento() * PRECIO_PREMIUM;
+		} else
+			return PRECIO_PREMIUM;
+	}
+
 	public void setEstado(Optional<Status> estado) {
 		this.estado = estado;
 	}
@@ -145,7 +165,7 @@ public class User {
 	public void addGrupoAdmin(Group g) {
 		gruposAdmin.add(g);
 	}
-	
+
 	public void modificarGrupoAdmin(Group g) {
 		for (int i = 0; i < gruposAdmin.size(); i++)
 			if (gruposAdmin.get(i).getCodigo() == g.getCodigo())
@@ -159,18 +179,19 @@ public class User {
 	public void addGrupo(Group g) {
 		contactos.add(g);
 	}
-	
+
 	public void modificarGrupo(Group g) {
-		List<Group> grupos = contactos.stream().filter(c -> c instanceof Group).map(c -> (Group) c).collect(Collectors.toList());
+		List<Group> grupos = contactos.stream().filter(c -> c instanceof Group).map(c -> (Group) c)
+				.collect(Collectors.toList());
 		for (int i = 0; i < grupos.size(); i++)
 			if (grupos.get(i).getCodigo() == g.getCodigo())
 				grupos.set(i, g);
 	}
-	
+
 	public void removeContact(Contact c) {
 		contactos.remove(c);
-		if (c instanceof Group && ((Group)c).getAdmin().getCodigo() == this.codigo) {
-			gruposAdmin.remove((Group)c);
+		if (c instanceof Group && ((Group) c).getAdmin().getCodigo() == this.codigo) {
+			gruposAdmin.remove((Group) c);
 		}
 	}
 
