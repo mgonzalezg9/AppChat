@@ -148,7 +148,7 @@ public class NewGroup extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBackground(MAIN_COLOR_LIGHT);
 		scrollPane.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Contacts",
-				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+				TitledBorder.LEADING, TitledBorder.TOP, null, TEXT_COLOR_LIGHT));
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridheight = 6;
 		gbc_scrollPane.gridwidth = 3;
@@ -197,7 +197,7 @@ public class NewGroup extends JFrame {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBackground(MAIN_COLOR_LIGHT);
 		scrollPane_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Added",
-				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+				TitledBorder.LEADING, TitledBorder.TOP, null, TEXT_COLOR_LIGHT));
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.gridheight = 6;
 		gbc_scrollPane_1.gridwidth = 3;
