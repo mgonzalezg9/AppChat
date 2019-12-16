@@ -15,12 +15,11 @@ public abstract class Contact {
 	public Contact(String nombre) {
 		this(nombre, new LinkedList<>());
 	}
-	
+
 	public Contact(String nombre, List<Message> mensajes) {
 		this.nombre = nombre;
 		this.mensajes = mensajes;
 	}
-
 
 	// Getters.
 	public String getNombre() {
@@ -35,7 +34,7 @@ public abstract class Contact {
 	public int getCodigo() {
 		return codigo;
 	}
-	
+
 	public abstract ImageIcon getFoto();
 
 	// Setters
@@ -46,6 +45,14 @@ public abstract class Contact {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
+	public List<Message> removeMensajesEnviados() {
+		List<Message> lista = new LinkedList<>(mensajes); // copia
+		mensajes.clear();
+		return lista;
+	}
+
+	//public abstract List<Message> removeMensajesRecibidos();
 
 	// Methods
 	public void sendMessage(Message message) {

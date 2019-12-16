@@ -112,11 +112,9 @@ public class AdaptadorIndividualContactTDS implements IndividualContactDAO {
 		Entidad eContact = servPersistencia.recuperarEntidad(codigo);
 
 		// recuperar propiedades que no son objetos
-		String nombre = null;
-		nombre = servPersistencia.recuperarPropiedadEntidad(eContact, "nombre");
+		String nombre = servPersistencia.recuperarPropiedadEntidad(eContact, "nombre");
 		
-		String movil = null;
-		movil = servPersistencia.recuperarPropiedadEntidad(eContact, "movil");
+		String movil = servPersistencia.recuperarPropiedadEntidad(eContact, "movil");
 		
 		IndividualContact contact = new IndividualContact(nombre, new LinkedList<Message>(), Integer.valueOf(movil), null);
 		contact.setCodigo(codigo);

@@ -316,7 +316,7 @@ public class Principal extends JFrame {
 			});
 			popupSettsGrupos.add(mntmGetPremium);
 		}
-		
+
 		if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
 			JMenuItem mntmShowStatistics = new JMenuItem("Show Statistics");
 			mntmShowStatistics.addActionListener(new ActionListener() {
@@ -416,11 +416,15 @@ public class Principal extends JFrame {
 		mntmRemoveAllMessages.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Borra los mensajes de la conversación de la base de datos
-				
-				
-				chat.removeAll();
-				chat.updateUI();
+				Contact contacto = list_contacts.getSelectedValue();
+				if (contacto != null) {
+					// Borra los mensajes de la conversación de la base de datos
+					Controlador.getInstancia().deleteChat(list_contacts.getSelectedValue());
+
+					loadChat(list_contacts.getSelectedValue());
+					/*chat.removeAll();
+					chat.updateUI();*/
+				}
 			}
 		});
 		popupSettsChat.add(mntmRemoveAllMessages);

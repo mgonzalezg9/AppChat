@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 import org.junit.BeforeClass;

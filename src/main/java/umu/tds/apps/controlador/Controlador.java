@@ -9,10 +9,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 import umu.tds.apps.AppChat.*;
+import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.GroupDAO;
@@ -149,15 +149,17 @@ public class Controlador {
 		User u = catalogoUsuarios.getUsuario(usuarioActual.getCodigo());
 		return u.getContactos();
 	}
-	
+
 	// Devuelvo mi lista de contactos individuales.
-		public List<IndividualContact> getContactosIndividualesUsuarioActual() {
-		return getContactosUsuarioActual().stream().filter(c -> c instanceof IndividualContact).map(c -> (IndividualContact) c).collect(Collectors.toList());
+	public List<IndividualContact> getContactosIndividualesUsuarioActual() {
+		return getContactosUsuarioActual().stream().filter(c -> c instanceof IndividualContact)
+				.map(c -> (IndividualContact) c).collect(Collectors.toList());
 	}
-	
+
 	// Devuelvo la lista de mis grupos.
 	public List<Group> getGruposUsuarioActual() {
-		return getContactosUsuarioActual().stream().filter(c -> c instanceof Group).map(c -> (Group) c).collect(Collectors.toList());
+		return getContactosUsuarioActual().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
+				.collect(Collectors.toList());
 	}
 
 	// Devuelvo mi lista de mensajes con ese contacto
@@ -220,15 +222,16 @@ public class Controlador {
 			catalogoUsuarios.addUsuario(usuario);
 			adaptadorUsuario.modificarUsuario(usuario);
 		});
-		
+
 		return nuevoGrupo;
 	}
-	
+
 	// Modifico el grupo.
 	public Group modificarGrupo(Group grupo, String nombre, List<IndividualContact> participantes) {
 		grupo.setNombre(nombre);
-		
-		// Creo una lista con los nuevos participantes, los participantes eliminados y los que mantengo
+
+		// Creo una lista con los nuevos participantes, los participantes eliminados y
+		// los que mantengo
 		List<IndividualContact> nuevos = new LinkedList<>();
 		List<IndividualContact> eliminados = new LinkedList<>();
 		List<IndividualContact> mantenidos = new LinkedList<>();
@@ -239,11 +242,11 @@ public class Controlador {
 				eliminados.add(participante);
 			}
 		}
-		
+
 		for (IndividualContact participanteNuevo : participantes)
 			if (!grupo.getContactos().stream().anyMatch(p -> p.getCodigo() == participanteNuevo.getCodigo()))
 				nuevos.add(participanteNuevo);
-		
+
 		grupo.modificarIntegrantes(participantes);
 
 		// Se añade el grupo al usuario actual y al resto de participantes
@@ -252,8 +255,8 @@ public class Controlador {
 		// Le modifico el grupo si el usuario ya existia, si es nuevo, se lo añado
 		mantenidos.stream().forEach(p -> p.modificarGrupo(grupo));
 		nuevos.stream().forEach(p -> p.addGrupo(grupo));
-		
-		//TODO elimino el grupo de los participantes que ya no lo tienen
+
+		// TODO elimino el grupo de los participantes que ya no lo tienen
 		eliminados.stream().forEach(p -> {
 			p.eliminarGrupo(grupo);
 			adaptadorUsuario.modificarUsuario(p.getUsuario());
@@ -269,7 +272,7 @@ public class Controlador {
 			catalogoUsuarios.addUsuario(usuario);
 			adaptadorUsuario.modificarUsuario(usuario);
 		});
-		
+
 		return grupo;
 	}
 
@@ -277,20 +280,20 @@ public class Controlador {
 		// Devuelvo una lista de mis grupos. Saco el código del usuario actual.
 		return usuarioActual.getGruposAdmin();
 	}
-	
-	public String getNombreContactoEmisor (User usuario) {
+
+	public String getNombreContactoEmisor(User usuario) {
 		return Controlador.getInstancia().getContactosUsuarioActual().stream()
-		.filter(c -> c instanceof IndividualContact)
-		.map(c -> (IndividualContact) c)
-		.filter(c -> c.getUsuario().getCodigo() == usuario.getCodigo())
-		.collect(Collectors.toList()).get(0).getNombre();
+				.filter(c -> c instanceof IndividualContact).map(c -> (IndividualContact) c)
+				.filter(c -> c.getUsuario().getCodigo() == usuario.getCodigo()).collect(Collectors.toList()).get(0)
+				.getNombre();
 	}
 
 	// Devuelvo una lista con los nombres de los grupos en los que se usuario y yo
 	// estamos.
 	public List<String> getNombresGrupo(IndividualContact contacto) {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
-				.filter(g -> g.getContactos().stream().anyMatch(c -> c.getMovil() == contacto.getMovil()) || g.getAdmin().getNumTelefono() == contacto.getMovil())
+				.filter(g -> g.getContactos().stream().anyMatch(c -> c.getMovil() == contacto.getMovil())
+						|| g.getAdmin().getNumTelefono() == contacto.getMovil())
 				.map(g -> g.getNombre()).collect(Collectors.toList());
 	}
 
@@ -299,7 +302,7 @@ public class Controlador {
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
-	
+
 	public double getPrecio() {
 		return usuarioActual.getPrecio();
 	}
@@ -310,26 +313,10 @@ public class Controlador {
 
 	public List<Message> buscarMensajes(String emisor, LocalDateTime fechaInicio, LocalDateTime fechaFin, String text) {
 		// Recupero los mensajes que he enviado
-		/*List<Message> enviados = usuarioActual.getContactos().stream().flatMap(c -> c.getMensajesEnviados().stream())
-				.collect(Collectors.toList());
+		List<Message> mensajes = Controlador.getInstancia().getContactosUsuarioActual().stream()
+				.flatMap(c -> Controlador.getInstancia().getMensajes(c).stream()).collect(Collectors.toList());
 
-		// Recupero los mensajes que he recibido
-		List<Message> recibidos = usuarioActual.getContactos().stream().flatMap(c -> {
-			List<Message> m;
-			if (c instanceof IndividualContact)
-				m = ((IndividualContact) c).getMensajesRecibidos(usuarioActual);
-			else
-				m = ((Group) c).getMensajesEnviados();
-			return m.stream();
-		}).collect(Collectors.toList());*/
-		
-		List<Message> mensajes = Controlador.getInstancia()
-				.getContactosUsuarioActual().stream()
-				.flatMap(c -> Controlador.getInstancia().getMensajes(c).stream())
-				.collect(Collectors.toList());
-
-		return mensajes.stream()
-				.filter(m -> emisor.equals("All") || m.getEmisor().getName().equals(emisor))
+		return mensajes.stream().filter(m -> emisor.equals("All") || m.getEmisor().getName().equals(emisor))
 				.filter(m -> fechaInicio == null || m.getHora().isBefore(fechaInicio))
 				.filter(m -> fechaFin == null || m.getHora().isAfter(fechaFin))
 				.filter(m -> text == "" || m.getTexto().contains(text)).collect(Collectors.toList());
@@ -350,7 +337,7 @@ public class Controlador {
 	public void addEstado(ImageIcon icono, String frase) {
 		// Se guarda para poder recuperarla después
 		Theme.saveImage(icono, Theme.STATUS_NAME, usuarioActual.getCodigo(), 0);
-		
+
 		Status estado = new Status(icono, frase);
 		usuarioActual.setEstado(Optional.of(estado));
 		adaptadorEstado.registrarEstado(estado);
@@ -386,11 +373,40 @@ public class Controlador {
 		}
 	}
 
+	// Borra todos los mensajes enviados al contacto pasado como parametro
+	public void deleteChat(Contact contacto) {
+		// Borra mensajes recibidos y enviados
+		List<Message> enviados = contacto.removeMensajesEnviados();
+		List<Message> recibidos;
+		if (contacto instanceof IndividualContact) {
+			recibidos = ((IndividualContact) contacto).removeMensajesRecibidos(usuarioActual);
+			
+			// Actualiza al otro usuario en catalogo
+			//catalogoUsuarios.addUsuario(((IndividualContact) contacto).getUsuario());
+			adaptadorUsuario.modificarUsuario(((IndividualContact) contacto).getUsuario());
+		} else {
+			recibidos = ((Group) contacto).removeMensajesRecibidos();
+			
+			//adaptadorUsuario.modificarUsuario(((Group) contacto).);
+		}
+
+		// Actualiza la base de datos
+		//adaptadorUsuario.modificarUsuario(usuarioActual);
+		adaptadorUsuario.modificarUsuario(((IndividualContact) contacto).getUsuario());
+		if (contacto instanceof IndividualContact) {
+			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
+			adaptadorContactoIndividual.modificarContacto(((IndividualContact) contacto).getContacto(usuarioActual));
+		} else {
+			adaptadorGrupo.modificarGrupo((Group) contacto);
+		}
+		enviados.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
+		recibidos.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
+	}
+
 	// Devuelve los contactos del usuario actual que tienen un estado
 	public List<IndividualContact> getContactosEstado() {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
-				.map(c -> (IndividualContact) c)
-				.filter(c -> c.getEstado().isPresent()).collect(Collectors.toList());
+				.map(c -> (IndividualContact) c).filter(c -> c.getEstado().isPresent()).collect(Collectors.toList());
 	}
 
 	public Optional<Contact> getContacto(String nombre) {

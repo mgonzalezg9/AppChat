@@ -309,7 +309,7 @@ public class AdaptadorUserTDS implements UserDAO {
 	}
 
 	private List<Group> obtenerGruposDesdeCodigos(String codigos) {
-		List<Group> grupos = new LinkedList<Group>();
+		List<Group> grupos = new LinkedList<>();
 		StringTokenizer strTok = new StringTokenizer(codigos, " ");
 		AdaptadorGroupTDS adaptadorG = AdaptadorGroupTDS.getInstancia();
 		while (strTok.hasMoreTokens()) {

@@ -2,6 +2,7 @@ package umu.tds.apps.AppChat;
 
 import static umu.tds.apps.vistas.Theme.*;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class Group extends Contact {
 	public User getAdmin() {
 		return admin;
 	}
-	
+
 	@Override
 	public ImageIcon getFoto() {
 		ImageIcon imagen = new ImageIcon(Group.class.getResource(GROUP_ICON_PATH));
@@ -49,8 +50,8 @@ public class Group extends Contact {
 	public void cambiarAdmin(User u) {
 		admin = u;
 	}
-	
-	public void modificarIntegrantes (List<IndividualContact> contactos) {
+
+	public void modificarIntegrantes(List<IndividualContact> contactos) {
 		this.contactos = contactos;
 	}
 
@@ -58,12 +59,19 @@ public class Group extends Contact {
 	public List<Message> getMensajesRecibidos() {
 		return this.contactos.stream().flatMap(c -> c.getUsuario().getContactos().stream())
 				.filter(c -> c instanceof Group).map(c -> (Group) c).filter(g -> g.getCodigo() == this.getCodigo())
-				.flatMap(g -> g.getMensajesEnviados().stream())
-				.collect(Collectors.toList());
+				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
 	}
 
 	public List<Message> getMensajesGrupo() {
 		return getMensajesEnviados();
+	}
+
+	// Borra los mensajes que recibo de ese contacto
+	public List<Message> removeMensajesRecibidos() {
+		List<Message> recibidos = getMensajesRecibidos();
+		List<Message> copia = new LinkedList<Message>(recibidos);
+		recibidos.clear();
+		return copia;
 	}
 
 	// hashCode y equals
@@ -97,10 +105,4 @@ public class Group extends Contact {
 			return false;
 		return true;
 	}
-
-	// toString
-	/*@Override
-	public String toString() {
-		return "Group [contactos=" + contactos + ", admin=" + admin + "]";
-	}*/
 }
