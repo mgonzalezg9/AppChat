@@ -387,7 +387,7 @@ public class Principal extends JFrame {
 		label_4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Search ventanaBusqueda = new Search(Controlador.getInstancia().getContactosUsuarioActual());
+				Search ventanaBusqueda = new Search();
 				ventanaBusqueda.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				ventanaBusqueda.setVisible(true);
 			}

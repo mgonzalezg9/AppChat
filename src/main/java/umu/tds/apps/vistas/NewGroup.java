@@ -7,6 +7,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -137,7 +139,7 @@ public class NewGroup extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Abre la nueva ventana
-				JFrame busquedaWindow = new Search(Controlador.getInstancia().getContactosUsuarioActual());
+				JFrame busquedaWindow = new Search();
 				busquedaWindow.setDefaultCloseOperation(HIDE_ON_CLOSE);
 				busquedaWindow.setVisible(true);
 			}
@@ -185,6 +187,12 @@ public class NewGroup extends JFrame {
 		} else {
 			txtGroupName.setText("Group name..");
 		}
+		
+		txtGroupName.setForeground(TEXT_COLOR_LIGHT);
+		txtGroupName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		txtGroupName.setCaretColor(TEXT_COLOR_LIGHT);
+		txtGroupName.setBackground(MAIN_COLOR);
+		
 		GridBagConstraints gbc_txtGroupName = new GridBagConstraints();
 		gbc_txtGroupName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtGroupName.gridwidth = 4;

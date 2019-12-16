@@ -277,6 +277,14 @@ public class Controlador {
 		// Devuelvo una lista de mis grupos. Saco el código del usuario actual.
 		return usuarioActual.getGruposAdmin();
 	}
+	
+	public String getNombreContactoEmisor (User usuario) {
+		return Controlador.getInstancia().getContactosUsuarioActual().stream()
+		.filter(c -> c instanceof IndividualContact)
+		.map(c -> (IndividualContact) c)
+		.filter(c -> c.getUsuario().getCodigo() == usuario.getCodigo())
+		.collect(Collectors.toList()).get(0).getNombre();
+	}
 
 	// Devuelvo una lista con los nombres de los grupos en los que se usuario y yo
 	// estamos.
@@ -299,7 +307,7 @@ public class Controlador {
 
 	public List<Message> buscarMensajes(String emisor, LocalDateTime fechaInicio, LocalDateTime fechaFin, String text) {
 		// Recupero los mensajes que he enviado
-		List<Message> enviados = usuarioActual.getContactos().stream().flatMap(c -> c.getMensajesEnviados().stream())
+		/*List<Message> enviados = usuarioActual.getContactos().stream().flatMap(c -> c.getMensajesEnviados().stream())
 				.collect(Collectors.toList());
 
 		// Recupero los mensajes que he recibido
@@ -310,9 +318,14 @@ public class Controlador {
 			else
 				m = ((Group) c).getMensajesEnviados();
 			return m.stream();
-		}).collect(Collectors.toList());
+		}).collect(Collectors.toList());*/
+		
+		List<Message> mensajes = Controlador.getInstancia()
+				.getContactosUsuarioActual().stream()
+				.flatMap(c -> Controlador.getInstancia().getMensajes(c).stream())
+				.collect(Collectors.toList());
 
-		return Stream.concat(recibidos.stream(), enviados.stream())
+		return mensajes.stream()
 				.filter(m -> emisor.equals("All") || m.getEmisor().getName().equals(emisor))
 				.filter(m -> fechaInicio == null || m.getHora().isBefore(fechaInicio))
 				.filter(m -> fechaFin == null || m.getHora().isAfter(fechaFin))

@@ -11,6 +11,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -39,7 +41,7 @@ import java.awt.event.ActionEvent;
 public class Search extends JFrame {
 
 	private JPanel contentPane;
-	private List<Contact> misContactos;
+	private List<IndividualContact> misContactos;
 
 	/**
 	 * Launch the application.
@@ -60,13 +62,13 @@ public class Search extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Search(List<Contact> contacts) {
+	public Search() {
 		setTitle("Search");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Search.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 606, 462);
 		
-		misContactos = contacts;
+		misContactos = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -118,6 +120,12 @@ public class Search extends JFrame {
 		contentPane.add(lblDate, gbc_lblDate);
 		
 		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.getDateEditor().getUiComponent().setBackground(MAIN_COLOR);
+		dateChooser.getDateEditor().getUiComponent().setForeground(MAIN_COLOR);
+		dateChooser.getDateEditor().getUiComponent().setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		dateChooser.setForeground(MAIN_COLOR);
+		dateChooser.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		dateChooser.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
 		gbc_dateChooser.fill = GridBagConstraints.HORIZONTAL;
@@ -134,6 +142,12 @@ public class Search extends JFrame {
 		contentPane.add(label_1, gbc_label_1);
 		
 		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.getDateEditor().getUiComponent().setBackground(MAIN_COLOR);
+		dateChooser_1.getDateEditor().getUiComponent().setForeground(MAIN_COLOR);
+		dateChooser_1.getDateEditor().getUiComponent().setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		dateChooser_1.setForeground(MAIN_COLOR);
+		dateChooser_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		dateChooser_1.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_dateChooser_1 = new GridBagConstraints();
 		gbc_dateChooser_1.insets = new Insets(0, 0, 5, 5);
 		gbc_dateChooser_1.fill = GridBagConstraints.HORIZONTAL;
@@ -160,6 +174,11 @@ public class Search extends JFrame {
 		
 		JTextPane textPane = new JTextPane();
 		scrollPane.setViewportView(textPane);
+		
+		textPane.setForeground(TEXT_COLOR_LIGHT);
+		textPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textPane.setCaretColor(TEXT_COLOR_LIGHT);
+		textPane.setBackground(MAIN_COLOR);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
@@ -190,6 +209,7 @@ public class Search extends JFrame {
 				List<Message> mensajes = Controlador.getInstancia().buscarMensajes(emisorMensaje, fechaInicio, fechaFin, textPane.getText());
 				
 				chat.removeAll();
+				chat.repaint();
 				
 				// Muestro los mensajes encontrados
 				mensajes.stream().map(m -> {
@@ -203,7 +223,11 @@ public class Search extends JFrame {
 						direccionMensaje = BubbleText.SENT;
 					} else {
 						colorBurbuja = INCOMING_MESSAGE_COLOR;
-						emisor = m.getEmisor().getName();
+						// Pongo su nombre de contacto
+						emisor = Controlador.getInstancia().getNombreContactoEmisor(m.getEmisor());
+						if (m.getReceptor() instanceof Group) {
+							emisor = emisor + "@" + m.getReceptor().getNombre();
+						}
 						direccionMensaje = BubbleText.RECEIVED;
 					}
 

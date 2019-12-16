@@ -159,10 +159,12 @@ public class Login extends JFrame {
 				userField.setBackground(MAIN_COLOR);
 			}
 		});
+		
 		userField.setForeground(TEXT_COLOR_LIGHT);
 		userField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		userField.setCaretColor(TEXT_COLOR_LIGHT);
 		userField.setBackground(MAIN_COLOR);
+		
 		GridBagConstraints gbc_userField = new GridBagConstraints();
 		gbc_userField.insets = new Insets(0, 0, 5, 0);
 		gbc_userField.fill = GridBagConstraints.HORIZONTAL;
