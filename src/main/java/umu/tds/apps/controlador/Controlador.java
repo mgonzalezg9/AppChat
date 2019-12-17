@@ -11,6 +11,15 @@ import java.util.stream.Stream;
 
 import javax.swing.ImageIcon;
 
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.Histogram;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.internal.ChartBuilder;
+import org.knowm.xchart.internal.chartpart.Chart;
+import org.knowm.xchart.style.Styler.LegendPosition;
+
 import umu.tds.apps.AppChat.*;
 import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.persistencia.DAOException;
@@ -380,9 +389,10 @@ public class Controlador {
 		List<Message> recibidos;
 		if (contacto instanceof IndividualContact) {
 			recibidos = ((IndividualContact) contacto).removeMensajesRecibidos(usuarioActual);
-			
+
 			// Actualiza al otro usuario en catalogo
-			//adaptadorUsuario.modificarUsuario(((IndividualContact) contacto).getUsuario());
+			// adaptadorUsuario.modificarUsuario(((IndividualContact)
+			// contacto).getUsuario());
 		} else {
 			recibidos = ((Group) contacto).removeMensajesRecibidos();
 		}
@@ -396,6 +406,34 @@ public class Controlador {
 		}
 		enviados.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
 		recibidos.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
+	}
+
+	public CategoryChart crearHistograma(String titulo) {
+		// Recupera para cada mes del año en curso los mensajes
+		List<Long> mensajesEnviados = usuarioActual.getMensajesMes();
+		List<Long> meses = new LinkedList<>();
+
+		for (int i = 1; i <= mensajesEnviados.size(); i++) {
+			meses.add((long) i);
+		}
+
+		// Create Chart
+		CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title(titulo).xAxisTitle("Month")
+				.yAxisTitle("Messages sent").build();
+
+		// Customize Chart
+		chart.getStyler().setLegendPosition(LegendPosition.InsideNW);
+		chart.getStyler().setHasAnnotations(true);
+
+		// Series
+		chart.addSeries("test", meses, mensajesEnviados);
+
+		return chart;
+	}
+
+	public Chart crearTarta(String titulo) {
+
+		return null;
 	}
 
 	// Devuelve los contactos del usuario actual que tienen un estado

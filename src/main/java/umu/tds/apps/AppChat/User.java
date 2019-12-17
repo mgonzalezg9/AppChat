@@ -1,6 +1,8 @@
 package umu.tds.apps.AppChat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +53,7 @@ public class User {
 		this.saludo = saludo;
 		this.gruposAdmin = gruposAdmin;
 		this.contactos = contactos;
-		
+
 		if (descuento == null) {
 			// Si es joven descuento para jovenes, si es muy mayor para mayores
 			if (fechaNacimiento.isAfter(FECHA_JOVEN)) {
@@ -120,6 +122,35 @@ public class User {
 		return descuento;
 	}
 
+	public double getPrecio() {
+		if (descuento.isPresent()) {
+			return descuento.get().getDescuento() * PRECIO_PREMIUM;
+		} else
+			return PRECIO_PREMIUM;
+	}
+
+	// Devuelve una lista con el numero de mensajes enviados en cada mes del año en
+	// curso
+	public List<Long> getMensajesMes() {
+		List<Long> mensajesMes = new LinkedList<>();
+
+		LocalDate fechaActual = LocalDate.now();
+		for (int i = 1; i <= fechaActual.getMonthValue(); i++) {
+			// Primer y ultimo dia del mes
+			LocalDate primerDia = LocalDate.of(fechaActual.getYear(), i, 1);
+			LocalDate ultimoDia = LocalDate.of(fechaActual.getYear(), i, primerDia.lengthOfMonth());
+
+			// Cuenta el numero de mensajes enviados entre el inicio de ese mes y el fin
+			long num = contactos.stream().flatMap(c -> c.getMensajesEnviados().stream())
+					.map(m -> m.getHora().toLocalDate()).filter(h -> h.isBefore(ultimoDia))
+					.filter(h -> h.isAfter(primerDia)).count();
+
+			mensajesMes.add(num);
+		}
+
+		return mensajesMes;
+	}
+
 	// Setters
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
@@ -135,13 +166,6 @@ public class User {
 
 	public void setPremium() {
 		premium = true;
-	}
-
-	public double getPrecio() {
-		if (descuento.isPresent()) {
-			return descuento.get().getDescuento() * PRECIO_PREMIUM;
-		} else
-			return PRECIO_PREMIUM;
 	}
 
 	public void setEstado(Optional<Status> estado) {

@@ -10,8 +10,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>AppChat</name>
-	<!-- FIXME change it to the project's website -->
-	<url>http://www.example.com</url>
+	<url>https://github.com/mrblacknuel/AppChat</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,12 +41,21 @@
 			<version>1.4</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 		<dependency>
-		    <groupId>com.itextpdf</groupId>
-		    <artifactId>itextpdf</artifactId>
-		    <version>5.5.13.1</version>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.1</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- https://search.maven.org/artifact/org.knowm.xchart/xchart/3.6.0/jar -->
+		<dependency>
+			<groupId>org.knowm.xchart</groupId>
+			<artifactId>xchart</artifactId>
+			<version>3.6.0</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
