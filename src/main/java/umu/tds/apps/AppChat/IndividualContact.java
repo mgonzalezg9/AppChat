@@ -118,9 +118,4 @@ public class IndividualContact extends Contact {
 		return true;
 	}
 
-	// toString
-	@Override
-	public String toString() {
-		return "IndividualContact [movil=" + movil + ", usuario=" + usuario + "]";
-	}
 }

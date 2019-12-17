@@ -2,9 +2,7 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.GraphicsConfiguration;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,17 +11,13 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XChartPanel;
-import org.knowm.xchart.XYChart;
 import org.knowm.xchart.internal.chartpart.Chart;
 
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JLabel;
@@ -32,38 +26,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JButton;
 import java.awt.Dimension;
 
-import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 
-class GraficaUso extends JFrame {
-	private JPanel contentPane;
-
-	public GraficaUso() {
-		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage(UsageStatistics.class.getResource("/umu/tds/apps/resources/icon.png")));
-		setTitle("Graphics");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 410, 213);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[] { 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 0, 0, 0 };
-		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
-		contentPane.setLayout(gbl_contentPane);
-	}
-
-}
-
 public class UsageStatistics extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private static final String HISTOGRAMA = "Messages sent monthly";
 	private static final String TARTA = "Most frequented groups";
 
@@ -118,8 +88,8 @@ public class UsageStatistics extends JFrame {
 		lblGraphicType.setForeground(TEXT_COLOR_LIGHT);
 		panel.add(lblGraphicType);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { HISTOGRAMA, TARTA }));
+		JComboBox<String> comboBox = new JComboBox<>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { HISTOGRAMA, TARTA }));
 		comboBox.setPreferredSize(new Dimension(100, 20));
 		comboBox.setMinimumSize(new Dimension(78, 20));
 		panel.add(comboBox);
@@ -137,7 +107,7 @@ public class UsageStatistics extends JFrame {
 		btnView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Creacion del grafico
-				Chart chart;
+				Chart<?, ?> chart;
 				if (comboBox.getSelectedItem().equals(HISTOGRAMA)) {
 					chart = Controlador.getInstancia().crearHistograma((String) comboBox.getSelectedItem());
 				} else {
@@ -171,7 +141,7 @@ public class UsageStatistics extends JFrame {
 				int returnValue = jfc.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					// Creacion del grafico
-					Chart chart;
+					Chart<?, ?> chart;
 					if (comboBox.getSelectedItem().equals(HISTOGRAMA)) {
 						chart = Controlador.getInstancia().crearHistograma((String) comboBox.getSelectedItem());
 					} else {
@@ -179,8 +149,6 @@ public class UsageStatistics extends JFrame {
 					}
 
 					try {
-						System.out.println(
-								jfc.getSelectedFile().getAbsolutePath() + "\\" + comboBox.getSelectedItem() + ".png");
 						BitmapEncoder.saveBitmap(chart,
 								jfc.getSelectedFile().getAbsolutePath() + "\\" + comboBox.getSelectedItem() + ".png",
 								BitmapFormat.PNG);

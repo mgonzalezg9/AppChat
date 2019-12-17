@@ -1,11 +1,9 @@
 package umu.tds.apps.AppChat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,6 +13,7 @@ public class User {
 	private static final double PRECIO_PREMIUM = 19.90;
 	private static final LocalDate FECHA_JOVEN = LocalDate.of(2003, 1, 1);
 	private static final LocalDate FECHA_ADULTO = LocalDate.of(1955, 1, 1);
+	private static final int NUM_GRUPOS_TARTA = 6;
 
 	// Properties
 	private int codigo;
@@ -149,6 +148,14 @@ public class User {
 		}
 
 		return mensajesMes;
+	}
+
+	// Devuelve los seis grupos mas frecuentados con sus correspondientes mensajes
+	// enviados
+	public Map<String, Integer> getGruposMasFrecuentados() {
+		return contactos.stream().filter(c -> c instanceof Group).map(g -> (Group) g)
+				.sorted((g1, g2) -> g2.getMisMensajesGrupo(this).size() - g1.getMisMensajesGrupo(this).size()).limit(NUM_GRUPOS_TARTA)
+				.collect(Collectors.toMap(Group::getNombre, g -> g.getMisMensajesGrupo(this).size()));
 	}
 
 	// Setters

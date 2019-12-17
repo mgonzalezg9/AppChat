@@ -1,10 +1,12 @@
 package umu.tds.apps.controlador;
 
+import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -14,6 +16,8 @@ import javax.swing.ImageIcon;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.Histogram;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.internal.ChartBuilder;
@@ -179,7 +183,7 @@ public class Controlador {
 							((IndividualContact) contacto).getMensajesRecibidos(usuarioActual).stream())
 					.sorted().collect(Collectors.toList());
 		} else {
-			return ((Group) contacto).getMensajesGrupo();
+			return ((Group) contacto).getMensajesEnviados(); // Dentro de los enviados estan contenidos todos los mensajes
 		}
 	}
 
@@ -432,8 +436,17 @@ public class Controlador {
 	}
 
 	public Chart crearTarta(String titulo) {
+		PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Diagram").build();
+	    chart.getStyler().setSeriesColors(Theme.COLORES_TARTA);
+	    chart.getStyler().setLegendVisible(true);
 
-		return null;
+		// Recupera los seis grupos mas frecuentados
+		Map<String, Integer> gruposMasFrecuentados = usuarioActual.getGruposMasFrecuentados();
+		for (String nomGrupo : gruposMasFrecuentados.keySet()) {
+			chart.addSeries(nomGrupo, gruposMasFrecuentados.get(nomGrupo));
+		}
+		
+		return chart;
 	}
 
 	// Devuelve los contactos del usuario actual que tienen un estado
