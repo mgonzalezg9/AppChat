@@ -39,7 +39,8 @@ import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import umu.tds.apps.AppChat.*;
-import umu.tds.apps.AppChat.IndividualContact;
+import umu.tds.apps.cargador.MensajesEvent;
+import umu.tds.apps.cargador.MensajesListener;
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.GroupDAO;
@@ -48,8 +49,9 @@ import umu.tds.apps.persistencia.MessageDAO;
 import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
 import umu.tds.apps.vistas.Theme;
+import umu.tds.apps.whatsappparser.MensajeWhatsApp;
 
-public class Controlador {
+public class Controlador implements MensajesListener {
 	// Instancia del controlador.
 	private static Controlador unicaInstancia = null;
 
@@ -549,7 +551,7 @@ public class Controlador {
 
 	public Chart crearTarta(String titulo) {
 		PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Diagram").build();
-	    chart.getStyler().setSeriesColors(Theme.COLORES_TARTA);
+	    chart.getStyler().setSeriesColors(Theme.PIECHART_COLORS);
 	    chart.getStyler().setLegendVisible(true);
 
 		// Recupera los seis grupos mas frecuentados
@@ -569,5 +571,16 @@ public class Controlador {
 
 	public Optional<Contact> getContacto(String nombre) {
 		return getContactosUsuarioActual().stream().filter(c -> c.getNombre().equals(nombre)).findAny();
+	}
+
+	// TODO Cuando se hace click en el pulsador guarda los mensajes cargados en BD
+	@Override
+	public void nuevosMensajes(MensajesEvent ev) {
+		List<Message> mensajes = new LinkedList<>();
+		
+		for (MensajeWhatsApp mensaje : ev.getNewMessages()) {
+			//new Message(mensaje.getTexto(), mensaje.getFecha(), mensaje.getAutor(), )
+		}
+		
 	}
 }

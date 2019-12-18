@@ -47,6 +47,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import pulsador.Luz;
 
 // Clase para que desaparezca la scrollbar horizontal
 class ChatBurbujas extends JPanel implements Scrollable {
@@ -196,7 +197,7 @@ public class Principal extends JFrame {
 		settingsIzq.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsIzq = new GridBagConstraints();
 		gbc_settingsIzq.insets = new Insets(0, 0, 5, 5);
-		gbc_settingsIzq.fill = GridBagConstraints.HORIZONTAL;
+		gbc_settingsIzq.fill = GridBagConstraints.BOTH;
 		gbc_settingsIzq.gridx = 0;
 		gbc_settingsIzq.gridy = 0;
 		contentPane.add(settingsIzq, gbc_settingsIzq);
@@ -204,7 +205,7 @@ public class Principal extends JFrame {
 		gbl_settingsIzq.columnWidths = new int[] { 0, 0, 0 };
 		gbl_settingsIzq.rowHeights = new int[] { 10, 0 };
 		gbl_settingsIzq.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-		gbl_settingsIzq.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_settingsIzq.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		settingsIzq.setLayout(gbl_settingsIzq);
 
 		JPanel panel_1 = new JPanel();
@@ -354,14 +355,14 @@ public class Principal extends JFrame {
 		settingsDer.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_settingsDer = new GridBagConstraints();
 		gbc_settingsDer.insets = new Insets(0, 0, 5, 0);
-		gbc_settingsDer.fill = GridBagConstraints.HORIZONTAL;
+		gbc_settingsDer.fill = GridBagConstraints.BOTH;
 		gbc_settingsDer.gridx = 1;
 		gbc_settingsDer.gridy = 0;
 		contentPane.add(settingsDer, gbc_settingsDer);
 		GridBagLayout gbl_settingsDer = new GridBagLayout();
-		gbl_settingsDer.columnWidths = new int[] { 0, 0, 0 };
+		gbl_settingsDer.columnWidths = new int[] { 0, 0, 0, 0 };
 		gbl_settingsDer.rowHeights = new int[] { 0, 0 };
-		gbl_settingsDer.columnWeights = new double[] { 1.0, 1.0, Double.MIN_VALUE };
+		gbl_settingsDer.columnWeights = new double[] { 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_settingsDer.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		settingsDer.setLayout(gbl_settingsDer);
 
@@ -389,7 +390,7 @@ public class Principal extends JFrame {
 		panel.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.NORTHEAST;
-		gbc_panel.gridx = 1;
+		gbc_panel.gridx = 2;
 		gbc_panel.gridy = 0;
 		settingsDer.add(panel, gbc_panel);
 
@@ -402,6 +403,10 @@ public class Principal extends JFrame {
 				ventanaBusqueda.setVisible(true);
 			}
 		});
+		
+		Luz luz = new Luz();
+		luz.setColor(SECONDARY_COLOR);
+		panel.add(luz);
 		label_4.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/search-white.png")));
 		panel.add(label_4);
 
