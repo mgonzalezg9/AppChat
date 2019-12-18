@@ -33,6 +33,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -445,7 +446,7 @@ public class Controlador {
 				
 				// Imagen del contacto
 				Image img;
-				img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);
+				img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);;
 				documento.add(img);
 				
 				// Nombre del contacto

@@ -5,6 +5,7 @@ import static umu.tds.apps.vistas.Theme.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
+import java.awt.Image;
 
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
@@ -21,12 +23,14 @@ import javax.swing.ListCellRenderer;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -42,7 +46,12 @@ import umu.tds.apps.controlador.Controlador;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -147,13 +156,23 @@ public class ContactWindow extends JFrame {
 				// Funcionalidad Premium
 				if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
 					// Exporto a PDF toda la información
-					// TODO Pido la ruta donde crear el archivo
-					if (Controlador.getInstancia().crearPDFInfoConacto("C:\\Users\\Alfonso\\hola.pdf")) {
-						JOptionPane.showMessageDialog(ContactWindow.this, "PDF created successfully", "Create pdf",
-								JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						JOptionPane.showMessageDialog(ContactWindow.this, "Error to create the pdf", "Create pdf",
-								JOptionPane.ERROR_MESSAGE);
+					// Pido la ruta donde crear el archivo
+					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+					jfc.setDialogTitle("Create a PDF");
+					jfc.setSelectedFile(new File("contactsInfo.pdf"));
+					jfc.setAcceptAllFileFilterUsed(false);
+					FileNameExtensionFilter filter = new FileNameExtensionFilter("Only pdf", "pdf");
+					jfc.addChoosableFileFilter(filter);
+
+					int returnValue = jfc.showSaveDialog(null);
+					if (returnValue == JFileChooser.APPROVE_OPTION) {
+						if (Controlador.getInstancia().crearPDFInfoConacto(jfc.getSelectedFile().getAbsolutePath())) {
+							JOptionPane.showMessageDialog(ContactWindow.this, "PDF created successfully", "Create pdf",
+									JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							JOptionPane.showMessageDialog(ContactWindow.this, "Error to create the pdf", "Create pdf",
+									JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				} else {
 					JOptionPane.showMessageDialog(ContactWindow.this,
