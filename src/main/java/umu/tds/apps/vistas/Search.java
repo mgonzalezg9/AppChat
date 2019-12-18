@@ -224,7 +224,7 @@ public class Search extends JFrame {
 					} else {
 						colorBurbuja = INCOMING_MESSAGE_COLOR;
 						// Pongo su nombre de contacto
-						emisor = Controlador.getInstancia().getNombreContactoEmisor(m.getEmisor());
+						emisor = Controlador.getInstancia().getNombreContacto(m.getEmisor());
 						if (m.getReceptor() instanceof Group) {
 							emisor = emisor + "@" + m.getReceptor().getNombre();
 						}

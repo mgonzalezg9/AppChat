@@ -1,6 +1,10 @@
 package umu.tds.apps.controlador;
 
 import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -23,6 +27,15 @@ import org.knowm.xchart.XYChart;
 import org.knowm.xchart.internal.ChartBuilder;
 import org.knowm.xchart.internal.chartpart.Chart;
 import org.knowm.xchart.style.Styler.LegendPosition;
+
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.TabSettings;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import umu.tds.apps.AppChat.*;
 import umu.tds.apps.AppChat.IndividualContact;
@@ -294,20 +307,19 @@ public class Controlador {
 		return usuarioActual.getGruposAdmin();
 	}
 
-	public String getNombreContactoEmisor(User usuario) {
+	public String getNombreContacto(User usuario) {
 		return Controlador.getInstancia().getContactosUsuarioActual().stream()
 				.filter(c -> c instanceof IndividualContact).map(c -> (IndividualContact) c)
 				.filter(c -> c.getUsuario().getCodigo() == usuario.getCodigo()).collect(Collectors.toList()).get(0)
 				.getNombre();
 	}
 
-	// Devuelvo una lista con los nombres de los grupos en los que se usuario y yo
-	// estamos.
-	public List<String> getNombresGrupo(IndividualContact contacto) {
+	// Devuelvo una lista con los grupos en los que se usuario y yo estamos.
+	public List<Group> getGruposEnComun(IndividualContact contacto) {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
 				.filter(g -> g.getContactos().stream().anyMatch(c -> c.getMovil() == contacto.getMovil())
 						|| g.getAdmin().getNumTelefono() == contacto.getMovil())
-				.map(g -> g.getNombre()).collect(Collectors.toList());
+				.collect(Collectors.toList());
 	}
 
 	public void hacerPremium() {
@@ -410,6 +422,105 @@ public class Controlador {
 		}
 		enviados.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
 		recibidos.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
+	}
+	
+	public boolean crearPDFInfoConacto (String ruta) {
+		List<IndividualContact> contactos = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
+		
+		try {
+			// Creamos el documento PDF
+			FileOutputStream archivo;
+			archivo = new FileOutputStream(ruta);
+			Document documento = new Document();
+			PdfWriter.getInstance(documento, archivo);
+			documento.open();
+			
+			// Escribimos en el documento PDF
+			int i = 1;
+			Paragraph p;
+			// Recorremos los contactos del usuario actual
+			for (IndividualContact contacto : contactos) {
+				documento.add(new Paragraph("Contacto número " + i));
+				documento.add(Chunk.NEWLINE);
+				
+				// Imagen del contacto
+				Image img;
+				img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);
+				documento.add(img);
+				
+				// Nombre del contacto
+				p = new Paragraph();
+				p.setTabSettings(new TabSettings(30f));
+				p.add(Chunk.TABBING);			
+				p.add(new Chunk("- Nombre del contacto: " + contacto.getNombre()));
+				documento.add(p);
+				
+				// Número de teléfono del contacto
+				p = new Paragraph();
+				p.setTabSettings(new TabSettings(30f));
+				p.add(Chunk.TABBING);
+				p.add(new Chunk("- Número de teléfono: " + contacto.getMovil()));
+				documento.add(p);
+				
+				// Mostramos la información de los grupos en común que tenemos con ese contacto
+				p = new Paragraph();
+				p.setTabSettings(new TabSettings(30f));
+				p.add(Chunk.TABBING);
+				p.add(new Chunk("- Grupos en común:"));
+				documento.add(p);
+				
+				// Recorremos todos los grupos en común
+				int z = 1;
+				for (Group grupo : getGruposEnComun(contacto)) {
+					// Nombre del grupo
+					p = new Paragraph();
+					p.setTabSettings(new TabSettings(60f));
+					p.add(Chunk.TABBING);
+					p.add(new Chunk("+ Nombre del grupo: " + grupo.getNombre()));
+					documento.add(p);
+					
+					// Admin del grupo
+					p = new Paragraph();
+					p.setTabSettings(new TabSettings(60f));
+					p.add(Chunk.TABBING);
+					p.add(new Chunk("+ Admin del grupo: " + ((grupo.getAdmin().getCodigo() == usuarioActual.getCodigo()) ? usuarioActual.getName() : getNombreContacto(grupo.getAdmin()))));
+					documento.add(p);
+					
+					// Mostramos los participantes del grupo
+					p = new Paragraph();
+					p.setTabSettings(new TabSettings(60f));
+					p.add(Chunk.TABBING);
+					p.add(new Chunk("+ Participantes:"));
+					documento.add(p);
+					
+					// Recorro todos los participantes
+					for (IndividualContact participante : grupo.getContactos()) {
+						// Información del participante
+						p = new Paragraph();
+						p.setTabSettings(new TabSettings(90f));
+						p.add(Chunk.TABBING);
+						p.add(new Chunk("- Nombre: " +  participante.getNombre() + ((participante.getEstado().isPresent()) ? ", estado: " + participante.getEstado() : "") + ", teléfono: " + participante.getMovil()));
+						documento.add(p);
+					}
+					
+					if (z < grupo.getContactos().size())
+						documento.add(Chunk.NEWLINE);
+					z++;
+				}				
+				
+				if (i < contactos.size()) {
+					documento.add(Chunk.NEWLINE);
+					documento.add(Chunk.NEWLINE);
+				}
+				i++;
+			}			
+			
+			documento.close();
+		} catch (DocumentException | IOException e1) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	public CategoryChart crearHistograma(String titulo) {

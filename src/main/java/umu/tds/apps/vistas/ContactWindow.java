@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 
@@ -43,6 +45,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
@@ -143,17 +146,14 @@ public class ContactWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Funcionalidad Premium
 				if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
-					// TODO Exporto a PDF toda la información
-					try {
-						FileOutputStream archivo;
-						archivo = new FileOutputStream("C:\\Users\\Alfonso\\hola.pdf");
-						Document documento = new Document();
-						PdfWriter.getInstance(documento, archivo);
-						documento.open();
-						documento.add(new Paragraph("Hola Mundo!"));
-						documento.close();
-					} catch (DocumentException | FileNotFoundException e1) {
-						e1.printStackTrace();
+					// Exporto a PDF toda la información
+					// TODO Pido la ruta donde crear el archivo
+					if (Controlador.getInstancia().crearPDFInfoConacto("C:\\Users\\Alfonso\\hola.pdf")) {
+						JOptionPane.showMessageDialog(ContactWindow.this, "PDF created successfully", "Create pdf",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(ContactWindow.this, "Error to create the pdf", "Create pdf",
+								JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
 					JOptionPane.showMessageDialog(ContactWindow.this,

@@ -77,9 +77,9 @@ public class SharedGroups extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		final DefaultListModel<String> modelNameGroup = new DefaultListModel<>();
-		List<String> gruposCompartidos = Controlador.getInstancia().getNombresGrupo(contact);
+		List<Group> gruposCompartidos = Controlador.getInstancia().getGruposEnComun(contact);
 		for (int i = 0; i < gruposCompartidos.size(); i++)
-			modelNameGroup.add(i, gruposCompartidos.get(i));
+			modelNameGroup.add(i, gruposCompartidos.get(i).getNombre());
 
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
