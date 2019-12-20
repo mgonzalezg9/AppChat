@@ -10,6 +10,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -21,6 +24,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.border.BevelBorder;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -40,6 +44,7 @@ import javax.swing.Scrollable;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -48,6 +53,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import pulsador.Luz;
+import pulsador.IEncendidoListener;
+import java.util.EventObject;
 
 // Clase para que desaparezca la scrollbar horizontal
 class ChatBurbujas extends JPanel implements Scrollable {
@@ -403,8 +410,22 @@ public class Principal extends JFrame {
 				ventanaBusqueda.setVisible(true);
 			}
 		});
-		
+
 		Luz luz = new Luz();
+		luz.addEncendidoListener(new IEncendidoListener() {
+			public void enteradoCambioEncendido(EventObject arg0) {
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+				jfc.setDialogTitle("Choose a WhatsApp chat");
+				jfc.setAcceptAllFileFilterUsed(false);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Only txt", "txt");
+				jfc.addChoosableFileFilter(filter);
+
+				int returnValue = jfc.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					Controlador.getInstancia().cargarMensajes(jfc.getSelectedFile());
+				}
+			}
+		});
 		luz.setColor(SECONDARY_COLOR);
 		panel.add(luz);
 		label_4.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/search-white.png")));

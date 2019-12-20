@@ -4,11 +4,11 @@ import java.util.EventObject;
 import java.util.List;
 import umu.tds.apps.whatsappparser.MensajeWhatsApp;
 
-public class MensajesEvent extends EventObject {
+public class MessagesEvent extends EventObject {
 	private static final long serialVersionUID = 1L;
 	private List<MensajeWhatsApp> oldMessages, newMessages;
 
-	public MensajesEvent(Object eventSource, List<MensajeWhatsApp> oldMessages, List<MensajeWhatsApp> newMessages) {
+	public MessagesEvent(Object eventSource, List<MensajeWhatsApp> oldMessages, List<MensajeWhatsApp> newMessages) {
 		super(eventSource);
 		this.oldMessages = oldMessages;
 		this.newMessages = newMessages;

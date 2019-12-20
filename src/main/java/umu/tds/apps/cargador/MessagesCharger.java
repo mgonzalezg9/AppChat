@@ -8,7 +8,7 @@ import umu.tds.apps.whatsappparser.MensajeWhatsApp;
 
 public class MessagesCharger implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<MensajesListener> observadores;
+	private List<MessagesListener> observadores;
 	private List<MensajeWhatsApp> listaMensajes;
 
 	// Constructores
@@ -28,31 +28,31 @@ public class MessagesCharger implements Serializable {
 
 	public void setListaMensajes(List<MensajeWhatsApp> nuevalistaMensajes) {
 		if (!listaMensajes.equals(nuevalistaMensajes)) {
-			MensajesEvent evento = new MensajesEvent(this, listaMensajes, nuevalistaMensajes);
+			MessagesEvent evento = new MessagesEvent(this, listaMensajes, nuevalistaMensajes);
 			listaMensajes = nuevalistaMensajes;
 			notificarCambioMensajes(evento);
 		}
 	}
 
 	// Recorre la lista de oyentes y notifica del cambio
-	private void notificarCambioMensajes(MensajesEvent evento) {
+	private void notificarCambioMensajes(MessagesEvent evento) {
 		// Para evitar problemas de concurrencia me creo una copia
-		List<MensajesListener> copia = null;
+		List<MessagesListener> copia = null;
 		synchronized (observadores) {
 			copia = new LinkedList<>(observadores);
 		}
 
-		for (MensajesListener observador : copia) {
+		for (MessagesListener observador : copia) {
 			observador.nuevosMensajes(evento);
 		}
 	}
 
 	// Manejo de los oyentes
-	public synchronized void addListener(MensajesListener observador) {
+	public synchronized void addListener(MessagesListener observador) {
 		this.observadores.add(observador);
 	}
 
-	public synchronized void removeListener(MensajesListener observador) {
+	public synchronized void removeListener(MessagesListener observador) {
 		this.observadores.remove(observador);
 	}
 

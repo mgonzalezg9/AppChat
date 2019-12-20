@@ -1,6 +1,7 @@
 package umu.tds.apps.controlador;
 
 import java.awt.Color;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,8 +40,9 @@ import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import umu.tds.apps.AppChat.*;
-import umu.tds.apps.cargador.MensajesEvent;
-import umu.tds.apps.cargador.MensajesListener;
+import umu.tds.apps.cargador.MessagesCharger;
+import umu.tds.apps.cargador.MessagesEvent;
+import umu.tds.apps.cargador.MessagesListener;
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.GroupDAO;
@@ -51,7 +53,7 @@ import umu.tds.apps.persistencia.UserDAO;
 import umu.tds.apps.vistas.Theme;
 import umu.tds.apps.whatsappparser.MensajeWhatsApp;
 
-public class Controlador implements MensajesListener {
+public class Controlador implements MessagesListener {
 	// Instancia del controlador.
 	private static Controlador unicaInstancia = null;
 
@@ -67,6 +69,9 @@ public class Controlador implements MensajesListener {
 
 	// Nuestro usuario.
 	private User usuarioActual;
+
+	// Componente encargado de cargar los mensajes de Whatsapp
+	private MessagesCharger cargador;
 
 	private Controlador() {
 		inicializarAdaptadores(); // debe ser la primera linea para evitar error de sincronización
@@ -116,6 +121,7 @@ public class Controlador implements MensajesListener {
 		// Si la password esta bien inicia sesion
 		if (cliente.getPassword().equals(password)) {
 			usuarioActual = cliente;
+			cargador = new MessagesCharger();
 			return true;
 		}
 		return false;
@@ -199,7 +205,8 @@ public class Controlador implements MensajesListener {
 							((IndividualContact) contacto).getMensajesRecibidos(usuarioActual).stream())
 					.sorted().collect(Collectors.toList());
 		} else {
-			return ((Group) contacto).getMensajesEnviados(); // Dentro de los enviados estan contenidos todos los mensajes
+			return ((Group) contacto).getMensajesEnviados(); // Dentro de los enviados estan contenidos todos los
+																// mensajes
 		}
 	}
 
@@ -426,10 +433,10 @@ public class Controlador implements MensajesListener {
 		enviados.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
 		recibidos.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
 	}
-	
-	public boolean crearPDFInfoConacto (String ruta) {
+
+	public boolean crearPDFInfoConacto(String ruta) {
 		List<IndividualContact> contactos = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
-		
+
 		try {
 			// Creamos el documento PDF
 			FileOutputStream archivo;
@@ -437,7 +444,7 @@ public class Controlador implements MensajesListener {
 			Document documento = new Document();
 			PdfWriter.getInstance(documento, archivo);
 			documento.open();
-			
+
 			// Escribimos en el documento PDF
 			int i = 1;
 			Paragraph p;
@@ -445,33 +452,34 @@ public class Controlador implements MensajesListener {
 			for (IndividualContact contacto : contactos) {
 				documento.add(new Paragraph("Contacto número " + i));
 				documento.add(Chunk.NEWLINE);
-				
+
 				// Imagen del contacto
 				Image img;
-				img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);;
+				img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);
+				;
 				documento.add(img);
-				
+
 				// Nombre del contacto
 				p = new Paragraph();
 				p.setTabSettings(new TabSettings(30f));
-				p.add(Chunk.TABBING);			
+				p.add(Chunk.TABBING);
 				p.add(new Chunk("- Nombre del contacto: " + contacto.getNombre()));
 				documento.add(p);
-				
+
 				// Número de teléfono del contacto
 				p = new Paragraph();
 				p.setTabSettings(new TabSettings(30f));
 				p.add(Chunk.TABBING);
 				p.add(new Chunk("- Número de teléfono: " + contacto.getMovil()));
 				documento.add(p);
-				
+
 				// Mostramos la información de los grupos en común que tenemos con ese contacto
 				p = new Paragraph();
 				p.setTabSettings(new TabSettings(30f));
 				p.add(Chunk.TABBING);
 				p.add(new Chunk("- Grupos en común:"));
 				documento.add(p);
-				
+
 				// Recorremos todos los grupos en común
 				int z = 1;
 				for (Group grupo : getGruposEnComun(contacto)) {
@@ -481,48 +489,53 @@ public class Controlador implements MensajesListener {
 					p.add(Chunk.TABBING);
 					p.add(new Chunk("+ Nombre del grupo: " + grupo.getNombre()));
 					documento.add(p);
-					
+
 					// Admin del grupo
 					p = new Paragraph();
 					p.setTabSettings(new TabSettings(60f));
 					p.add(Chunk.TABBING);
-					p.add(new Chunk("+ Admin del grupo: " + ((grupo.getAdmin().getCodigo() == usuarioActual.getCodigo()) ? usuarioActual.getName() : getNombreContacto(grupo.getAdmin()))));
+					p.add(new Chunk("+ Admin del grupo: "
+							+ ((grupo.getAdmin().getCodigo() == usuarioActual.getCodigo()) ? usuarioActual.getName()
+									: getNombreContacto(grupo.getAdmin()))));
 					documento.add(p);
-					
+
 					// Mostramos los participantes del grupo
 					p = new Paragraph();
 					p.setTabSettings(new TabSettings(60f));
 					p.add(Chunk.TABBING);
 					p.add(new Chunk("+ Participantes:"));
 					documento.add(p);
-					
+
 					// Recorro todos los participantes
 					for (IndividualContact participante : grupo.getContactos()) {
 						// Información del participante
 						p = new Paragraph();
 						p.setTabSettings(new TabSettings(90f));
 						p.add(Chunk.TABBING);
-						p.add(new Chunk("- Nombre: " +  participante.getNombre() + ((participante.getEstado().isPresent()) ? ", estado: " + participante.getEstado() : "") + ", teléfono: " + participante.getMovil()));
+						p.add(new Chunk("- Nombre: " + participante.getNombre()
+								+ ((participante.getEstado().isPresent()) ? ", estado: " + participante.getEstado()
+										: "")
+								+ ", teléfono: " + participante.getMovil()));
 						documento.add(p);
 					}
-					
+
 					if (z < grupo.getContactos().size())
 						documento.add(Chunk.NEWLINE);
 					z++;
-				}				
-				
+				}
+
 				if (i < contactos.size()) {
 					documento.add(Chunk.NEWLINE);
 					documento.add(Chunk.NEWLINE);
 				}
 				i++;
-			}			
-			
+			}
+
 			documento.close();
 		} catch (DocumentException | IOException e1) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -551,15 +564,15 @@ public class Controlador implements MensajesListener {
 
 	public Chart crearTarta(String titulo) {
 		PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Diagram").build();
-	    chart.getStyler().setSeriesColors(Theme.PIECHART_COLORS);
-	    chart.getStyler().setLegendVisible(true);
+		chart.getStyler().setSeriesColors(Theme.PIECHART_COLORS);
+		chart.getStyler().setLegendVisible(true);
 
 		// Recupera los seis grupos mas frecuentados
 		Map<String, Integer> gruposMasFrecuentados = usuarioActual.getGruposMasFrecuentados();
 		for (String nomGrupo : gruposMasFrecuentados.keySet()) {
 			chart.addSeries(nomGrupo, gruposMasFrecuentados.get(nomGrupo));
 		}
-		
+
 		return chart;
 	}
 
@@ -575,12 +588,15 @@ public class Controlador implements MensajesListener {
 
 	// TODO Cuando se hace click en el pulsador guarda los mensajes cargados en BD
 	@Override
-	public void nuevosMensajes(MensajesEvent ev) {
+	public void nuevosMensajes(MessagesEvent ev) {
 		List<Message> mensajes = new LinkedList<>();
-		
+
 		for (MensajeWhatsApp mensaje : ev.getNewMessages()) {
-			//new Message(mensaje.getTexto(), mensaje.getFecha(), mensaje.getAutor(), )
+			// new Message(mensaje.getTexto(), mensaje.getFecha(), mensaje.getAutor(), )
 		}
-		
+	}
+
+	// TODO Guarda una lista de mensajes de Whatsapp
+	public void cargarMensajes(File conversacion) {
 	}
 }
