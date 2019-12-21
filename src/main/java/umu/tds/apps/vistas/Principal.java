@@ -35,6 +35,7 @@ import javax.swing.DefaultListModel;
 
 import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
+import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.cargador.MessagesCharger;
 import umu.tds.apps.controlador.Controlador;
@@ -96,6 +97,8 @@ public class Principal extends JFrame {
 	private JLabel profilePhoto;
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
+	private JLabel chatName;
+	private JLabel chatPhoto;
 	private boolean iconsVisible;
 	private Controlador controlador;
 	private JList<Contact> listaContactos;
@@ -464,9 +467,25 @@ public class Principal extends JFrame {
 		mntmDeleteContact.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (/* FIXME */ true) {
+				if (list_contacts.getSelectedValue() == null) {
+					JOptionPane.showMessageDialog(Principal.this,
+							"Unable to perform this action.", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				
+				if (!(list_contacts.getSelectedValue() instanceof Group) || Controlador.getInstancia().isAdmin((Group) list_contacts.getSelectedValue())) {
 					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
 							JOptionPane.INFORMATION_MESSAGE);
+					Contact contactoSeleccionado = list_contacts.getSelectedValue();
+					modelContacts.removeElement(contactoSeleccionado);
+					Controlador.getInstancia().deleteContact(contactoSeleccionado);
+
+					if (modelContacts.isEmpty()) {
+						chat.removeAll();
+						Controlador.getInstancia().setChatActual(null);
+						chatName.setText("");
+						chatPhoto.setIcon(null);
+					}
 				} else {
 					JOptionPane.showMessageDialog(Principal.this,
 							"Unable to delete the chat. Please check your chat privileges.", "Error",
@@ -489,14 +508,14 @@ public class Principal extends JFrame {
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		JLabel lblContactPhoto = new JLabel("");
+		chatPhoto = new JLabel("");
 		if (!list_contacts.isSelectionEmpty())
-			lblContactPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), ICON_SIZE_MINI));
-		panel_3.add(lblContactPhoto);
+			chatPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), ICON_SIZE_MINI));
+		panel_3.add(chatPhoto);
 
-		JLabel lblChatName = new JLabel();
-		lblChatName.setForeground(TEXT_COLOR_LIGHT);
-		panel_3.add(lblChatName);
+		chatName = new JLabel();
+		chatName.setForeground(TEXT_COLOR_LIGHT);
+		panel_3.add(chatName);
 
 		list_contacts.setBorder(null);
 		list_contacts.setBackground(MAIN_COLOR_LIGHT);
@@ -504,10 +523,12 @@ public class Principal extends JFrame {
 		list_contacts.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
 				Contact contactoActual = list_contacts.getSelectedValue();
-				loadChat(contactoActual);
-				Controlador.getInstancia().setChatActual(contactoActual);
-				lblChatName.setText(contactoActual.getNombre());
-				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));
+				if (contactoActual != null) {
+					loadChat(contactoActual);
+					Controlador.getInstancia().setChatActual(contactoActual);
+					chatName.setText(contactoActual.getNombre());
+					chatPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));	
+				}
 			}
 
 		});

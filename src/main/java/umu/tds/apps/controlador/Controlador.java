@@ -299,7 +299,7 @@ public class Controlador implements MessagesListener {
 		mantenidos.stream().forEach(p -> p.modificarGrupo(grupo));
 		nuevos.stream().forEach(p -> p.addGrupo(grupo));
 
-		// TODO elimino el grupo de los participantes que ya no lo tienen
+		// Elimino el grupo de los participantes que ya no lo tienen
 		eliminados.stream().forEach(p -> {
 			p.eliminarGrupo(grupo);
 			adaptadorUsuario.modificarUsuario(p.getUsuario());
@@ -370,6 +370,11 @@ public class Controlador implements MessagesListener {
 		if (c instanceof IndividualContact) {
 			adaptadorContactoIndividual.borrarContacto((IndividualContact) c);
 		} else {
+			Group grupo = (Group) c; 
+			grupo.getContactos().stream().forEach(p -> {
+				p.eliminarGrupo(grupo);
+				adaptadorUsuario.modificarUsuario(p.getUsuario());
+			});
 			adaptadorGrupo.borrarGrupo((Group) c);
 		}
 		catalogoUsuarios.addUsuario(usuarioActual);
@@ -385,10 +390,6 @@ public class Controlador implements MessagesListener {
 		adaptadorEstado.registrarEstado(estado);
 		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
-	}
-
-	public List<Status> getEstados(List<Contact> contactos) { // ALFONSITO
-		return null;
 	}
 
 	public void enviarMensaje(Contact contacto, String message) {
@@ -650,5 +651,9 @@ public class Controlador implements MessagesListener {
 
 	public void setChatActual(Contact contacto) {
 		chatActual = contacto;
+	}
+
+	public boolean isAdmin(Group selectedValue) {
+		return selectedValue.getAdmin().getCodigo() == usuarioActual.getCodigo();
 	}
 }

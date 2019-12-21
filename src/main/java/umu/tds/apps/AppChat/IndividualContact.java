@@ -48,13 +48,13 @@ public class IndividualContact extends Contact {
 	// Dado un usuario me devuelve el contacto que este usuario tiene (como lo ve desde su perspectiva)
 	public IndividualContact getContacto(User usuario) {
 		return this.usuario.getContactos().stream().filter(c -> c instanceof IndividualContact)
-		.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().getNick().equals(usuario.getNick())).findAny().get();
+		.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().getNick().equals(usuario.getNick())).findAny().orElse(null);
 	}
 	
 	// Devuelve los mensajes que el usuario pasado como parametro recibe de este
 	// contacto
 	public List<Message> getMensajesRecibidos(User usuario) {
-		return getContacto(usuario).getMensajesEnviados();
+		return (getContacto(usuario) != null) ? getContacto(usuario).getMensajesEnviados() : new LinkedList<Message>();
 	}
 
 	// Devuelve el estado del contacto
