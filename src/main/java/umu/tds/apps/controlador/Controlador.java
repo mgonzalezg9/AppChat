@@ -52,6 +52,7 @@ import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
 import umu.tds.apps.vistas.Theme;
 import umu.tds.apps.whatsappparser.MensajeWhatsApp;
+import umu.tds.apps.whatsappparser.Plataforma;
 
 public class Controlador implements MessagesListener {
 	// Instancia del controlador.
@@ -69,6 +70,9 @@ public class Controlador implements MessagesListener {
 
 	// Nuestro usuario.
 	private User usuarioActual;
+
+	// Chat seleccionado
+	private Contact chatActual;
 
 	// Componente encargado de cargar los mensajes de Whatsapp
 	private MessagesCharger cargador;
@@ -121,7 +125,10 @@ public class Controlador implements MessagesListener {
 		// Si la password esta bien inicia sesion
 		if (cliente.getPassword().equals(password)) {
 			usuarioActual = cliente;
+
+			// Inicializa el cargador de mensajes
 			cargador = new MessagesCharger();
+			cargador.addListener(this);
 			return true;
 		}
 		return false;
@@ -586,17 +593,62 @@ public class Controlador implements MessagesListener {
 		return getContactosUsuarioActual().stream().filter(c -> c.getNombre().equals(nombre)).findAny();
 	}
 
-	// TODO Cuando se hace click en el pulsador guarda los mensajes cargados en BD
+	private Optional<User> getUser(String name) {
+		return catalogoUsuarios.getUsuarios().stream().filter(u -> u.getName().equals(name)).findAny();
+	}
+
+	// Cuando se hace click en el pulsador guarda los mensajes cargados en BD
 	@Override
 	public void nuevosMensajes(MessagesEvent ev) {
 		List<Message> mensajes = new LinkedList<>();
 
-		for (MensajeWhatsApp mensaje : ev.getNewMessages()) {
-			// new Message(mensaje.getTexto(), mensaje.getFecha(), mensaje.getAutor(), )
+		for (MensajeWhatsApp message : ev.getNewMessages()) {
+			Optional<User> autor;
+			if (message.getAutor().equals(usuarioActual.getName())) {
+				autor = Optional.of(usuarioActual);
+			} else {
+				autor = getUser(message.getAutor());
+			}
+			
+			if (autor.isPresent() /*&& (!(chatActual instanceof Group) || ((Group) chatActual).isParticipante(autor))*/)
+				mensajes.add(new Message(message.getTexto(), message.getFecha(), autor.get(), chatActual));
+			else
+				return;
+		}
+
+		chatActual.addMensajes(mensajes);
+		
+		// Guardar los mensajes en BD
+		mensajes.stream().forEach(m -> adaptadorMensaje.registrarMensaje(m));
+		
+		if (chatActual instanceof Group) {
+			adaptadorGrupo.modificarGrupo((Group) chatActual);
+		} else {
+			adaptadorContactoIndividual.modificarContacto((IndividualContact) chatActual);
 		}
 	}
 
-	// TODO Guarda una lista de mensajes de Whatsapp
-	public void cargarMensajes(File conversacion) {
+	// Guarda una lista de mensajes de Whatsapp
+	public void cargarMensajes(String path, String opElegida) {
+		Plataforma plataforma;
+		String dateFormat;
+
+		if (opElegida.equals(MessagesCharger.IOS)) {
+			plataforma = Plataforma.IOS;
+			dateFormat = MessagesCharger.IOS_DATE;
+		} else {
+			plataforma = Plataforma.ANDROID;
+			if (opElegida.equals(MessagesCharger.ANDROID_1)) {
+				dateFormat = MessagesCharger.ANDROID_1_DATE;
+			} else {
+				dateFormat = MessagesCharger.ANDROID_2_DATE;
+			}
+		}
+
+		cargador.setFichero(path, plataforma, dateFormat);
+	}
+
+	public void setChatActual(Contact contacto) {
+		chatActual = contacto;
 	}
 }

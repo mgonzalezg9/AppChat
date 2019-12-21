@@ -30,6 +30,7 @@ public class Login extends JFrame {
 	private JPasswordField passwordField;
 	private Controlador controlador;
 
+	
 	/**
 	 * Launch the application.
 	 */

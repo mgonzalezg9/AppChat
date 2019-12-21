@@ -52,6 +52,10 @@ public abstract class Contact {
 		return lista;
 	}
 
+	public void addMensajes(List<Message> mensajes) {
+		this.mensajes.addAll(mensajes);
+	}
+	
 	//public abstract List<Message> removeMensajesRecibidos();
 
 	// Methods

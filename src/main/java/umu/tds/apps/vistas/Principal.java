@@ -36,7 +36,9 @@ import javax.swing.DefaultListModel;
 import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.IndividualContact;
+import umu.tds.apps.cargador.MessagesCharger;
 import umu.tds.apps.controlador.Controlador;
+import umu.tds.apps.whatsappparser.Plataforma;
 
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
@@ -422,7 +424,11 @@ public class Principal extends JFrame {
 
 				int returnValue = jfc.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
-					Controlador.getInstancia().cargarMensajes(jfc.getSelectedFile());
+					// Ventana para seleccionar el chat
+					JFrame ventana = new WhatsappChatChooser(jfc.getSelectedFile().getAbsolutePath());
+					ventana.setVisible(true);
+					
+					loadChat(list_contacts.getSelectedValue());
 				}
 			}
 		});
@@ -499,6 +505,7 @@ public class Principal extends JFrame {
 			if (!e.getValueIsAdjusting()) {
 				Contact contactoActual = list_contacts.getSelectedValue();
 				loadChat(contactoActual);
+				Controlador.getInstancia().setChatActual(contactoActual);
 				lblChatName.setText(contactoActual.getNombre());
 				lblContactPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));
 			}

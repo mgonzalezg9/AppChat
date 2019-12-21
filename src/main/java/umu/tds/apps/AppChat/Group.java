@@ -74,5 +74,9 @@ public class Group extends Contact {
 		recibidos.clear();
 		return copia;
 	}
+	
+	private boolean isParticipante(User usuario) {
+		return integrantes.contains(usuario);
+	}
 
 }
