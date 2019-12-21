@@ -471,6 +471,7 @@ public class Principal extends JFrame {
 					JOptionPane.showMessageDialog(Principal.this,
 							"Unable to perform this action.", "Error",
 							JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				
 				if (!(list_contacts.getSelectedValue() instanceof Group) || Controlador.getInstancia().isAdmin((Group) list_contacts.getSelectedValue())) {
