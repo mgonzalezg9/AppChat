@@ -67,6 +67,7 @@ class Carrousel {
 		profilePhoto.setIcon(imagenes.get(numImagen));
 	}
 
+	// Si se ha escogido la imagen se guarda en BD
 	public boolean addImagen(JFileChooser jfc) {
 		int returnValue = jfc.showOpenDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -84,7 +85,7 @@ class Carrousel {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			numImagen++;
+			numImagen = imagenes.size() - 1;
 			int numMostrado = numImagen + 1;
 			indicador.setText(numMostrado + "/" + imagenes.size());
 			profilePhoto.setIcon(imagenes.get(imagenes.size() - 1));
@@ -94,9 +95,7 @@ class Carrousel {
 	}
 
 	public void removeImagen(int op) {
-		ImageIcon imgBorrada = Controlador.getInstancia().removeImagenUsuario(op);
-		imagenes.remove(op);
-		if (imagenes.size() > 0)
+		if (imagenes.size() > 1)
 			desplazar(-1);
 		else {
 			// Pedimos amablemente una imagen
@@ -108,11 +107,12 @@ class Carrousel {
 
 			boolean escogida = addImagen(jfc);
 			if (!escogida) {
-				// Deshace el cambio
-				Controlador.getInstancia().addImagenUsuario(imgBorrada);
-				imagenes.add(imgBorrada);
+				// No efectua el cambio
+				return;
 			}
 		}
+		Controlador.getInstancia().removeImagenUsuario(op);
+		imagenes.remove(op);
 	}
 
 }

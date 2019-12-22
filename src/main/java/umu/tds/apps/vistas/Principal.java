@@ -121,6 +121,10 @@ public class Principal extends JFrame {
 	}
 
 	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) throws IllegalArgumentException {
+		// No permite enviar un mensaje si no hay seleccionado ningún contacto
+		if (contacto == null)
+			return;
+
 		Controlador.getInstancia().enviarMensaje(contacto, textField.getText());
 
 		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "You", BubbleText.SENT,
@@ -131,6 +135,10 @@ public class Principal extends JFrame {
 	}
 
 	private void sendIcon(JPanel panel, int iconID, Contact contacto) throws IllegalArgumentException {
+		// No permite enviar un emoji si no hay seleccionado ningún contacto
+		if (contacto == null)
+			return;
+
 		Controlador.getInstancia().enviarMensaje(contacto, iconID);
 
 		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "You", BubbleText.SENT, MESSAGE_SIZE);
@@ -375,7 +383,7 @@ public class Principal extends JFrame {
 		gbl_settingsDer.columnWidths = new int[] { 0, 0, 0, 0 };
 		gbl_settingsDer.rowHeights = new int[] { 0, 0 };
 		gbl_settingsDer.columnWeights = new double[] { 1.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_settingsDer.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_settingsDer.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		settingsDer.setLayout(gbl_settingsDer);
 
 		JPanel panel_3 = new JPanel();
@@ -391,7 +399,6 @@ public class Principal extends JFrame {
 		FlowLayout flowLayout_2 = (FlowLayout) panel_3.getLayout();
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
-		gbc_panel_3.fill = GridBagConstraints.VERTICAL;
 		gbc_panel_3.anchor = GridBagConstraints.WEST;
 		gbc_panel_3.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_3.gridx = 0;
@@ -401,7 +408,7 @@ public class Principal extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.anchor = GridBagConstraints.NORTHEAST;
+		gbc_panel.anchor = GridBagConstraints.EAST;
 		gbc_panel.gridx = 2;
 		gbc_panel.gridy = 0;
 		settingsDer.add(panel, gbc_panel);
@@ -430,7 +437,7 @@ public class Principal extends JFrame {
 					// Ventana para seleccionar el chat
 					JFrame ventana = new WhatsappChatChooser(jfc.getSelectedFile().getAbsolutePath());
 					ventana.setVisible(true);
-					
+
 					loadChat(list_contacts.getSelectedValue());
 				}
 			}
@@ -468,13 +475,13 @@ public class Principal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (list_contacts.getSelectedValue() == null) {
-					JOptionPane.showMessageDialog(Principal.this,
-							"Unable to perform this action.", "Error",
+					JOptionPane.showMessageDialog(Principal.this, "Unable to perform this action.", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				
-				if (!(list_contacts.getSelectedValue() instanceof Group) || Controlador.getInstancia().isAdmin((Group) list_contacts.getSelectedValue())) {
+
+				if (!(list_contacts.getSelectedValue() instanceof Group)
+						|| Controlador.getInstancia().isAdmin((Group) list_contacts.getSelectedValue())) {
 					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
 							JOptionPane.INFORMATION_MESSAGE);
 					Contact contactoSeleccionado = list_contacts.getSelectedValue();
@@ -528,7 +535,7 @@ public class Principal extends JFrame {
 					loadChat(contactoActual);
 					Controlador.getInstancia().setChatActual(contactoActual);
 					chatName.setText(contactoActual.getNombre());
-					chatPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));	
+					chatPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));
 				}
 			}
 
