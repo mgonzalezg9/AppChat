@@ -573,6 +573,7 @@ public class Principal extends JFrame {
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400, 700);
+		scrollPane_1.getViewport().setBackground(CHAT_COLOR);
 
 		// Se muestran todas las burbujas de la conversacion actual
 		list_contacts.setSelectedIndex(0);
