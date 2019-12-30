@@ -27,7 +27,7 @@ public class Group extends Contact {
 	}
 
 	// Getters
-	public List<IndividualContact> getContactos() {
+	public List<IndividualContact> getParticipantes() {
 		return integrantes;
 	}
 

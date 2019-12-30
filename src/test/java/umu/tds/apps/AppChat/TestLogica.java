@@ -3,7 +3,9 @@ package umu.tds.apps.AppChat;
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
@@ -26,6 +28,10 @@ public class TestLogica {
 	private final static String NOADMIN_NICK = "noadmin";
 	private final static String NOADMIN_MAIL = "noadmin@um.es";
 	private final static int NOADMIN_PHONE = 2;
+	private final static String OTHER_NAME = "Other account";
+	private final static String OTHER_NICK = "other";
+	private final static String OTHER_MAIL = "other@um.es";
+	private final static int OTHER_PHONE = 3;
 	private final static String PASSWORD = "1234";
 	private final static ImageIcon ICON = new ImageIcon(
 			TestLogica.class.getResource("/umu/tds/apps/resources/icon.png"));
@@ -84,6 +90,27 @@ public class TestLogica {
 		controlador.enviarMensaje(grupo, EMOJI);
 
 		// NoAdmin cierra sesión
+		controlador.cerrarSesion();
+
+		// Se crea una tercera cuenta que sólo Admin tendrá como contacto
+		assertTrue(controlador.crearCuenta(ICON, OTHER_NICK, PASSWORD, OTHER_MAIL, OTHER_NAME, OTHER_PHONE,
+				LocalDate.now()));
+		controlador.cerrarSesion();
+		
+		// Admin añade como contacto a Other
+		assertTrue(controlador.iniciarSesion(ADMIN_NICK, PASSWORD));
+		IndividualContact contactoOther = controlador.crearContacto(OTHER_NICK, OTHER_PHONE);
+		assertNotNull(contactoOther);
+		
+		// Mete a Other al grupo Juernes
+		List<IndividualContact> participantes = grupo.getParticipantes();
+		participantes.add(contactoOther);
+		controlador.modificarGrupo(grupo, grupo.getNombre(), participantes);
+		controlador.cerrarSesion();
+		
+		// Other da los buenos dias por el grupo
+		assertTrue(controlador.iniciarSesion(OTHER_NICK, PASSWORD));
+		controlador.enviarMensaje(grupo, "Buenos días por la mañana!");
 		controlador.cerrarSesion();
 	}
 

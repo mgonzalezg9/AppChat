@@ -167,7 +167,7 @@ public class NewGroup extends JFrame {
 				.getContactosIndividualesUsuarioActual();
 		List<IndividualContact> participantes = new LinkedList<>();
 		if (groupToModify != null)
-			participantes = groupToModify.getContactos();
+			participantes = groupToModify.getParticipantes();
 
 		int z = 0;
 		for (int i = 0; i < contactosIndividuales.size(); i++) {
@@ -220,7 +220,7 @@ public class NewGroup extends JFrame {
 		final DefaultListModel<IndividualContact> modelAdded = new DefaultListModel<>();
 
 		if (groupToModify != null) {
-			List<IndividualContact> integrantes = groupToModify.getContactos();
+			List<IndividualContact> integrantes = groupToModify.getParticipantes();
 			for (int i = 0; i < integrantes.size(); i++)
 				modelAdded.add(i, integrantes.get(i));
 		}

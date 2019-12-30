@@ -48,7 +48,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 		registrarSiNoExistenMensajes(group.getMensajesEnviados());
 
 		// Registramos los contactos del grupo si no existen (Integrantes)
-		registrarSiNoExistenContactos(group.getContactos());
+		registrarSiNoExistenContactos(group.getParticipantes());
 
 		// Registramos a nuestro usuario administrador si no existe.
 		registrarSiNoExisteAdmin(group.getAdmin());
@@ -57,7 +57,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 		eGroup.setNombre("grupo");
 		eGroup.setPropiedades(new ArrayList<Propiedad>(Arrays.asList(new Propiedad("nombre", group.getNombre()),
 				new Propiedad("mensajesRecibidos", obtenerCodigosMensajesRecibidos(group.getMensajesEnviados())),
-				new Propiedad("integrantes", obtenerCodigosContactosIndividual(group.getContactos())),
+				new Propiedad("integrantes", obtenerCodigosContactosIndividual(group.getParticipantes())),
 				new Propiedad("admin", String.valueOf(group.getAdmin().getCodigo())))));
 
 		// Registrar entidad usuario
@@ -101,7 +101,7 @@ public class AdaptadorGroupTDS implements GroupDAO {
 				obtenerCodigosMensajesRecibidos(group.getMensajesEnviados()));
 		servPersistencia.eliminarPropiedadEntidad(eGroup, "integrantes");
 		servPersistencia.anadirPropiedadEntidad(eGroup, "integrantes",
-				obtenerCodigosContactosIndividual(group.getContactos()));
+				obtenerCodigosContactosIndividual(group.getParticipantes()));
 		servPersistencia.eliminarPropiedadEntidad(eGroup, "admin");
 		servPersistencia.anadirPropiedadEntidad(eGroup, "admin", String.valueOf(group.getAdmin().getCodigo()));
 	}

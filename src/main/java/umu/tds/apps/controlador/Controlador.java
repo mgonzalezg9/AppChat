@@ -278,7 +278,7 @@ public class Controlador implements MessagesListener {
 		List<IndividualContact> nuevos = new LinkedList<>();
 		List<IndividualContact> eliminados = new LinkedList<>();
 		List<IndividualContact> mantenidos = new LinkedList<>();
-		for (IndividualContact participante : grupo.getContactos()) {
+		for (IndividualContact participante : grupo.getParticipantes()) {
 			if (participantes.stream().anyMatch(p -> p.getCodigo() == participante.getCodigo())) {
 				mantenidos.add(participante);
 			} else {
@@ -287,7 +287,7 @@ public class Controlador implements MessagesListener {
 		}
 
 		for (IndividualContact participanteNuevo : participantes)
-			if (!grupo.getContactos().stream().anyMatch(p -> p.getCodigo() == participanteNuevo.getCodigo()))
+			if (!grupo.getParticipantes().stream().anyMatch(p -> p.getCodigo() == participanteNuevo.getCodigo()))
 				nuevos.add(participanteNuevo);
 
 		grupo.modificarIntegrantes(participantes);
@@ -334,7 +334,7 @@ public class Controlador implements MessagesListener {
 	// Devuelvo una lista con los grupos en los que se usuario y yo estamos.
 	public List<Group> getGruposEnComun(IndividualContact contacto) {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
-				.filter(g -> g.getContactos().stream().anyMatch(c -> c.getMovil() == contacto.getMovil())
+				.filter(g -> g.getParticipantes().stream().anyMatch(c -> c.getMovil() == contacto.getMovil())
 						|| g.getAdmin().getNumTelefono() == contacto.getMovil())
 				.collect(Collectors.toList());
 	}
@@ -371,7 +371,7 @@ public class Controlador implements MessagesListener {
 			adaptadorContactoIndividual.borrarContacto((IndividualContact) c);
 		} else {
 			Group grupo = (Group) c; 
-			grupo.getContactos().stream().forEach(p -> {
+			grupo.getParticipantes().stream().forEach(p -> {
 				p.eliminarGrupo(grupo);
 				adaptadorUsuario.modificarUsuario(p.getUsuario());
 			});
@@ -515,7 +515,7 @@ public class Controlador implements MessagesListener {
 					documento.add(p);
 
 					// Recorro todos los participantes
-					for (IndividualContact participante : grupo.getContactos()) {
+					for (IndividualContact participante : grupo.getParticipantes()) {
 						// Información del participante
 						p = new Paragraph();
 						p.setTabSettings(new TabSettings(90f));
@@ -527,7 +527,7 @@ public class Controlador implements MessagesListener {
 						documento.add(p);
 					}
 
-					if (z < grupo.getContactos().size())
+					if (z < grupo.getParticipantes().size())
 						documento.add(Chunk.NEWLINE);
 					z++;
 				}
