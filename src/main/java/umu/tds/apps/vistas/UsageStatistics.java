@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import org.knowm.xchart.BitmapEncoder;
@@ -29,6 +30,7 @@ import java.awt.Dimension;
 import javax.swing.DefaultComboBoxModel;
 
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 
@@ -134,8 +136,10 @@ public class UsageStatistics extends JFrame {
 				// Se pregunta donde guardar la grafica
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 				jfc.setDialogTitle("Choose a folder to save the chart");
-				jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				jfc.setSelectedFile(new File((String) comboBox.getSelectedItem() + ".png"));
 				jfc.setAcceptAllFileFilterUsed(false);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Only PNG", "png");
+				jfc.addChoosableFileFilter(filter);
 
 				// Guardado
 				int returnValue = jfc.showOpenDialog(null);
@@ -149,9 +153,7 @@ public class UsageStatistics extends JFrame {
 					}
 
 					try {
-						BitmapEncoder.saveBitmap(chart,
-								jfc.getSelectedFile().getAbsolutePath() + "\\" + comboBox.getSelectedItem() + ".png",
-								BitmapFormat.PNG);
+						BitmapEncoder.saveBitmap(chart, jfc.getSelectedFile().getAbsolutePath(), BitmapFormat.PNG);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}

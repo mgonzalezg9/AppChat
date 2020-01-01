@@ -1,6 +1,7 @@
 package umu.tds.apps.AppChat;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class User {
 	private static final LocalDate FECHA_JOVEN = LocalDate.of(2003, 1, 1);
 	private static final LocalDate FECHA_ADULTO = LocalDate.of(1955, 1, 1);
 	private static final int NUM_GRUPOS_TARTA = 6;
+	private static final String SALUDO_INICIAL = "Hello World!";
 
 	// Properties
 	private int codigo;
@@ -31,12 +33,57 @@ public class User {
 	private Optional<Discount> descuento;
 
 	// Constructores
+	/**
+	 * Constructor para la creación de un usuario nuevo en el sistema
+	 * 
+	 * @param icono           Foto de perfil del usuario
+	 * @param name            Nombre completo del usuario
+	 * @param fechaNacimiento Fecha de nacimiento
+	 * @param numTelefono     Telefono
+	 * @param nick            Alias elegido por el usuario
+	 * @param password        contraseña para autenticarse el usuario
+	 */
+	public User(ImageIcon icono, String name, LocalDate fechaNacimiento, int numTelefono, String nick,
+			String password) {
+		this(new LinkedList<>(Arrays.asList(icono)), name, fechaNacimiento, numTelefono, nick, password, false, null,
+				SALUDO_INICIAL, new LinkedList<>(), new LinkedList<>(), null);
+	}
+
+	/**
+	 * Constructor empleado en persistencia para recuperar los objetos
+	 * 
+	 * @param iconList        Lista con las fotos de perfil del usuario
+	 * @param name            Nombre completo del usuario
+	 * @param fechaNacimiento Fecha de nacimiento
+	 * @param numTelefono     Telefono
+	 * @param nick            Alias elegido por el usuario
+	 * @param password        contraseña para autenticarse el usuario
+	 * @param premium         Indica si el usuario es premium
+	 * @param descuento       Porcentaje de descuento que el usuario tendrá
+	 * @param saludo          Saludo del usuario
+	 */
 	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick,
 			String password, boolean premium, Discount descuento, String saludo) {
 		this(iconList, name, fechaNacimiento, numTelefono, nick, password, premium, null, saludo, new LinkedList<>(),
 				new LinkedList<>(), descuento);
 	}
 
+	/**
+	 * Constructor principal
+	 * 
+	 * @param iconList        Lista con las fotos de perfil del usuario
+	 * @param name            Nombre completo del usuario
+	 * @param fechaNacimiento Fecha de nacimiento
+	 * @param numTelefono     Telefono
+	 * @param nick            Alias elegido por el usuario
+	 * @param password        contraseña para autenticarse el usuario
+	 * @param premium         Indica si el usuario es premium
+	 * @param estado          Estado que el usuario tendrá
+	 * @param saludo          Saludo del usuario
+	 * @param gruposAdmin     Grupos en los que el usuario es administrador
+	 * @param contactos       Contactos que tiene guardados el usuario
+	 * @param descuento       Porcentaje de descuento que el usuario tendrá
+	 */
 	public User(List<ImageIcon> iconList, String name, LocalDate fechaNacimiento, int numTelefono, String nick,
 			String password, boolean premium, Status estado, String saludo, List<Group> gruposAdmin,
 			List<Contact> contactos, Discount descuento) {
@@ -123,7 +170,7 @@ public class User {
 
 	public double getPrecio() {
 		if (descuento.isPresent()) {
-			return descuento.get().getDescuento() * PRECIO_PREMIUM;
+			return descuento.get().getDescuento(PRECIO_PREMIUM);
 		} else
 			return PRECIO_PREMIUM;
 	}
@@ -154,7 +201,8 @@ public class User {
 	// enviados
 	public Map<String, Integer> getGruposMasFrecuentados() {
 		return contactos.stream().filter(c -> c instanceof Group).map(g -> (Group) g)
-				.sorted((g1, g2) -> g2.getMisMensajesGrupo(this).size() - g1.getMisMensajesGrupo(this).size()).limit(NUM_GRUPOS_TARTA)
+				.sorted((g1, g2) -> g2.getMisMensajesGrupo(this).size() - g1.getMisMensajesGrupo(this).size())
+				.limit(NUM_GRUPOS_TARTA)
 				.collect(Collectors.toMap(Group::getNombre, g -> g.getMisMensajesGrupo(this).size()));
 	}
 
@@ -184,7 +232,7 @@ public class User {
 	}
 
 	public int addProfilePhoto(ImageIcon icon) {
-		this.profilePhotos.add(icon);
+		profilePhotos.add(icon);
 		return profilePhotos.size();
 	}
 
@@ -235,26 +283,23 @@ public class User {
 				+ ", contactos=" + contactos + ", rol=" + descuento + "]";
 	}
 
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + codigo;
-		result = prime * result + ((contactos == null) ? 0 : contactos.hashCode());
-		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
-		result = prime * result + ((fechaNacimiento == null) ? 0 : fechaNacimiento.hashCode());
-		result = prime * result + ((gruposAdmin == null) ? 0 : gruposAdmin.hashCode());
-		result = prime * result + ((profilePhotos == null) ? 0 : profilePhotos.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((nick == null) ? 0 : nick.hashCode());
 		result = prime * result + numTelefono;
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + (premium ? 1231 : 1237);
-		result = prime * result + ((descuento == null) ? 0 : descuento.hashCode());
-		result = prime * result + ((saludo == null) ? 0 : saludo.hashCode());
 		return result;
 	}
 
+	/**
+	 * Dos usuarios serán iguales si tienen el mismo nick o número de teléfono
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -264,62 +309,6 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (codigo != other.codigo)
-			return false;
-		if (contactos == null) {
-			if (other.contactos != null)
-				return false;
-		} else if (!contactos.equals(other.contactos))
-			return false;
-		if (estado == null) {
-			if (other.estado != null)
-				return false;
-		} else if (!estado.equals(other.estado))
-			return false;
-		if (fechaNacimiento == null) {
-			if (other.fechaNacimiento != null)
-				return false;
-		} else if (!fechaNacimiento.equals(other.fechaNacimiento))
-			return false;
-		if (gruposAdmin == null) {
-			if (other.gruposAdmin != null)
-				return false;
-		} else if (!gruposAdmin.equals(other.gruposAdmin))
-			return false;
-		if (profilePhotos == null) {
-			if (other.profilePhotos != null)
-				return false;
-		} else if (!profilePhotos.equals(other.profilePhotos))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (nick == null) {
-			if (other.nick != null)
-				return false;
-		} else if (!nick.equals(other.nick))
-			return false;
-		if (numTelefono != other.numTelefono)
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (premium != other.premium)
-			return false;
-		if (descuento == null) {
-			if (other.descuento != null)
-				return false;
-		} else if (!descuento.equals(other.descuento))
-			return false;
-		if (saludo == null) {
-			if (other.saludo != null)
-				return false;
-		} else if (!saludo.equals(other.saludo))
-			return false;
-		return true;
+		return nick.equals(other.nick) || numTelefono == other.numTelefono;
 	}
 }

@@ -9,12 +9,11 @@ import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.UserDAO;
 
-/* El catálogo mantiene los objetos en memoria, en una tabla hash
+/** El catálogo mantiene los objetos en memoria, en una tabla hash
  * para mejorar el rendimiento. Esto no se podría hacer en una base de
  * datos con un número grande de objetos. En ese caso se consultaria
  * directamente la base de datos
  */
-
 public class UsersCatalogue {
 	private Map<String, User> usuarios; 
 	private static UsersCatalogue unicaInstancia = new UsersCatalogue();
@@ -68,6 +67,10 @@ public class UsersCatalogue {
 		 List<User> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
 		 for (User user : usuariosBD) 
 			     usuarios.put(user.getNick(), user);
+	}
+	
+	public boolean contains(User usuario) {
+		return usuarios.containsValue(usuario);
 	}
 	
 }

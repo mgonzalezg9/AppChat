@@ -133,7 +133,7 @@ public class ContactWindow extends JFrame {
 		gbc_panel_1.gridy = 1;
 		contentPane.add(panel_1, gbc_panel_1);
 
-		btnNewButton_2 = new JButton("Show shared groups");
+		btnNewButton_2 = new JButton("SHOW SHARED GROUPS");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				IndividualContact selected = list.getSelectedValue();
@@ -166,7 +166,7 @@ public class ContactWindow extends JFrame {
 
 					int returnValue = jfc.showSaveDialog(null);
 					if (returnValue == JFileChooser.APPROVE_OPTION) {
-						if (Controlador.getInstancia().crearPDFInfoConacto(jfc.getSelectedFile().getAbsolutePath())) {
+						if (Controlador.getInstancia().crearPDFInfoContacto(jfc.getSelectedFile().getAbsolutePath())) {
 							JOptionPane.showMessageDialog(ContactWindow.this, "PDF created successfully", "Create pdf",
 									JOptionPane.INFORMATION_MESSAGE);
 						} else {

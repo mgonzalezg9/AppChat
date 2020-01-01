@@ -113,12 +113,10 @@ public class Controlador implements MessagesListener {
 	}
 
 	public boolean iniciarSesion(String nick, String password) {
-		if (nick.isEmpty() || password.isEmpty()) {
+		if (nick.isEmpty() || password.isEmpty())
 			return false;
-		}
 
 		User cliente = catalogoUsuarios.getUsuario(nick);
-
 		if (cliente == null)
 			return false;
 
@@ -137,12 +135,8 @@ public class Controlador implements MessagesListener {
 	// Registro el usuario. Devuelvo false si el nick ya está en uso
 	public boolean crearCuenta(ImageIcon imagen, String nick, String password, String email, String name,
 			int numTelefono, LocalDate fechaNacimiento) {
-		// TODO Comprobar que no haya un usuario con ese numero de telefono
-		User u = catalogoUsuarios.getUsuario(nick);
-		if (u == null) {
-			User nuevoUsuario = new User(Arrays.asList(imagen), name, fechaNacimiento, numTelefono, nick, password,
-					false, null, null);
-
+		User nuevoUsuario = new User(imagen, name, fechaNacimiento, numTelefono, nick, password);
+		if (!catalogoUsuarios.contains(nuevoUsuario)) {
 			// Guarda la imagen en el proyecto
 			Theme.saveImage(imagen, Theme.PROFILE_PHOTO_NAME, nuevoUsuario.getCodigo(), 1);
 
@@ -370,7 +364,7 @@ public class Controlador implements MessagesListener {
 		if (c instanceof IndividualContact) {
 			adaptadorContactoIndividual.borrarContacto((IndividualContact) c);
 		} else {
-			Group grupo = (Group) c; 
+			Group grupo = (Group) c;
 			grupo.getParticipantes().stream().forEach(p -> {
 				p.eliminarGrupo(grupo);
 				adaptadorUsuario.modificarUsuario(p.getUsuario());
@@ -442,7 +436,7 @@ public class Controlador implements MessagesListener {
 		recibidos.stream().forEach(m -> adaptadorMensaje.borrarMensaje(m));
 	}
 
-	public boolean crearPDFInfoConacto(String ruta) {
+	public boolean crearPDFInfoContacto(String ruta) {
 		List<IndividualContact> contactos = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
 
 		try {
@@ -610,18 +604,21 @@ public class Controlador implements MessagesListener {
 			} else {
 				autor = getUser(message.getAutor());
 			}
-			
-			if (autor.isPresent() /*&& (!(chatActual instanceof Group) || ((Group) chatActual).isParticipante(autor))*/)
+
+			if (autor.isPresent() /*
+									 * && (!(chatActual instanceof Group) || ((Group)
+									 * chatActual).isParticipante(autor))
+									 */)
 				mensajes.add(new Message(message.getTexto(), message.getFecha(), autor.get(), chatActual));
 			else
 				return;
 		}
 
 		chatActual.addMensajes(mensajes);
-		
+
 		// Guardar los mensajes en BD
 		mensajes.stream().forEach(m -> adaptadorMensaje.registrarMensaje(m));
-		
+
 		if (chatActual instanceof Group) {
 			adaptadorGrupo.modificarGrupo((Group) chatActual);
 		} else {
