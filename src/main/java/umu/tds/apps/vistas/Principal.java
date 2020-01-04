@@ -36,6 +36,7 @@ import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
+import umu.tds.apps.AppChat.Message;
 import umu.tds.apps.controlador.Controlador;
 
 import javax.swing.JTextField;
@@ -755,9 +756,10 @@ public class Principal extends JFrame {
 				panel.add(lblNewLabel, gbc_lblNewLabel);
 
 				JLabel lblNewLabel_1;
-				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblNewLabel_1 = new JLabel(contacto.getMensajesEnviados()
-							.get(contacto.getMensajesEnviados().size() - 1).getHora().format(format).toString());
+				List<Message> mensajes = Controlador.getInstancia().getMensajes(contacto);
+				if (!mensajes.isEmpty()) {
+					lblNewLabel_1 = new JLabel(mensajes
+							.get(mensajes.size() - 1).getHora().format(format).toString());
 				} else {
 					lblNewLabel_1 = new JLabel("");
 				}
@@ -768,12 +770,12 @@ public class Principal extends JFrame {
 				gbc_lblNewLabel_1.gridy = 1;
 				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
-				JLabel lblEsteHaSido;
-				if (!contacto.getMensajesEnviados().isEmpty()) {
-					lblEsteHaSido = new JLabel(
-							contacto.getMensajesEnviados().get(contacto.getMensajesEnviados().size() - 1).getTexto());
+				JLabel lblMensaje;
+				if (!mensajes.isEmpty()) {
+					lblMensaje = new JLabel(
+							mensajes.get(mensajes.size() - 1).getTexto());
 				} else {
-					lblEsteHaSido = new JLabel("");
+					lblMensaje = new JLabel("");
 				}
 				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
 				gbc_lblEsteHaSido.gridwidth = 2;
@@ -781,7 +783,7 @@ public class Principal extends JFrame {
 				gbc_lblEsteHaSido.insets = new Insets(0, 0, 5, 5);
 				gbc_lblEsteHaSido.gridx = 1;
 				gbc_lblEsteHaSido.gridy = 2;
-				panel.add(lblEsteHaSido, gbc_lblEsteHaSido);
+				panel.add(lblMensaje, gbc_lblEsteHaSido);
 
 				panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 				panel.setBackground((isSelected) ? SECONDARY_COLOR : MAIN_COLOR_LIGHT);
