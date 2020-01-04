@@ -88,7 +88,7 @@ public class GroupsListForModify extends JFrame {
 				if (selected != null) {
 					// Si soy el administrador puedo modificar el grupo
 					if (selected.getAdmin().getCodigo() == Controlador.getInstancia().getUsuarioActual().getCodigo()) {
-						NewGroup window = new NewGroup(modelContacts, (Group) comboBox.getSelectedItem());
+						GroupManagement window = new GroupManagement(modelContacts, (Group) comboBox.getSelectedItem());
 						window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 						window.setVisible(true);
 						GroupsListForModify.this.setVisible(false);

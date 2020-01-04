@@ -40,7 +40,7 @@ public class SharedGroups extends JFrame {
 	public SharedGroups(IndividualContact contacto) {
 		setTitle("Shared groups");
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(NewGroup.class.getResource("/umu/tds/apps/resources/icon.png")));
+				Toolkit.getDefaultToolkit().getImage(GroupManagement.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 

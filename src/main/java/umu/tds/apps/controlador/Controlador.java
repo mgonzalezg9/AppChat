@@ -240,8 +240,19 @@ public class Controlador implements MessagesListener {
 		return null;
 	}
 
-	// Creo el grupo.
+	/**
+	 * Crea un grupo para el que el usuario actual es el administrador.
+	 * 
+	 * @param nombre        Nombre del grupo
+	 * @param participantes Contactos añadidos al grupo
+	 * @return Grupo creado. En caso de que ya exista un grupo con ese nombre
+	 *         devuelve null
+	 */
 	public Group crearGrupo(String nombre, List<IndividualContact> participantes) {
+		if (usuarioActual.hasGroup(nombre)) {
+			return null;
+		}
+
 		Group nuevoGrupo = new Group(nombre, new LinkedList<Message>(), participantes, usuarioActual);
 
 		// Se añade el grupo al usuario actual y al resto de participantes

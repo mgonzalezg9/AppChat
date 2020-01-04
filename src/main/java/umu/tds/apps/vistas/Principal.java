@@ -303,7 +303,7 @@ public class Principal extends JFrame {
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewGroup window = new NewGroup(modelContacts, null);
+				GroupManagement window = new GroupManagement(modelContacts, null);
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}

@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.BevelBorder;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
@@ -43,7 +44,7 @@ import java.awt.event.MouseAdapter;
 /**
  * Clase que permite crear un grupo o modificar uno ya existente
  */
-public class NewGroup extends JFrame {
+public class GroupManagement extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtGroupName;
@@ -53,10 +54,10 @@ public class NewGroup extends JFrame {
 	/**
 	 * Crea la ventana
 	 */
-	public NewGroup(DefaultListModel<Contact> modelo, Group grupo) {
+	public GroupManagement(DefaultListModel<Contact> modelo, Group grupo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(NewGroup.class.getResource("/umu/tds/apps/resources/icon.png")));
+				Toolkit.getDefaultToolkit().getImage(GroupManagement.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Group managment");
 		setBounds(100, 100, 497, 340);
 
@@ -131,7 +132,7 @@ public class NewGroup extends JFrame {
 			}
 		});
 		lblSearchMessages
-				.setIcon(new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/search-white.png")));
+				.setIcon(new ImageIcon(GroupManagement.class.getResource("/umu/tds/apps/resources/search-white.png")));
 		panel_1.add(lblSearchMessages);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -284,7 +285,7 @@ public class NewGroup extends JFrame {
 		});
 
 		btAddedContact
-				.setIcon(new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
+				.setIcon(new ImageIcon(GroupManagement.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
 		GridBagConstraints gbc_btAddedContact = new GridBagConstraints();
 		gbc_btAddedContact.gridwidth = 2;
 		gbc_btAddedContact.fill = GridBagConstraints.HORIZONTAL;
@@ -305,7 +306,7 @@ public class NewGroup extends JFrame {
 			}
 		});
 		btRemoveContact.setIcon(
-				new ImageIcon(NewGroup.class.getResource("/umu/tds/apps/resources/flecha-hacia-izquierda.png")));
+				new ImageIcon(GroupManagement.class.getResource("/umu/tds/apps/resources/flecha-hacia-izquierda.png")));
 		GridBagConstraints gbc_btRemoveContact = new GridBagConstraints();
 		gbc_btRemoveContact.gridwidth = 2;
 		gbc_btRemoveContact.fill = GridBagConstraints.HORIZONTAL;
@@ -331,10 +332,19 @@ public class NewGroup extends JFrame {
 						modelContacts.set(i, grupoModificado);
 				} else {
 					Group nuevoGrupo = Controlador.getInstancia().crearGrupo(txtGroupName.getText(), participantes);
-					modelContacts.add(modelContacts.getSize(), nuevoGrupo);
+					
+					// Si ha podido crear el grupo lo añade a la lista de contactos. En caso contrario muestra error.
+					if (nuevoGrupo != null) {
+						modelContacts.add(modelContacts.getSize(), nuevoGrupo);
+					} else {
+						Toolkit.getDefaultToolkit().beep();
+						JOptionPane.showMessageDialog(GroupManagement.this,
+								"Unable to create group. Another group with the same name exists.", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 
-				NewGroup.this.setVisible(false);
+				GroupManagement.this.setVisible(false);
 			}
 		});
 		btnNewButton.setBackground(SECONDARY_COLOR);
