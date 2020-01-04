@@ -14,6 +14,8 @@ import umu.tds.apps.controlador.Controlador;
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -23,6 +25,10 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.LinkedList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 /**
@@ -98,6 +104,12 @@ public class CreateContact extends JFrame {
 		textFieldName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldName.setCaretColor(TEXT_COLOR_LIGHT);
 		textFieldName.setBackground(MAIN_COLOR);
+		textFieldName.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldName.setBackground(MAIN_COLOR);
+			}
+		});
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 0);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -120,6 +132,12 @@ public class CreateContact extends JFrame {
 		textFieldTelf.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldTelf.setCaretColor(TEXT_COLOR_LIGHT);
 		textFieldTelf.setBackground(MAIN_COLOR);
+		textFieldTelf.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldTelf.setBackground(MAIN_COLOR);
+			}
+		});
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridx = 1;
@@ -140,19 +158,63 @@ public class CreateContact extends JFrame {
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				// Comprobamos que los datos son correctos
+				if (!datosCorrectos())
+					return;
+				
 				// Creamos el contacto
 				IndividualContact nuevoContacto = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()));
 				if (nuevoContacto == null) {
 					// No se ha podido crear el usuario
-					
+					JOptionPane.showMessageDialog(CreateContact.this,
+							"Could not create user", "Error",
+							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// Usuario creado
 					modelContacts.add(modelContacts.size(), nuevoContacto);
+					JOptionPane.showMessageDialog(CreateContact.this, "Contact created successfully", "Create pdf",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
 		btnAdd.setBackground(SECONDARY_COLOR);
 		panel_2.add(btnAdd);
 	}
-
+	
+	private boolean datosCorrectos () {
+		List<String> errores = new LinkedList<>();
+		
+		if (textFieldName.getText().equals("")) {
+			errores.add("Name value is invalid");
+			textFieldName.setBackground(WRONG_INPUT_COLOR);
+		}
+		
+		if (textFieldTelf.getText().equals("") || !isNumeric(textFieldTelf.getText()) || Integer.parseInt(textFieldTelf.getText()) < 0) {
+			textFieldTelf.setBackground(WRONG_INPUT_COLOR);
+			errores.add("Phone number value is invalid");		
+		}
+				
+		if (errores.size() > 0) {
+			String error = "";
+			for (String e : errores)
+				error += e + "\n";
+			JOptionPane.showMessageDialog(CreateContact.this,
+					error, "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        Integer.parseInt(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
 }
