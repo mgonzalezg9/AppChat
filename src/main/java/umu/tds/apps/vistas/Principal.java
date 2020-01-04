@@ -314,6 +314,11 @@ public class Principal extends JFrame {
 		mntmModifyGroup.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (Controlador.getInstancia().getGruposUsuarioActual().size() == 0) {
+					JOptionPane.showMessageDialog(Principal.this, "Groups are needed", "Modify Group",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				GroupsListForModify window = new GroupsListForModify(modelContacts);
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);

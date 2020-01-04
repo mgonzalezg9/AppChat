@@ -121,7 +121,7 @@ public class ContactWindow extends JFrame {
 				// Funcionalidad Premium
 				if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
 					if (Controlador.getInstancia().getContactosIndividualesUsuarioActual().size() == 0) {
-						JOptionPane.showMessageDialog(ContactWindow.this, "Contacts are needed", "Create pdf",
+						JOptionPane.showMessageDialog(ContactWindow.this, "Contacts are needed", "Export contacts",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
