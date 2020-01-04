@@ -18,13 +18,22 @@ import javax.swing.JFileChooser;
 
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 import javax.imageio.ImageIO;
@@ -32,6 +41,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Dimension;
 import java.awt.Font;
+
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.apps.controlador.Controlador;
@@ -52,6 +62,7 @@ public class Register extends JFrame {
 	private JTextField textFieldEmail;
 	private JTextField textFieldPNumber;
 	private JTextField textFieldName;
+	private JDateChooser birthDateChooser;
 
 	/**
 	 * Launch the application.
@@ -86,7 +97,7 @@ public class Register extends JFrame {
 		gbl_contentPane.columnWidths = new int[] { 20, 0, 100, 100, 20, 100, 100, 100, 20, 0 };
 		gbl_contentPane.rowHeights = new int[] { 20, 0, 60, 0, 31, 10, 0, 0, 22, 0, 0, 20, 0 };
 		gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 
@@ -227,6 +238,12 @@ public class Register extends JFrame {
 		textFieldPassword.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldPassword.setCaretColor(TEXT_COLOR_LIGHT);
 		textFieldPassword.setBackground(MAIN_COLOR);
+		textFieldPassword.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldPassword.setBackground(MAIN_COLOR);
+			}
+		});
 		GridBagConstraints gbc_textFieldPassword = new GridBagConstraints();
 		gbc_textFieldPassword.gridwidth = 2;
 		gbc_textFieldPassword.insets = new Insets(0, 0, 5, 5);
@@ -250,6 +267,12 @@ public class Register extends JFrame {
 		textFieldConfPassword.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldConfPassword.setCaretColor(TEXT_COLOR_LIGHT);
 		textFieldConfPassword.setBackground(MAIN_COLOR);
+		textFieldConfPassword.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldConfPassword.setBackground(MAIN_COLOR);
+			}
+		});
 		GridBagConstraints gbc_textFieldConfPassword = new GridBagConstraints();
 		gbc_textFieldConfPassword.gridwidth = 2;
 		gbc_textFieldConfPassword.anchor = GridBagConstraints.NORTH;
@@ -274,6 +297,12 @@ public class Register extends JFrame {
 		textFieldEmail.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldEmail.setCaretColor(TEXT_COLOR_LIGHT);
 		textFieldEmail.setBackground(MAIN_COLOR);
+		textFieldEmail.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldEmail.setBackground(MAIN_COLOR);
+			}
+		});		
 		GridBagConstraints gbc_textFieldEmail = new GridBagConstraints();
 		gbc_textFieldEmail.gridwidth = 2;
 		gbc_textFieldEmail.insets = new Insets(0, 0, 5, 5);
@@ -297,6 +326,12 @@ public class Register extends JFrame {
 		textFieldName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldName.setCaretColor(TEXT_COLOR_LIGHT);
 		textFieldName.setBackground(MAIN_COLOR);
+		textFieldName.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldName.setBackground(MAIN_COLOR);
+			}
+		});	
 		GridBagConstraints gbc_textFieldName = new GridBagConstraints();
 		gbc_textFieldName.gridwidth = 2;
 		gbc_textFieldName.insets = new Insets(0, 0, 5, 5);
@@ -320,6 +355,12 @@ public class Register extends JFrame {
 		textFieldPNumber.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldPNumber.setCaretColor(TEXT_COLOR_LIGHT);
 		textFieldPNumber.setBackground(MAIN_COLOR);
+		textFieldPNumber.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldPNumber.setBackground(MAIN_COLOR);
+			}
+		});	
 		GridBagConstraints gbc_textFieldPNumber = new GridBagConstraints();
 		gbc_textFieldPNumber.gridwidth = 2;
 		gbc_textFieldPNumber.insets = new Insets(0, 0, 5, 5);
@@ -338,37 +379,41 @@ public class Register extends JFrame {
 		gbc_lblBirthDate.gridy = 7;
 		contentPane.add(lblBirthDate, gbc_lblBirthDate);
 
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.getDateEditor().getUiComponent().setBackground(MAIN_COLOR);
-		dateChooser.getDateEditor().getUiComponent().setForeground(MAIN_COLOR);
-		dateChooser.getDateEditor().getUiComponent().setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		dateChooser.setForeground(MAIN_COLOR);
-		dateChooser.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		dateChooser.setBackground(MAIN_COLOR);
-		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
-		gbc_dateChooser.gridwidth = 2;
-		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
-		gbc_dateChooser.fill = GridBagConstraints.BOTH;
-		gbc_dateChooser.gridx = 6;
-		gbc_dateChooser.gridy = 7;
-		contentPane.add(dateChooser, gbc_dateChooser);
+		birthDateChooser = new JDateChooser();
+		birthDateChooser.getDateEditor().getUiComponent().setBackground(MAIN_COLOR);
+		birthDateChooser.getDateEditor().getUiComponent().setForeground(MAIN_COLOR);
+		birthDateChooser.getDateEditor().getUiComponent().setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		birthDateChooser.setForeground(MAIN_COLOR);
+		birthDateChooser.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		birthDateChooser.setBackground(MAIN_COLOR);
+		birthDateChooser.setDate(new Date());
+		GridBagConstraints gbc_birthDateChooser = new GridBagConstraints();
+		gbc_birthDateChooser.gridwidth = 2;
+		gbc_birthDateChooser.insets = new Insets(0, 0, 5, 5);
+		gbc_birthDateChooser.fill = GridBagConstraints.BOTH;
+		gbc_birthDateChooser.gridx = 6;
+		gbc_birthDateChooser.gridy = 7;
+		contentPane.add(birthDateChooser, gbc_birthDateChooser);
 
 		JButton btnNewButton = new JButton("CREATE ACCOUNT");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				// Compruebo que los datos introducidos sean correctos
+				if (!datosCorrectos())
+					return;
+				
 				// Registra al usuario
 				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()),
 						textFieldUser.getText(), textFieldPassword.getText(), textFieldEmail.getText(),
 						textFieldName.getText(), Integer.parseInt(textFieldPNumber.getText()),
-						dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+						birthDateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
 				if (!creada) {
-					textFieldUser.setBackground(WRONG_INPUT_COLOR);
+					//textFieldUser.setBackground(WRONG_INPUT_COLOR);
+					JOptionPane.showMessageDialog(Register.this, "User already exists", "Create account",
+							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// Cierra la ventana actual
 					Register.this.setVisible(false);
@@ -418,5 +463,76 @@ public class Register extends JFrame {
 		gbc_btnNewButton_1.gridy = 10;
 		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
 	}
-
+	
+	private boolean datosCorrectos () {
+		List<String> errores = new LinkedList<>();
+		
+		if (textFieldUser.getText().equals("")) {
+			errores.add("User value is invalid");
+			textFieldUser.setBackground(WRONG_INPUT_COLOR);
+		}
+		if (textFieldPassword.getText().equals("")) {
+			errores.add("Password value is invalid");
+			textFieldPassword.setBackground(WRONG_INPUT_COLOR);
+		}
+		if (textFieldConfPassword.getText().equals("")) {
+			errores.add("Confirm password value is invalid");
+			textFieldConfPassword.setBackground(WRONG_INPUT_COLOR);
+		}
+		if (textFieldEmail.getText().equals("") || !isMail(textFieldEmail.getText())) {
+			errores.add("Email value is invalid");
+			textFieldEmail.setBackground(WRONG_INPUT_COLOR);
+		}
+		if (textFieldPNumber.getText().equals("") || !isNumeric(textFieldPNumber.getText()) || Integer.parseInt(textFieldPNumber.getText()) < 0) {
+			errores.add("Phone number value is invalid");
+			textFieldPNumber.setBackground(WRONG_INPUT_COLOR);
+		}
+		if (textFieldName.getText().equals("")) {
+			errores.add("Name value is invalid");
+			textFieldName.setBackground(WRONG_INPUT_COLOR);
+		}
+		if (!textFieldPassword.getText().equals(textFieldConfPassword.getText())) {
+			errores.add("Passwords are not equals");
+			textFieldConfPassword.setBackground(WRONG_INPUT_COLOR);
+		}
+		if (birthDateChooser.getDate() == null) {
+			errores.add("Birth date value is invalid");
+		}
+		
+		if (errores.size() > 0) {
+			String error = "";
+			for (String e : errores)
+				error += e + "\n";
+			JOptionPane.showMessageDialog(Register.this,
+					error, "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        Integer.parseInt(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
+	private boolean isMail(String email) 
+    { 
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
+                            "[a-zA-Z0-9_+&*-]+)*@" + 
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
+                            "A-Z]{2,7}$"; 
+                              
+        Pattern pat = Pattern.compile(emailRegex); 
+        if (email == null) 
+            return false; 
+        return pat.matcher(email).matches(); 
+    }
 }
