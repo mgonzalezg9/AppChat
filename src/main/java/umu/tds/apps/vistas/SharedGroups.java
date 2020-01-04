@@ -4,10 +4,8 @@ import static umu.tds.apps.vistas.Theme.MAIN_COLOR_LIGHT;
 import static umu.tds.apps.vistas.Theme.SECONDARY_COLOR;
 import static umu.tds.apps.vistas.Theme.TEXT_COLOR_LIGHT;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -17,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.controlador.Controlador;
@@ -33,25 +30,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 
 public class SharedGroups extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private IndividualContact contact;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					// SharedGroups frame = new SharedGroups();
-					// frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

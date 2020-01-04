@@ -2,11 +2,8 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,30 +11,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
-import java.awt.Image;
 
-import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import javax.imageio.ImageIO;
-import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
-import javax.swing.table.DefaultTableModel;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.IndividualContact;
@@ -50,38 +35,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class ContactWindow extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JList<IndividualContact> list;
 	private JScrollPane scrollPane;
 	private JPanel panel_1;
 	private JButton btnNewButton_1;
 	private JButton btnNewButton_2;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ContactWindow frame = new ContactWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

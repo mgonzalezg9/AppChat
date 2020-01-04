@@ -1,8 +1,5 @@
 package umu.tds.apps.vistas;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -10,7 +7,6 @@ import javax.swing.border.EmptyBorder;
 import umu.tds.apps.cargador.MessagesCharger;
 import umu.tds.apps.controlador.Controlador;
 
-import java.awt.Window.Type;
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -25,22 +21,6 @@ import java.awt.event.ActionEvent;
 public class WhatsappChatChooser extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WhatsappChatChooser frame = new WhatsappChatChooser(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -61,7 +41,7 @@ public class WhatsappChatChooser extends JFrame {
 		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBackground(Theme.MAIN_COLOR);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -69,16 +49,17 @@ public class WhatsappChatChooser extends JFrame {
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 0;
 		contentPane.add(panel, gbc_panel);
-		
+
 		JLabel lblChooseFormat = new JLabel("Choose format ");
 		lblChooseFormat.setForeground(Theme.TEXT_COLOR_LIGHT);
 		panel.add(lblChooseFormat);
-		
+
 		JComboBox<String> comboBox = new JComboBox<>();
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {MessagesCharger.ANDROID_1, MessagesCharger.ANDROID_2, MessagesCharger.IOS}));
-		
+		comboBox.setModel(new DefaultComboBoxModel<String>(
+				new String[] { MessagesCharger.ANDROID_1, MessagesCharger.ANDROID_2, MessagesCharger.IOS }));
+
 		panel.add(comboBox);
-		
+
 		JButton btnContinue = new JButton("CONTINUE");
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -1,7 +1,6 @@
 package umu.tds.apps.vistas;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import static umu.tds.apps.vistas.Theme.*;
 
 import javax.swing.JFrame;
@@ -172,22 +171,6 @@ public class StatusWindow extends JFrame {
 	private JLabel lblEstadoSeleccionado;
 	private JLabel lblNombreContacto;
 	private JList<IndividualContact> list;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					StatusWindow frame = new StatusWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

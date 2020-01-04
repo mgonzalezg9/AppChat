@@ -1,6 +1,5 @@
 package umu.tds.apps.vistas;
 
-import java.awt.EventQueue;
 import static umu.tds.apps.vistas.Theme.*;
 
 import javax.swing.JFrame;
@@ -32,22 +31,6 @@ public class CreateContact extends JFrame {
 	private JTextField textFieldName;
 	private JTextField textFieldTelf;
 	private DefaultListModel<Contact> modelContacts;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					//CreateContact frame = new CreateContact();
-					//frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

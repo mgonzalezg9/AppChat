@@ -2,7 +2,6 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
@@ -29,13 +27,9 @@ import java.io.IOException;
 import java.time.ZoneId;
 
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
@@ -50,7 +44,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 
 public class Register extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textFieldUser;
 	private JTextField textFieldPassword;

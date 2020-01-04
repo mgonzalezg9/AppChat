@@ -4,9 +4,7 @@ import static umu.tds.apps.vistas.Theme.*;
 
 import umu.tds.apps.AppChat.*;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,31 +31,14 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 
 public class Search extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private List<IndividualContact> misContactos;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					//Busqueda frame = new Busqueda();
-					//frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -103,7 +84,7 @@ public class Search extends JFrame {
 		model.addElement("All");
 		misContactos.stream().forEach(c -> model.addElement(c.getNombre()));
 		
-		JComboBox comboBox = new JComboBox(model);
+		JComboBox<String> comboBox = new JComboBox<>(model);
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);

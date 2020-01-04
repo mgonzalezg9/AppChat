@@ -4,9 +4,7 @@ import static umu.tds.apps.vistas.Theme.MAIN_COLOR_LIGHT;
 import static umu.tds.apps.vistas.Theme.SECONDARY_COLOR;
 import static umu.tds.apps.vistas.Theme.TEXT_COLOR_LIGHT;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,7 +13,6 @@ import javax.swing.border.EmptyBorder;
 
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Group;
-import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.GridBagLayout;
@@ -37,25 +34,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 public class GroupsListForModify extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private DefaultListModel<Contact> modelContacts;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					// GroupsListForModify frame = new GroupsListForModify();
-					// frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -88,7 +69,7 @@ public class GroupsListForModify extends JFrame {
 		contentPane.add(lblSeleccioneElGrupo, gbc_lblSeleccioneElGrupo);
 
 		List<Group> grupos = Controlador.getInstancia().getGruposUsuarioActual();
-		DefaultComboBoxModel<Group> model = new DefaultComboBoxModel();
+		DefaultComboBoxModel<Group> model = new DefaultComboBoxModel<>();
 		for (int i = 0; i < grupos.size(); i++)
 			model.addElement(grupos.get(i));
 

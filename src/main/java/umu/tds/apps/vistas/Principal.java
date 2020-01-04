@@ -5,7 +5,6 @@ import static umu.tds.apps.vistas.Theme.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -37,9 +36,7 @@ import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Group;
 import umu.tds.apps.AppChat.IndividualContact;
-import umu.tds.apps.cargador.MessagesCharger;
 import umu.tds.apps.controlador.Controlador;
-import umu.tds.apps.whatsappparser.Plataforma;
 
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
@@ -47,7 +44,6 @@ import javax.swing.Scrollable;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -103,22 +99,6 @@ public class Principal extends JFrame {
 	private Controlador controlador;
 	private JList<Contact> listaContactos;
 	private static DateTimeFormatter format;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Principal frame = new Principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) throws IllegalArgumentException {
 		// No permite enviar un mensaje si no hay seleccionado ningún contacto
