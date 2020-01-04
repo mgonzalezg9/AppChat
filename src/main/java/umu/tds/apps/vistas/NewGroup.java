@@ -40,6 +40,9 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 
+/**
+ * Clase que permite crear un grupo o modificar uno ya existente
+ */
 public class NewGroup extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -48,7 +51,7 @@ public class NewGroup extends JFrame {
 	private Group groupToModify;
 
 	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public NewGroup(DefaultListModel<Contact> modelo, Group grupo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -171,12 +174,12 @@ public class NewGroup extends JFrame {
 		} else {
 			txtGroupName.setText("Group name..");
 		}
-		
+
 		txtGroupName.setForeground(TEXT_COLOR_LIGHT);
 		txtGroupName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		txtGroupName.setCaretColor(TEXT_COLOR_LIGHT);
 		txtGroupName.setBackground(MAIN_COLOR);
-		
+
 		GridBagConstraints gbc_txtGroupName = new GridBagConstraints();
 		gbc_txtGroupName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtGroupName.gridwidth = 4;
@@ -344,6 +347,12 @@ public class NewGroup extends JFrame {
 		contentPane.add(btnNewButton, gbc_btnNewButton);
 	}
 
+	/**
+	 * Renderer que permite mostrar los contactos en la lista
+	 * 
+	 * @return Objeto que le indica a la lista como mostrar los contactos en la
+	 *         vista
+	 */
 	private static ListCellRenderer<? super Contact> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;

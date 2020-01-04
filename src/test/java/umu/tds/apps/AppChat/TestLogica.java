@@ -3,7 +3,6 @@ package umu.tds.apps.AppChat;
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +13,9 @@ import org.junit.Test;
 
 import umu.tds.apps.controlador.Controlador;
 
-// Clase para crear contenido en BD con el que probar la logica de la aplicacion
+/**
+ * Clase para crear contenido en BD con el que probar la logica de la aplicacion
+ */
 public class TestLogica {
 	// Constantes
 	private final static String ADMIN_NAME = "Administrador";

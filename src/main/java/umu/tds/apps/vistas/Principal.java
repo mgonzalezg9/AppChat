@@ -55,7 +55,10 @@ import pulsador.Luz;
 import pulsador.IEncendidoListener;
 import java.util.EventObject;
 
-// Clase para que desaparezca la scrollbar horizontal
+/**
+ * Clase que representa al chat con las burbujas. Se creó con el objetivo de que
+ * desaparezca la scrollbar horizontal del chat.
+ */
 class ChatBurbujas extends JPanel implements Scrollable {
 	private static final long serialVersionUID = 1L;
 
@@ -86,6 +89,9 @@ class ChatBurbujas extends JPanel implements Scrollable {
 
 }
 
+/**
+ * Ventana principal
+ */
 public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -100,7 +106,15 @@ public class Principal extends JFrame {
 	private JList<Contact> listaContactos;
 	private static DateTimeFormatter format;
 
-	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) throws IllegalArgumentException {
+	/**
+	 * Manda al contacto pasado como parametro el mensaje con el texto del textfield
+	 * y lo muestra en el panel.
+	 * 
+	 * @param panel     Panel dónde se mostrará el mensaje enviado
+	 * @param textField Campo de texto con el mensaje a enviar
+	 * @param contacto  Contacto al que se le envia el mensaje
+	 */
+	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) {
 		// No permite enviar un mensaje si no hay seleccionado ningún contacto
 		if (contacto == null)
 			return;
@@ -114,7 +128,15 @@ public class Principal extends JFrame {
 		listaContactos.updateUI();
 	}
 
-	private void sendIcon(JPanel panel, int iconID, Contact contacto) throws IllegalArgumentException {
+	/**
+	 * Manda al contacto pasado como parametro el mensaje con el emoticono y lo
+	 * muestra en el panel.
+	 * 
+	 * @param panel    Panel dónde se mostrará el mensaje enviado
+	 * @param iconID   Identificador del icono a enviar
+	 * @param contacto Contacto al que se le envia el mensaje
+	 */
+	private void sendIcon(JPanel panel, int iconID, Contact contacto) {
 		// No permite enviar un emoji si no hay seleccionado ningún contacto
 		if (contacto == null)
 			return;
@@ -125,6 +147,11 @@ public class Principal extends JFrame {
 		chat.add(burbuja);
 	}
 
+	/**
+	 * Carga en pantalla toda la conversación con dicho contacto
+	 * 
+	 * @param contacto Contacto cuya conversación se quiere cargar
+	 */
 	private void loadChat(Contact contacto) {
 		if (contacto == null) {
 			return;
@@ -157,7 +184,7 @@ public class Principal extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public Principal() {
 		controlador = Controlador.getInstancia();
@@ -667,6 +694,12 @@ public class Principal extends JFrame {
 		writeText.add(lblSend, gbc_lblSend);
 	}
 
+	/**
+	 * Crea el renderer para mostrar la lista con los chats del usuario
+	 * 
+	 * @return Objeto que se pasará como parámetro a la lista con los chats para que
+	 *         sepa mostrarlos
+	 */
 	private static ListCellRenderer<? super Contact> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
@@ -753,6 +786,11 @@ public class Principal extends JFrame {
 		};
 	}
 
+	/**
+	 * Se encarga de mostrar el menú de opciones
+	 * @param component Componente que contendrá el menú
+	 * @param popup Menú de opciones a mostrar
+	 */
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

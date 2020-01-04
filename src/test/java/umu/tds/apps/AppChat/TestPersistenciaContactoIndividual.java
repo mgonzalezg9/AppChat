@@ -16,6 +16,9 @@ import org.junit.Test;
 import umu.tds.apps.persistencia.AdaptadorIndividualContactTDS;
 import umu.tds.apps.persistencia.IndividualContactDAO;
 
+/**
+ * Test que prueba el guardado y recuperación de contactos individuales en BD
+ */
 public class TestPersistenciaContactoIndividual {
 	private static IndividualContact contact;
 	private static IndividualContactDAO adapter;

@@ -32,6 +32,9 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 
+/**
+ * Ventana que muestra las estadísticas de uso del usuario
+ */
 public class UsageStatistics extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String HISTOGRAMA = "Messages sent monthly";
@@ -40,7 +43,7 @@ public class UsageStatistics extends JFrame {
 	private JPanel contentPane;
 
 	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public UsageStatistics() {
 		setIconImage(Toolkit.getDefaultToolkit()

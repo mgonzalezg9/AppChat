@@ -21,12 +21,15 @@ import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Ventana que permite que un usuario normal pueda convertirse en premium
+ */
 public class Premium extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public Premium() {
 		setTitle("Get premium");

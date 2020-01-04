@@ -17,7 +17,7 @@ import umu.tds.apps.persistencia.AdaptadorUserTDS;
 import umu.tds.apps.persistencia.UserDAO;
 
 /**
- * Unit test for AppChat.
+ * Test que prueba el guardado y recuperación de usuarios en BD
  */
 public class TestPersistenciaUser {
 	private static User usuario;

@@ -34,6 +34,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 
+/**
+ * Ventana con los datos del usuario actual
+ */
 public class UserSettings extends JFrame {
 	private static final long serialVersionUID = 1L;
 

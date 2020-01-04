@@ -24,15 +24,17 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.border.EtchedBorder;
 
+/**
+ * Ventana inicial de la aplicación. Permite al usuario iniciar sesión
+ */
 public class Login extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField userField;
 	private JPasswordField passwordField;
 	private Controlador controlador;
 
-	
 	/**
-	 * Launch the application.
+	 * Lanza el hilo que se encarga de iniciar la app
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -48,7 +50,7 @@ public class Login extends JFrame {
 	}
 
 	/**
-	 * Create the application.
+	 * Inicializa la ventana
 	 */
 	public Login() {
 		getContentPane().setBackground(MAIN_COLOR_LIGHT);
@@ -56,7 +58,9 @@ public class Login extends JFrame {
 		initialize();
 	}
 
-	// Funcion con la que el usuario inicia sesion
+	/**
+	 * Funcion con la que el usuario inicia sesion
+	 */
 	private void login() {
 		// Comprobamos que el login haya sido satisfactorio
 		String user = userField.getText();
@@ -77,7 +81,7 @@ public class Login extends JFrame {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Inicializa la ventana
 	 */
 	private void initialize() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/icon.png")));
@@ -160,12 +164,12 @@ public class Login extends JFrame {
 				userField.setBackground(MAIN_COLOR);
 			}
 		});
-		
+
 		userField.setForeground(TEXT_COLOR_LIGHT);
 		userField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		userField.setCaretColor(TEXT_COLOR_LIGHT);
 		userField.setBackground(MAIN_COLOR);
-		
+
 		GridBagConstraints gbc_userField = new GridBagConstraints();
 		gbc_userField.insets = new Insets(0, 0, 5, 0);
 		gbc_userField.fill = GridBagConstraints.HORIZONTAL;

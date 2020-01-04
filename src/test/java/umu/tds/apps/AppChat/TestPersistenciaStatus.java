@@ -9,6 +9,9 @@ import org.junit.Test;
 import umu.tds.apps.persistencia.AdaptadorStatusTDS;
 import umu.tds.apps.persistencia.StatusDAO;
 
+/**
+ * Test que prueba el guardado y recuperación de estados en BD
+ */
 public class TestPersistenciaStatus {
 	private static Status status;
 	private static StatusDAO adapter;

@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 
@@ -16,6 +15,9 @@ import org.junit.Test;
 import umu.tds.apps.persistencia.AdaptadorMessageTDS;
 import umu.tds.apps.persistencia.MessageDAO;
 
+/**
+ * Test que prueba el guardado y recuperación de mensajes en BD
+ */
 public class TestPersistenciaMessage {
 	private static User usuario;
 	private static Message mensaje;

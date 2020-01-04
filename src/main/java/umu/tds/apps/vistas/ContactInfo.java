@@ -23,7 +23,6 @@ public class ContactInfo extends JFrame {
 	 * Create the frame.
 	 */
 	public ContactInfo(Contact contact) {
-		
 		setTitle("Contact info");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ContactInfo.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

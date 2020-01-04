@@ -25,6 +25,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Ventana que permite añadir un nuevo contacto
+ */
 public class CreateContact extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -33,7 +36,7 @@ public class CreateContact extends JFrame {
 	private DefaultListModel<Contact> modelContacts;
 
 	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public CreateContact(DefaultListModel<Contact> modelo) {
 		this.modelContacts = modelo;

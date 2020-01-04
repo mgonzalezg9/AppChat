@@ -49,6 +49,9 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.border.BevelBorder;
 
+/**
+ * Ventana que permite al usuario añadir un nuevo estado
+ */
 class StatusChooser extends JFrame {
 	private static final long serialVersionUID = 1L;
 
@@ -161,6 +164,9 @@ class StatusChooser extends JFrame {
 	}
 }
 
+/**
+ * Clase que permite ver tanto el estado del usuario como el del resto de contactos.
+ */
 public class StatusWindow extends JFrame {
 	private static final Status DEFAULT_STATUS = new Status(
 			new ImageIcon(StatusWindow.class.getResource("/umu/tds/apps/resources/icon.png")), "AppChat");
@@ -173,7 +179,7 @@ public class StatusWindow extends JFrame {
 	private JList<IndividualContact> list;
 
 	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public StatusWindow() {
 		setTitle("Status");
@@ -383,6 +389,10 @@ public class StatusWindow extends JFrame {
 		lblFraseProfunda.setBorder(null);
 	}
 
+	/**
+	 * Crea un renderer para mostrar la lista de contactos
+	 * @return Objeto que se añade a la lista de contactos para que sepa como mostrarlos
+	 */
 	private static ListCellRenderer<? super IndividualContact> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
