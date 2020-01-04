@@ -120,6 +120,11 @@ public class ContactWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Funcionalidad Premium
 				if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
+					if (Controlador.getInstancia().getContactosIndividualesUsuarioActual().size() == 0) {
+						JOptionPane.showMessageDialog(ContactWindow.this, "Contacts are needed", "Create pdf",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					// Exporto a PDF toda la información
 					// Pido la ruta donde crear el archivo
 					JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
