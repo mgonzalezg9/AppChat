@@ -2,8 +2,6 @@ package umu.tds.apps.vistas;
 
 import static umu.tds.apps.vistas.Theme.*;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -26,13 +24,10 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
@@ -48,13 +43,15 @@ import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.ActionEvent;
 
 public class Register extends JFrame {
 	private static final long serialVersionUID = 1L;
+	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@"
+			+ "(?:[a-zA-Z0-9-]+\\.)+[a-z" + "A-Z]{2,7}$";
+	private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
 	private JPanel contentPane;
 	private JTextField textFieldUser;
 	private JTextField textFieldPassword;
@@ -65,23 +62,7 @@ public class Register extends JFrame {
 	private JDateChooser birthDateChooser;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Register frame = new Register();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public Register() {
 		setIconImage(
@@ -182,13 +163,11 @@ public class Register extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -302,7 +281,7 @@ public class Register extends JFrame {
 			public void focusGained(FocusEvent e) {
 				textFieldEmail.setBackground(MAIN_COLOR);
 			}
-		});		
+		});
 		GridBagConstraints gbc_textFieldEmail = new GridBagConstraints();
 		gbc_textFieldEmail.gridwidth = 2;
 		gbc_textFieldEmail.insets = new Insets(0, 0, 5, 5);
@@ -331,7 +310,7 @@ public class Register extends JFrame {
 			public void focusGained(FocusEvent e) {
 				textFieldName.setBackground(MAIN_COLOR);
 			}
-		});	
+		});
 		GridBagConstraints gbc_textFieldName = new GridBagConstraints();
 		gbc_textFieldName.gridwidth = 2;
 		gbc_textFieldName.insets = new Insets(0, 0, 5, 5);
@@ -360,7 +339,7 @@ public class Register extends JFrame {
 			public void focusGained(FocusEvent e) {
 				textFieldPNumber.setBackground(MAIN_COLOR);
 			}
-		});	
+		});
 		GridBagConstraints gbc_textFieldPNumber = new GridBagConstraints();
 		gbc_textFieldPNumber.gridwidth = 2;
 		gbc_textFieldPNumber.insets = new Insets(0, 0, 5, 5);
@@ -403,7 +382,7 @@ public class Register extends JFrame {
 				// Compruebo que los datos introducidos sean correctos
 				if (!datosCorrectos())
 					return;
-				
+
 				// Registra al usuario
 				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()),
 						textFieldUser.getText(), textFieldPassword.getText(), textFieldEmail.getText(),
@@ -411,7 +390,7 @@ public class Register extends JFrame {
 						birthDateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
 				if (!creada) {
-					//textFieldUser.setBackground(WRONG_INPUT_COLOR);
+					// textFieldUser.setBackground(WRONG_INPUT_COLOR);
 					JOptionPane.showMessageDialog(Register.this, "User already exists", "Create account",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
@@ -463,10 +442,10 @@ public class Register extends JFrame {
 		gbc_btnNewButton_1.gridy = 10;
 		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
 	}
-	
-	private boolean datosCorrectos () {
+
+	private boolean datosCorrectos() {
 		List<String> errores = new LinkedList<>();
-		
+
 		if (textFieldUser.getText().equals("")) {
 			errores.add("User value is invalid");
 			textFieldUser.setBackground(WRONG_INPUT_COLOR);
@@ -483,7 +462,8 @@ public class Register extends JFrame {
 			errores.add("Email value is invalid");
 			textFieldEmail.setBackground(WRONG_INPUT_COLOR);
 		}
-		if (textFieldPNumber.getText().equals("") || !isNumeric(textFieldPNumber.getText()) || Integer.parseInt(textFieldPNumber.getText()) < 0) {
+		if (textFieldPNumber.getText().equals("") || !isNumeric(textFieldPNumber.getText())
+				|| Integer.parseInt(textFieldPNumber.getText()) < 0) {
 			errores.add("Phone number value is invalid");
 			textFieldPNumber.setBackground(WRONG_INPUT_COLOR);
 		}
@@ -495,44 +475,35 @@ public class Register extends JFrame {
 			errores.add("Passwords are not equals");
 			textFieldConfPassword.setBackground(WRONG_INPUT_COLOR);
 		}
-		if (birthDateChooser.getDate() == null) {
+		if (birthDateChooser.getDate() == null || birthDateChooser.getDate().after(new Date())) {
 			errores.add("Birth date value is invalid");
 		}
-		
+
 		if (errores.size() > 0) {
 			String error = "";
 			for (String e : errores)
 				error += e + "\n";
-			JOptionPane.showMessageDialog(Register.this,
-					error, "Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(Register.this, error, "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		return true;
 	}
-	
+
 	private boolean isNumeric(String strNum) {
-	    if (strNum == null) {
-	        return false;
-	    }
-	    try {
-	        Integer.parseInt(strNum);
-	    } catch (NumberFormatException nfe) {
-	        return false;
-	    }
-	    return true;
+		if (strNum == null) {
+			return false;
+		}
+		try {
+			Integer.parseInt(strNum);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
 	}
-	
-	private boolean isMail(String email) 
-    { 
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
-                            "[a-zA-Z0-9_+&*-]+)*@" + 
-                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
-                            "A-Z]{2,7}$"; 
-                              
-        Pattern pat = Pattern.compile(emailRegex); 
-        if (email == null) 
-            return false; 
-        return pat.matcher(email).matches(); 
-    }
+
+	private boolean isMail(String email) {
+		if (email == null)
+			return false;
+		return EMAIL_PATTERN.matcher(email).matches();
+	}
 }

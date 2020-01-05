@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
@@ -45,13 +46,20 @@ public class UsersCatalogue {
 	}
 	
 	public User getUsuario(int codigo) {
-		for (User u : usuarios.values())
-			if (u.getCodigo() == codigo) return u;
-		return null;
+		return usuarios.values().stream()
+				.filter(u -> u.getCodigo() == codigo)
+				.findAny()
+				.orElse(null); 
 	}
 	
 	public User getUsuario(String nick) {
 		return usuarios.get(nick); 
+	}
+	
+	public Optional<User> getUsuarioNumTelf(int numTelefono) {
+		return usuarios.values().stream()
+				.filter(u -> u.getNumTelefono() == numTelefono)
+				.findAny();
 	}
 	
 	public void addUsuario(User user) {

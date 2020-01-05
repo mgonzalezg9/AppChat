@@ -1,14 +1,9 @@
 package umu.tds.apps.controlador;
 
-import java.awt.Color;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -219,23 +214,28 @@ public class Controlador implements MessagesListener {
 		return mensajes.get(mensajes.size() - 1);
 	}
 
-	// Creo el contacto. Da error si tiene como telefono de otro ya creado.
+	/**
+	 * Crea el contacto especificado.
+	 * 
+	 * @param nombre      Nombre del contacto a guardar
+	 * @param numTelefono Número de telefono del contacto a guardar
+	 * @return El contacto creado. Devuelve null en caso de que ya existiese el
+	 *         contacto o el contacto no se corresponda con un usuario real.
+	 */
 	public IndividualContact crearContacto(String nombre, int numTelefono) {
-		boolean existeContacto = false;
-		if (!usuarioActual.getContactos().isEmpty()) {
-			existeContacto = usuarioActual.getContactos().stream().filter(c -> c instanceof IndividualContact)
-					.map(c -> (IndividualContact) c).anyMatch(c -> c.getMovil() == numTelefono);
-		}
-
-		if (!existeContacto) {
-			User usuario = catalogoUsuarios.getUsuarios().stream().filter(u -> u.getNumTelefono() == numTelefono)
-					.collect(Collectors.toList()).get(0);
-			IndividualContact nuevoContacto = new IndividualContact(nombre, numTelefono, usuario);
-			usuarioActual.addContacto(nuevoContacto);
-			adaptadorContactoIndividual.registrarContacto(nuevoContacto);
-			catalogoUsuarios.addUsuario(usuarioActual);
-			adaptadorUsuario.modificarUsuario(usuarioActual);
-			return nuevoContacto;
+		// Si no tiene el contacto guardado lo guarda
+		if (!usuarioActual.hasIndividualContact(nombre)) {
+			Optional<User> usuarioOpt = catalogoUsuarios.getUsuarioNumTelf(numTelefono);
+			
+			if (usuarioOpt.isPresent()) {
+				IndividualContact nuevoContacto = new IndividualContact(nombre, numTelefono, usuarioOpt.get());
+				usuarioActual.addContacto(nuevoContacto);
+				
+				adaptadorContactoIndividual.registrarContacto(nuevoContacto);
+				//catalogoUsuarios.addUsuario(usuarioActual);
+				adaptadorUsuario.modificarUsuario(usuarioActual);
+				return nuevoContacto;
+			}
 		}
 		return null;
 	}

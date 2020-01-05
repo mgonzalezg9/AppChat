@@ -273,15 +273,19 @@ public class User {
 			gruposAdmin.remove((Group) c);
 		}
 	}
-	
+
 	/**
 	 * Indica si el usuario tiene un grupo con dicho nombre
+	 * 
 	 * @param nombreGrupo Nombre del grupo a buscar
 	 * @return Devuelve si tiene un contacto grupo con ese nombre
 	 */
 	public boolean hasGroup(String nombreGrupo) {
-		return contactos.stream()
-				.anyMatch(c -> c instanceof Group && c.getNombre().equals(nombreGrupo));
+		return contactos.stream().anyMatch(c -> c instanceof Group && c.getNombre().equals(nombreGrupo));
+	}
+
+	public boolean hasIndividualContact(String nomContacto) {
+		return contactos.stream().anyMatch(c -> c instanceof IndividualContact && c.getNombre().equals(nomContacto));
 	}
 
 	// Metodos de test

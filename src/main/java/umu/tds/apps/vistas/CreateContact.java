@@ -166,13 +166,14 @@ public class CreateContact extends JFrame {
 				IndividualContact nuevoContacto = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()));
 				if (nuevoContacto == null) {
 					// No se ha podido crear el usuario
+					Toolkit.getDefaultToolkit().beep();
 					JOptionPane.showMessageDialog(CreateContact.this,
-							"Could not create user", "Error",
+							"The contact is already saved or its user does not exist", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					// Usuario creado
 					modelContacts.add(modelContacts.size(), nuevoContacto);
-					JOptionPane.showMessageDialog(CreateContact.this, "Contact created successfully", "Create pdf",
+					JOptionPane.showMessageDialog(CreateContact.this, "Contact added successfully", "Info",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
