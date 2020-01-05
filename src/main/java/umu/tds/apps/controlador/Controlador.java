@@ -201,8 +201,8 @@ public class Controlador implements MessagesListener {
 							((IndividualContact) contacto).getMensajesRecibidos(usuarioActual).stream())
 					.sorted().collect(Collectors.toList());
 		} else {
-			return ((Group) contacto).getMensajesEnviados(); // Dentro de los enviados estan contenidos todos los
-																// mensajes
+			// Dentro de los enviados estan contenidos todos los mensajes
+			return ((Group) contacto).getMensajesEnviados();
 		}
 	}
 
@@ -226,13 +226,13 @@ public class Controlador implements MessagesListener {
 		// Si no tiene el contacto guardado lo guarda
 		if (!usuarioActual.hasIndividualContact(nombre)) {
 			Optional<User> usuarioOpt = catalogoUsuarios.getUsuarioNumTelf(numTelefono);
-			
+
 			if (usuarioOpt.isPresent()) {
 				IndividualContact nuevoContacto = new IndividualContact(nombre, numTelefono, usuarioOpt.get());
 				usuarioActual.addContacto(nuevoContacto);
-				
+
 				adaptadorContactoIndividual.registrarContacto(nuevoContacto);
-				//catalogoUsuarios.addUsuario(usuarioActual);
+				// catalogoUsuarios.addUsuario(usuarioActual);
 				adaptadorUsuario.modificarUsuario(usuarioActual);
 				return nuevoContacto;
 			}

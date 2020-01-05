@@ -45,12 +45,14 @@ public class IndividualContact extends Contact {
 	}
 
 	// Methods
-	// Dado un usuario me devuelve el contacto que este usuario tiene (como lo ve desde su perspectiva)
+	// Dado un usuario me devuelve el contacto que este usuario tiene (como lo ve
+	// desde su perspectiva)
 	public IndividualContact getContacto(User usuario) {
 		return this.usuario.getContactos().stream().filter(c -> c instanceof IndividualContact)
-		.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().getNick().equals(usuario.getNick())).findAny().orElse(null);
+				.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().getNick().equals(usuario.getNick()))
+				.findAny().orElse(null);
 	}
-	
+
 	// Devuelve los mensajes que el usuario pasado como parametro recibe de este
 	// contacto
 	public List<Message> getMensajesRecibidos(User usuario) {
@@ -89,16 +91,22 @@ public class IndividualContact extends Contact {
 		return copia;
 	}
 
-	// HashCode y equals
+	// HashCode e Equals
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + movil;
-		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
 		return result;
 	}
 
+	/**
+	 * Dos contactos son iguales si tienen el mismo número de teléfono
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -109,11 +117,6 @@ public class IndividualContact extends Contact {
 			return false;
 		IndividualContact other = (IndividualContact) obj;
 		if (movil != other.movil)
-			return false;
-		if (usuario == null) {
-			if (other.usuario != null)
-				return false;
-		} else if (!usuario.equals(other.usuario))
 			return false;
 		return true;
 	}

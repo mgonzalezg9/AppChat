@@ -20,6 +20,7 @@ import java.awt.Toolkit;
 import java.util.List;
 import java.util.Random;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -756,12 +757,11 @@ public class Principal extends JFrame {
 				panel.add(lblNewLabel, gbc_lblNewLabel);
 
 				JLabel lblNewLabel_1;
-				List<Message> mensajes = Controlador.getInstancia().getMensajes(contacto);
-				if (!mensajes.isEmpty()) {
-					lblNewLabel_1 = new JLabel(mensajes
-							.get(mensajes.size() - 1).getHora().format(format).toString());
+				Message ultimoMensaje = Controlador.getInstancia().getUltimoMensaje(contacto);
+				if (ultimoMensaje != null) {
+					lblNewLabel_1 = new JLabel(ultimoMensaje.getHora().format(format).toString());
 				} else {
-					lblNewLabel_1 = new JLabel("");
+					lblNewLabel_1 = new JLabel();
 				}
 				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
@@ -771,11 +771,16 @@ public class Principal extends JFrame {
 				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 				JLabel lblMensaje;
-				if (!mensajes.isEmpty()) {
-					lblMensaje = new JLabel(
-							mensajes.get(mensajes.size() - 1).getTexto());
+				if (ultimoMensaje != null) {
+					// Si no tiene texto es un emoji
+					if (ultimoMensaje.getTexto().isEmpty()) {
+						lblMensaje = new JLabel("😀");
+						lblMensaje.setFont(lblMensaje.getFont().deriveFont(20));
+					} else {
+						lblMensaje = new JLabel(ultimoMensaje.getTexto());
+					}
 				} else {
-					lblMensaje = new JLabel("");
+					lblMensaje = new JLabel();
 				}
 				GridBagConstraints gbc_lblEsteHaSido = new GridBagConstraints();
 				gbc_lblEsteHaSido.gridwidth = 2;
@@ -795,8 +800,9 @@ public class Principal extends JFrame {
 
 	/**
 	 * Se encarga de mostrar el menú de opciones
+	 * 
 	 * @param component Componente que contendrá el menú
-	 * @param popup Menú de opciones a mostrar
+	 * @param popup     Menú de opciones a mostrar
 	 */
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {

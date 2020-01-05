@@ -74,9 +74,41 @@ public class Group extends Contact {
 		recibidos.clear();
 		return copia;
 	}
-	
+
 	private boolean isParticipante(User usuario) {
 		return integrantes.contains(usuario);
 	}
 
+	// HashCode e Equals
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getNombre() == null) ? 0 : getNombre().hashCode());
+		return result;
+	}
+
+	/**
+	 * Dos grupos son iguales si tienen el mismo nombre.
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Group other = (Group) obj;
+		if (getNombre() == null) {
+			if (other.getNombre() != null)
+				return false;
+		} else if (!getNombre().equals(other.getNombre()))
+			return false;
+		return true;
+	}
 }
