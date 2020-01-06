@@ -57,17 +57,17 @@ public class ContactInfo extends JFrame {
 		gbc_lblName.gridy = 3;
 		contentPane.add(lblName, gbc_lblName);
 		
-		JLabel lblAlfonso = new JLabel(contact.getNombre());
-		lblAlfonso.setForeground(TEXT_COLOR_LIGHT);
-		GridBagConstraints gbc_lblAlfonso = new GridBagConstraints();
-		gbc_lblAlfonso.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblAlfonso.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAlfonso.gridx = 2;
-		gbc_lblAlfonso.gridy = 3;
-		contentPane.add(lblAlfonso, gbc_lblAlfonso);
+		JLabel lblNameData = new JLabel(contact.getNombre());
+		lblNameData.setForeground(TEXT_COLOR_LIGHT);
+		GridBagConstraints gbc_lblNameData = new GridBagConstraints();
+		gbc_lblNameData.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblNameData.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNameData.gridx = 2;
+		gbc_lblNameData.gridy = 3;
+		contentPane.add(lblNameData, gbc_lblNameData);
 		
 		if (contact instanceof IndividualContact) {
-			JLabel lblTele = new JLabel("Telephone number: ");
+			JLabel lblTele = new JLabel("Phone: ");
 			lblTele.setForeground(TEXT_COLOR_LIGHT);
 			GridBagConstraints gbc_lblTele = new GridBagConstraints();
 			gbc_lblTele.anchor = GridBagConstraints.EAST;

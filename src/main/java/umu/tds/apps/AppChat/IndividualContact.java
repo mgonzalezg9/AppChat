@@ -74,13 +74,15 @@ public class IndividualContact extends Contact {
 		usuario.removeContact(grupo);
 	}
 
-	// Modifica el grupo del contacto
+	/**
+	 * Modifica el grupo del contacto
+	 * @param g Grupo ya modificado
+	 */
 	public void modificarGrupo(Group g) {
-		List<Group> grupos = usuario.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
-				.collect(Collectors.toList());
-		for (int i = 0; i < grupos.size(); i++)
-			if (grupos.get(i).getCodigo() == g.getCodigo())
-				grupos.set(i, g);
+		List<Group> grupos = usuario.getGrupos();
+		
+		grupos.remove(g);
+		grupos.add(g);
 	}
 
 	// Borra los mensajes que le ha mandado este contacto al usuarioActual

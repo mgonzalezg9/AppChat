@@ -49,7 +49,7 @@ public class Search extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 606, 462);
 		
-		misContactos = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
+		misContactos = Controlador.getInstancia().getUsuarioActual().getContactosIndividuales();
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

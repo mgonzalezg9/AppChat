@@ -51,14 +51,14 @@ public class Group extends Contact {
 		admin = u;
 	}
 
-	public void modificarIntegrantes(List<IndividualContact> contactos) {
+	public void setIntegrantes(List<IndividualContact> contactos) {
 		this.integrantes = contactos;
 	}
 
 	// Devuelve los mensajes que han enviado el resto de usuarios por el grupo
 	public List<Message> getMensajesRecibidos() {
 		return this.integrantes.stream().flatMap(c -> c.getUsuario().getContactos().stream())
-				.filter(c -> c instanceof Group).map(c -> (Group) c).filter(g -> g.getCodigo() == this.getCodigo())
+				.filter(c -> c instanceof Group).map(c -> (Group) c).filter(g -> this.equals(g))
 				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
 	}
 
@@ -75,8 +75,14 @@ public class Group extends Contact {
 		return copia;
 	}
 
-	private boolean isParticipante(User usuario) {
-		return integrantes.contains(usuario);
+	/**
+	 * Indica si el usuario pertenece al grupo
+	 * @param usuario Usuario a comprobar si está en el grupo
+	 * @return Devuelve si el usuario pertenece al grupo
+	 */
+	public boolean hasParticipante(User usuario) {
+		return integrantes.stream()
+				.anyMatch(i -> i.getUsuario().equals(usuario));
 	}
 
 	// HashCode e Equals

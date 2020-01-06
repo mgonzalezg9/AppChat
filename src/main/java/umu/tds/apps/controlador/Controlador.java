@@ -150,7 +150,7 @@ public class Controlador implements MessagesListener {
 
 	public void setSaludoUsuario(String saludo) {
 		usuarioActual.setSaludo(saludo);
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
@@ -161,14 +161,13 @@ public class Controlador implements MessagesListener {
 		// Guarda la imagen en el proyecto y con su nueva ruta
 		Theme.saveImage(image, Theme.PROFILE_PHOTO_NAME, usuarioActual.getCodigo(), pos);
 
-		catalogoUsuarios.addUsuario(usuarioActual);
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	// Borra una imagen del conjunto de imágenes del usuario
 	public ImageIcon removeImagenUsuario(int pos) {
 		ImageIcon img = usuarioActual.removeProfilePhoto(pos);
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		return img;
 	}
@@ -179,18 +178,6 @@ public class Controlador implements MessagesListener {
 			return new LinkedList<Contact>();
 		User u = catalogoUsuarios.getUsuario(usuarioActual.getCodigo());
 		return u.getContactos();
-	}
-
-	// Devuelvo mi lista de contactos individuales.
-	public List<IndividualContact> getContactosIndividualesUsuarioActual() {
-		return getContactosUsuarioActual().stream().filter(c -> c instanceof IndividualContact)
-				.map(c -> (IndividualContact) c).collect(Collectors.toList());
-	}
-
-	// Devuelvo la lista de mis grupos.
-	public List<Group> getGruposUsuarioActual() {
-		return getContactosUsuarioActual().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
-				.collect(Collectors.toList());
 	}
 
 	// Devuelvo mi lista de mensajes con ese contacto
@@ -232,7 +219,7 @@ public class Controlador implements MessagesListener {
 				usuarioActual.addContacto(nuevoContacto);
 
 				adaptadorContactoIndividual.registrarContacto(nuevoContacto);
-				// catalogoUsuarios.addUsuario(usuarioActual);
+
 				adaptadorUsuario.modificarUsuario(usuarioActual);
 				return nuevoContacto;
 			}
@@ -262,7 +249,7 @@ public class Controlador implements MessagesListener {
 
 		// Conexion con persistencia
 		adaptadorGrupo.registrarGrupo(nuevoGrupo);
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 
 		participantes.stream().forEach(p -> {
@@ -274,33 +261,33 @@ public class Controlador implements MessagesListener {
 		return nuevoGrupo;
 	}
 
-	// Modifico el grupo.
+	/**
+	 * Modifica un grupo.
+	 * 
+	 * @param grupo         Contacto grupo que tiene el administrador
+	 * @param nombre        Nombre que tomará el grupo tras la modificación
+	 * @param participantes Lista con los nuevos integrantes del grupo
+	 * @return
+	 */
 	public Group modificarGrupo(Group grupo, String nombre, List<IndividualContact> participantes) {
 		grupo.setNombre(nombre);
 
-		// Creo una lista con los nuevos participantes, los participantes eliminados y
-		// los que mantengo
+		// Creo listas para las altas y las bajas
 		List<IndividualContact> nuevos = new LinkedList<>();
-		List<IndividualContact> eliminados = new LinkedList<>();
 		List<IndividualContact> mantenidos = new LinkedList<>();
-		for (IndividualContact participante : grupo.getParticipantes()) {
-			if (participantes.stream().anyMatch(p -> p.getCodigo() == participante.getCodigo())) {
-				mantenidos.add(participante);
+
+		for (IndividualContact contacto : participantes) {
+			if (grupo.hasParticipante(contacto.getUsuario())) {
+				mantenidos.add(contacto);
 			} else {
-				eliminados.add(participante);
+				nuevos.add(contacto);
 			}
 		}
 
-		for (IndividualContact participanteNuevo : participantes)
-			if (!grupo.getParticipantes().stream().anyMatch(p -> p.getCodigo() == participanteNuevo.getCodigo()))
-				nuevos.add(participanteNuevo);
+		List<IndividualContact> eliminados = new LinkedList<>(grupo.getParticipantes());
+		eliminados.removeAll(participantes);
 
-		grupo.modificarIntegrantes(participantes);
-
-		// Se añade el grupo al usuario actual y al resto de participantes
-		usuarioActual.modificarGrupo(grupo);
-		usuarioActual.modificarGrupoAdmin(grupo);
-		// Le modifico el grupo si el usuario ya existia, si es nuevo, se lo añado
+		// Le modifico el grupo si el usuario ya existia. Si es nuevo, se lo añado
 		mantenidos.stream().forEach(p -> p.modificarGrupo(grupo));
 		nuevos.stream().forEach(p -> p.addGrupo(grupo));
 
@@ -310,16 +297,19 @@ public class Controlador implements MessagesListener {
 			adaptadorUsuario.modificarUsuario(p.getUsuario());
 		});
 
+		// Se le cambia al grupo la lista de participantes
+		grupo.setIntegrantes(participantes);
+
 		// Conexion con persistencia
 		adaptadorGrupo.modificarGrupo(grupo);
-		catalogoUsuarios.addUsuario(usuarioActual);
-		adaptadorUsuario.modificarUsuario(usuarioActual);
 
-		participantes.stream().forEach(p -> {
-			User usuario = p.getUsuario();
-			catalogoUsuarios.addUsuario(usuario);
-			adaptadorUsuario.modificarUsuario(usuario);
-		});
+		// Actualiza los usuarios que no estaban antes en el grupo
+		/*
+		 * participantes.stream().forEach(p -> { User usuario = p.getUsuario();
+		 * adaptadorUsuario.modificarUsuario(usuario); });
+		 */
+
+		nuevos.stream().map(IndividualContact::getUsuario).forEach(u -> adaptadorUsuario.modificarUsuario(u));
 
 		return grupo;
 	}
@@ -346,7 +336,7 @@ public class Controlador implements MessagesListener {
 
 	public void hacerPremium() {
 		usuarioActual.setPremium();
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
@@ -382,7 +372,7 @@ public class Controlador implements MessagesListener {
 			});
 			adaptadorGrupo.borrarGrupo((Group) c);
 		}
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
@@ -393,15 +383,16 @@ public class Controlador implements MessagesListener {
 		Status estado = new Status(icono, frase);
 		usuarioActual.setEstado(Optional.of(estado));
 		adaptadorEstado.registrarEstado(estado);
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 	}
 
 	public void enviarMensaje(Contact contacto, String message) {
 		Message mensaje = new Message(message, LocalDateTime.now(), usuarioActual, contacto);
 		contacto.sendMessage(mensaje);
+
 		adaptadorMensaje.registrarMensaje(mensaje);
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		if (contacto instanceof IndividualContact) {
 			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
 		} else {
@@ -413,7 +404,7 @@ public class Controlador implements MessagesListener {
 		Message mensaje = new Message(emoji, LocalDateTime.now(), usuarioActual, contacto);
 		contacto.sendMessage(mensaje);
 		adaptadorMensaje.registrarMensaje(mensaje);
-		catalogoUsuarios.addUsuario(usuarioActual);
+
 		if (contacto instanceof IndividualContact) {
 			adaptadorContactoIndividual.modificarContacto((IndividualContact) contacto);
 		} else {
@@ -428,10 +419,6 @@ public class Controlador implements MessagesListener {
 		List<Message> recibidos;
 		if (contacto instanceof IndividualContact) {
 			recibidos = ((IndividualContact) contacto).removeMensajesRecibidos(usuarioActual);
-
-			// Actualiza al otro usuario en catalogo
-			// adaptadorUsuario.modificarUsuario(((IndividualContact)
-			// contacto).getUsuario());
 		} else {
 			recibidos = ((Group) contacto).removeMensajesRecibidos();
 		}
@@ -448,7 +435,7 @@ public class Controlador implements MessagesListener {
 	}
 
 	public boolean crearPDFInfoContacto(String ruta) {
-		List<IndividualContact> contactos = Controlador.getInstancia().getContactosIndividualesUsuarioActual();
+		List<IndividualContact> contactos = usuarioActual.getContactosIndividuales();
 
 		try {
 			// Creamos el documento PDF
@@ -469,7 +456,6 @@ public class Controlador implements MessagesListener {
 				// Imagen del contacto
 				Image img;
 				img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);
-				;
 				documento.add(img);
 
 				// Nombre del contacto
@@ -616,10 +602,7 @@ public class Controlador implements MessagesListener {
 				autor = getUser(message.getAutor());
 			}
 
-			if (autor.isPresent() /*
-									 * && (!(chatActual instanceof Group) || ((Group)
-									 * chatActual).isParticipante(autor))
-									 */)
+			if (autor.isPresent())
 				mensajes.add(new Message(message.getTexto(), message.getFecha(), autor.get(), chatActual));
 			else
 				return;

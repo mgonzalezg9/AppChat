@@ -56,8 +56,8 @@ public class GroupManagement extends JFrame {
 	 */
 	public GroupManagement(DefaultListModel<Contact> modelo, Group grupo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(GroupManagement.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(GroupManagement.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Group managment");
 		setBounds(100, 100, 497, 340);
 
@@ -148,32 +148,26 @@ public class GroupManagement extends JFrame {
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
 
-		final DefaultListModel<IndividualContact> modelContact = new DefaultListModel<>();
+		final DefaultListModel<IndividualContact> notAddedModel = new DefaultListModel<>();
 		List<IndividualContact> contactosIndividuales = Controlador.getInstancia()
-				.getContactosIndividualesUsuarioActual();
-		List<IndividualContact> participantes = new LinkedList<>();
-		if (groupToModify != null)
-			participantes = groupToModify.getParticipantes();
+				.getUsuarioActual().getContactosIndividuales();
 
-		int z = 0;
-		for (int i = 0; i < contactosIndividuales.size(); i++) {
-			IndividualContact contacto = contactosIndividuales.get(i);
-			if (groupToModify == null || !participantes.stream().anyMatch(p -> p.getMovil() == contacto.getMovil())) {
-				modelContact.add(z, contacto);
-				z++;
+		for (IndividualContact contacto : contactosIndividuales) {
+			if (groupToModify == null || !groupToModify.hasParticipante(contacto.getUsuario())) {
+				notAddedModel.addElement(contacto);
 			}
 		}
 
-		final JList<IndividualContact> contactList = new JList<>(modelContact);
-		contactList.setCellRenderer(createListRenderer());
-		contactList.setBackground(new Color(255, 204, 153));
-		scrollPane.setViewportView(contactList);
+		final JList<IndividualContact> notAddedList = new JList<>(notAddedModel);
+		notAddedList.setCellRenderer(createListRenderer());
+		notAddedList.setBackground(new Color(255, 204, 153));
+		scrollPane.setViewportView(notAddedList);
 
 		txtGroupName = new JTextField();
 		if (groupToModify != null) {
 			txtGroupName.setText(groupToModify.getNombre());
 		} else {
-			txtGroupName.setText("Group name..");
+			txtGroupName.setText("Your Group");
 		}
 
 		txtGroupName.setForeground(TEXT_COLOR_LIGHT);
@@ -206,9 +200,9 @@ public class GroupManagement extends JFrame {
 		final DefaultListModel<IndividualContact> modelAdded = new DefaultListModel<>();
 
 		if (groupToModify != null) {
-			List<IndividualContact> integrantes = groupToModify.getParticipantes();
-			for (int i = 0; i < integrantes.size(); i++)
-				modelAdded.add(i, integrantes.get(i));
+			for (IndividualContact integrante : groupToModify.getParticipantes()) {
+				modelAdded.addElement(integrante);
+			}
 		}
 
 		final JList<IndividualContact> addedList = new JList<>(modelAdded);
@@ -216,25 +210,25 @@ public class GroupManagement extends JFrame {
 		addedList.setBackground(new Color(204, 255, 255));
 		scrollPane_1.setViewportView(addedList);
 
-		JButton btAddedContact = new JButton("");
+		JButton btAddedContact = new JButton();
 		btAddedContact.setBackground(SECONDARY_COLOR);
 		btAddedContact.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IndividualContact selected = (IndividualContact) contactList.getSelectedValue();
+				IndividualContact selected = (IndividualContact) notAddedList.getSelectedValue();
 				if (selected != null) {
 					modelAdded.add(modelAdded.getSize(), selected);
-					modelContact.remove(contactList.getSelectedIndex());
+					notAddedModel.remove(notAddedList.getSelectedIndex());
 				}
 			}
 		});
 
-		contactList.addMouseListener(new MouseListener() {
+		notAddedList.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					IndividualContact selected = (IndividualContact) contactList.getSelectedValue();
+					IndividualContact selected = (IndividualContact) notAddedList.getSelectedValue();
 					modelAdded.add(modelAdded.getSize(), selected);
-					modelContact.remove(contactList.getSelectedIndex());
+					notAddedModel.remove(notAddedList.getSelectedIndex());
 				}
 			}
 
@@ -261,7 +255,7 @@ public class GroupManagement extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					IndividualContact selected = (IndividualContact) addedList.getSelectedValue();
-					modelContact.add(modelContact.getSize(), selected);
+					notAddedModel.add(notAddedModel.getSize(), selected);
 					modelAdded.remove(addedList.getSelectedIndex());
 				}
 			}
@@ -284,8 +278,8 @@ public class GroupManagement extends JFrame {
 			}
 		});
 
-		btAddedContact
-				.setIcon(new ImageIcon(GroupManagement.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
+		btAddedContact.setIcon(
+				new ImageIcon(GroupManagement.class.getResource("/umu/tds/apps/resources/flecha-hacia-derecha.png")));
 		GridBagConstraints gbc_btAddedContact = new GridBagConstraints();
 		gbc_btAddedContact.gridwidth = 2;
 		gbc_btAddedContact.fill = GridBagConstraints.HORIZONTAL;
@@ -300,7 +294,7 @@ public class GroupManagement extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				IndividualContact selected = (IndividualContact) addedList.getSelectedValue();
 				if (selected != null) {
-					modelContact.add(modelContact.getSize(), selected);
+					notAddedModel.add(notAddedModel.getSize(), selected);
 					modelAdded.remove(addedList.getSelectedIndex());
 				}
 			}
@@ -332,8 +326,9 @@ public class GroupManagement extends JFrame {
 						modelContacts.set(i, grupoModificado);
 				} else {
 					Group nuevoGrupo = Controlador.getInstancia().crearGrupo(txtGroupName.getText(), participantes);
-					
-					// Si ha podido crear el grupo lo añade a la lista de contactos. En caso contrario muestra error.
+
+					// Si ha podido crear el grupo lo añade a la lista de contactos. En caso
+					// contrario muestra error.
 					if (nuevoGrupo != null) {
 						modelContacts.add(modelContacts.getSize(), nuevoGrupo);
 					} else {

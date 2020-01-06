@@ -16,14 +16,14 @@ import umu.tds.apps.controlador.Controlador;
 /**
  * Clase para crear contenido en BD con el que probar la logica de la aplicacion
  */
-public class TestLogica {
+public class TestFachada {
 	// Constantes
 	private final static String ADMIN_NAME = "Administrador";
 	private final static String ADMIN_NICK = "admin";
 	private final static String ADMIN_MAIL = "admin@um.es";
 	private final static int ADMIN_PHONE = 1;
 	private final static ImageIcon STATUS_ICON = new ImageIcon(
-			TestLogica.class.getResource("/umu/tds/apps/resources/paper plane-white.png"));
+			TestFachada.class.getResource("/umu/tds/apps/resources/paper plane-white.png"));
 	private final static String STATUS_PHRASE = "Buscadme en Telegram";
 	private final static String NOADMIN_NAME = "No Administrador";
 	private final static String NOADMIN_NICK = "noadmin";
@@ -35,8 +35,9 @@ public class TestLogica {
 	private final static int OTHER_PHONE = 3;
 	private final static String PASSWORD = "1234";
 	private final static ImageIcon ICON = new ImageIcon(
-			TestLogica.class.getResource("/umu/tds/apps/resources/icon.png"));
+			TestFachada.class.getResource("/umu/tds/apps/resources/icon.png"));
 	private final static String GROUP_NAME = "Juernes";
+	private final static String NEW_GROUP_NAME = "Sabado sabadete";
 	private final static int EMOJI = 3;
 
 	// Persistencia
@@ -104,9 +105,9 @@ public class TestLogica {
 		assertNotNull(contactoOther);
 		
 		// Mete a Other al grupo Juernes
-		List<IndividualContact> participantes = grupo.getParticipantes();
+		List<IndividualContact> participantes = new LinkedList<>(grupo.getParticipantes());
 		participantes.add(contactoOther);
-		controlador.modificarGrupo(grupo, grupo.getNombre(), participantes);
+		controlador.modificarGrupo(grupo, NEW_GROUP_NAME, participantes);
 		controlador.cerrarSesion();
 		
 		// Other da los buenos dias por el grupo

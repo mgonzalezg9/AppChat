@@ -68,7 +68,7 @@ public class GroupsListForModify extends JFrame {
 		gbc_lblSeleccioneElGrupo.gridy = 1;
 		contentPane.add(lblSeleccioneElGrupo, gbc_lblSeleccioneElGrupo);
 
-		List<Group> grupos = Controlador.getInstancia().getGruposUsuarioActual();
+		List<Group> grupos = Controlador.getInstancia().getUsuarioActual().getGrupos();
 		DefaultComboBoxModel<Group> model = new DefaultComboBoxModel<>();
 		for (int i = 0; i < grupos.size(); i++)
 			model.addElement(grupos.get(i));

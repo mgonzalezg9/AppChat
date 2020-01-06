@@ -316,7 +316,7 @@ public class Principal extends JFrame {
 		mntmModifyGroup.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Controlador.getInstancia().getGruposUsuarioActual().size() == 0) {
+				if (Controlador.getInstancia().getUsuarioActual().getGrupos().isEmpty()) {
 					JOptionPane.showMessageDialog(Principal.this, "Groups are needed", "Modify Group",
 							JOptionPane.ERROR_MESSAGE);
 					return;

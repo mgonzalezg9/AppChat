@@ -197,10 +197,31 @@ public class User {
 		return mensajesMes;
 	}
 
-	// Devuelve los seis grupos mas frecuentados con sus correspondientes mensajes
-	// enviados
+	/**
+	 * Devuelve todos los grupos que tiene el usuario
+	 * 
+	 * @return Lista con los grupos
+	 */
+	public List<Group> getGrupos() {
+		return contactos.stream().filter(c -> c instanceof Group).map(c -> (Group) c).collect(Collectors.toList());
+	}
+
+	/**
+	 * Devuelve todos los contactos individuales que tiene el usuario
+	 * 
+	 * @return Lista con los contactos individuales
+	 */
+	public List<IndividualContact> getContactosIndividuales() {
+		return contactos.stream().filter(c -> c instanceof IndividualContact).map(c -> (IndividualContact) c)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Devuelve los seis grupos mas frecuentados con sus correspondientes mensajes
+	 * enviados
+	 */
 	public Map<String, Integer> getGruposMasFrecuentados() {
-		return contactos.stream().filter(c -> c instanceof Group).map(g -> (Group) g)
+		return getGrupos().stream()
 				.sorted((g1, g2) -> g2.getMisMensajesGrupo(this).size() - g1.getMisMensajesGrupo(this).size())
 				.limit(NUM_GRUPOS_TARTA)
 				.collect(Collectors.toMap(Group::getNombre, g -> g.getMisMensajesGrupo(this).size()));
@@ -243,12 +264,6 @@ public class User {
 
 	public void addGrupoAdmin(Group g) {
 		gruposAdmin.add(g);
-	}
-
-	public void modificarGrupoAdmin(Group g) {
-		for (int i = 0; i < gruposAdmin.size(); i++)
-			if (gruposAdmin.get(i).getCodigo() == g.getCodigo())
-				gruposAdmin.set(i, g);
 	}
 
 	public void addContacto(IndividualContact c) {

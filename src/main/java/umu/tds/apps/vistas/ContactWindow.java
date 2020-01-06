@@ -81,7 +81,7 @@ public class ContactWindow extends JFrame {
 
 		final DefaultListModel<IndividualContact> modelContact = new DefaultListModel<>();
 		List<IndividualContact> contactosIndividuales = Controlador.getInstancia()
-				.getContactosIndividualesUsuarioActual();
+				.getUsuarioActual().getContactosIndividuales();
 		for (int i = 0; i < contactosIndividuales.size(); i++)
 			modelContact.add(i, contactosIndividuales.get(i));
 
@@ -120,7 +120,7 @@ public class ContactWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// Funcionalidad Premium
 				if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
-					if (Controlador.getInstancia().getContactosIndividualesUsuarioActual().size() == 0) {
+					if (Controlador.getInstancia().getUsuarioActual().getContactosIndividuales().isEmpty()) {
 						JOptionPane.showMessageDialog(ContactWindow.this, "Contacts are needed", "Export contacts",
 								JOptionPane.ERROR_MESSAGE);
 						return;
