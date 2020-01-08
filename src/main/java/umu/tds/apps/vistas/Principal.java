@@ -18,6 +18,7 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.awt.FlowLayout;
 
@@ -54,7 +55,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import pulsador.Luz;
 import pulsador.IEncendidoListener;
+
 import java.util.EventObject;
+import java.util.HashMap;
 
 /**
  * Clase que representa al chat con las burbujas. Se creó con el objetivo de que
@@ -94,7 +97,9 @@ class ChatBurbujas extends JPanel implements Scrollable {
  * Ventana principal
  */
 public class Principal extends JFrame {
+	private static final int NUM_CHATS_CACHE = 3;
 	private static final long serialVersionUID = 1L;
+	private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
 	private JPanel contentPane;
 	private JPanel chat;
 	private JLabel profilePhoto;
@@ -105,7 +110,9 @@ public class Principal extends JFrame {
 	private boolean iconsVisible;
 	private Controlador controlador;
 	private JList<Contact> listaContactos;
-	private static DateTimeFormatter format;
+
+	// Últimos chats accedidos por el usuario
+	private Map<Contact, List<Message>> chatsRecientes;
 
 	/**
 	 * Manda al contacto pasado como parametro el mensaje con el texto del textfield
@@ -149,7 +156,8 @@ public class Principal extends JFrame {
 	}
 
 	/**
-	 * Carga en pantalla toda la conversación con dicho contacto
+	 * Carga en pantalla toda la conversación con dicho contacto. Comprueba si el
+	 * chat se encuentra en la caché de pares recientes, si no está lo añade.
 	 * 
 	 * @param contacto Contacto cuya conversación se quiere cargar
 	 */
@@ -161,8 +169,25 @@ public class Principal extends JFrame {
 		// Borra todas las burbujas del chat anterior
 		chat.removeAll();
 
+		List<Message> mensajesChat = chatsRecientes.get(contacto);
+
+		// Si no es un chat accedido recientemente se lo pide al controlador
+		if (mensajesChat == null) {
+			System.out.println("Fallo");
+			mensajesChat = Controlador.getInstancia().getMensajes(contacto);
+
+			// Si no hay espacio en los chats recientes es necesario borrar uno
+			if (chatsRecientes.size() >= NUM_CHATS_CACHE) {
+				chatsRecientes.remove(chatsRecientes.keySet().stream().findFirst().orElse(null));
+			}
+
+			chatsRecientes.put(contacto, mensajesChat);
+		} else {
+			System.out.println("Acierto");
+		}
+
 		// Coloca las burbujas nuevas
-		Controlador.getInstancia().getMensajes(contacto).stream().map(m -> {
+		mensajesChat.stream().map(m -> {
 			String emisor;
 			int direccionMensaje;
 			Color colorBurbuja;
@@ -206,7 +231,6 @@ public class Principal extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		iconsVisible = false;
-		format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 		// Contactos de ejemplo
 		List<Contact> contactos = controlador.getContactosUsuarioActual();
@@ -216,9 +240,10 @@ public class Principal extends JFrame {
 
 		// Rellenamos el modelo
 		contactos.stream().forEach(c -> modelContacts.addElement(c));
+		listaContactos = new JList<>(modelContacts);
 
-		JList<Contact> list_contacts = new JList<>(modelContacts);
-		listaContactos = list_contacts;
+		// Inicialmente no se ha accedido a ningún chat
+		chatsRecientes = new HashMap<>();
 
 		JPanel settingsIzq = new JPanel();
 		settingsIzq.setBackground(MAIN_COLOR);
@@ -404,7 +429,7 @@ public class Principal extends JFrame {
 		panel_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ContactInfo window = new ContactInfo(list_contacts.getSelectedValue());
+				ContactInfo window = new ContactInfo(listaContactos.getSelectedValue());
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				window.setVisible(true);
 			}
@@ -451,7 +476,7 @@ public class Principal extends JFrame {
 					JFrame ventana = new WhatsappChatChooser(jfc.getSelectedFile().getAbsolutePath());
 					ventana.setVisible(true);
 
-					loadChat(list_contacts.getSelectedValue());
+					loadChat(listaContactos.getSelectedValue());
 				}
 			}
 		});
@@ -471,10 +496,10 @@ public class Principal extends JFrame {
 		mntmRemoveAllMessages.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Contact contacto = list_contacts.getSelectedValue();
+				Contact contacto = listaContactos.getSelectedValue();
 				if (contacto != null) {
 					// Borra los mensajes de la conversación de la base de datos
-					Controlador.getInstancia().deleteChat(list_contacts.getSelectedValue());
+					Controlador.getInstancia().deleteChat(listaContactos.getSelectedValue());
 
 					chat.removeAll();
 					chat.updateUI();
@@ -487,17 +512,17 @@ public class Principal extends JFrame {
 		mntmDeleteContact.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (list_contacts.getSelectedValue() == null) {
+				if (listaContactos.getSelectedValue() == null) {
 					JOptionPane.showMessageDialog(Principal.this, "Unable to perform this action.", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
-				if (!(list_contacts.getSelectedValue() instanceof Group)
-						|| Controlador.getInstancia().isAdmin((Group) list_contacts.getSelectedValue())) {
+				if (!(listaContactos.getSelectedValue() instanceof Group)
+						|| Controlador.getInstancia().isAdmin((Group) listaContactos.getSelectedValue())) {
 					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
 							JOptionPane.INFORMATION_MESSAGE);
-					Contact contactoSeleccionado = list_contacts.getSelectedValue();
+					Contact contactoSeleccionado = listaContactos.getSelectedValue();
 					modelContacts.removeElement(contactoSeleccionado);
 					Controlador.getInstancia().deleteContact(contactoSeleccionado);
 
@@ -530,31 +555,32 @@ public class Principal extends JFrame {
 		contentPane.add(scrollPane, gbc_scrollPane);
 
 		chatPhoto = new JLabel("");
-		if (!list_contacts.isSelectionEmpty())
-			chatPhoto.setIcon(resizeIcon(list_contacts.getSelectedValue().getFoto(), ICON_SIZE_MINI));
+		if (!listaContactos.isSelectionEmpty())
+			chatPhoto.setIcon(resizeIcon(listaContactos.getSelectedValue().getFoto(), ICON_SIZE_MINI));
 		panel_3.add(chatPhoto);
 
 		chatName = new JLabel();
 		chatName.setForeground(TEXT_COLOR_LIGHT);
 		panel_3.add(chatName);
 
-		list_contacts.setBorder(null);
-		list_contacts.setBackground(MAIN_COLOR_LIGHT);
-		list_contacts.setCellRenderer(createListRenderer());
-		list_contacts.addListSelectionListener(e -> {
+		listaContactos.setBorder(null);
+		listaContactos.setBackground(MAIN_COLOR_LIGHT);
+		listaContactos.setCellRenderer(createListRenderer());
+		listaContactos.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
-				Contact contactoActual = list_contacts.getSelectedValue();
+				Contact contactoActual = listaContactos.getSelectedValue();
 				if (contactoActual != null) {
 					loadChat(contactoActual);
 					Controlador.getInstancia().setChatActual(contactoActual);
 					chatName.setText(contactoActual.getNombre());
 					chatPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));
+					System.out.println(chatsRecientes);
 				}
 			}
 
 		});
 
-		scrollPane.setViewportView(list_contacts);
+		scrollPane.setViewportView(listaContactos);
 
 		JPanel chatPersonal = new JPanel();
 		chatPersonal.setBackground(CHAT_COLOR);
@@ -589,7 +615,7 @@ public class Principal extends JFrame {
 		scrollPane_1.getViewport().setBackground(CHAT_COLOR);
 
 		// Se muestran todas las burbujas de la conversacion actual
-		list_contacts.setSelectedIndex(0);
+		listaContactos.setSelectedIndex(0);
 
 		JScrollPane scrollPane_3 = new JScrollPane();
 		scrollPane_3.setBorder(null);
@@ -615,7 +641,7 @@ public class Principal extends JFrame {
 			labelIconos.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					sendIcon(chat, Integer.valueOf(labelIconos.getName()), list_contacts.getSelectedValue());
+					sendIcon(chat, Integer.valueOf(labelIconos.getName()), listaContactos.getSelectedValue());
 				}
 			});
 		}
@@ -648,7 +674,7 @@ public class Principal extends JFrame {
 				iconsVisible = !iconsVisible;
 				scrollPane_3.setVisible(iconsVisible);
 				chatPersonal.updateUI();
-				loadChat(list_contacts.getSelectedValue());
+				loadChat(listaContactos.getSelectedValue());
 			}
 		});
 		lblEmoji.setIcon(BubbleText.getEmoji(new Random().nextInt(BubbleText.MAXICONO + 1)));
@@ -667,7 +693,7 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					sendMessage(chat, textField, list_contacts.getSelectedValue());
+					sendMessage(chat, textField, listaContactos.getSelectedValue());
 				} catch (IllegalArgumentException e2) {
 				}
 			}
@@ -687,7 +713,7 @@ public class Principal extends JFrame {
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					sendMessage(chat, textField, list_contacts.getSelectedValue());
+					sendMessage(chat, textField, listaContactos.getSelectedValue());
 				} catch (IllegalArgumentException e) {
 				}
 			}

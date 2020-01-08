@@ -142,4 +142,8 @@ public class IndividualContact extends Contact {
 		return usuario.equals(otherUser);
 	}
 
+	@Override
+	public String toString() {
+		return super.getNombre();
+	}
 }
