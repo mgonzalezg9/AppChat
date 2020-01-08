@@ -2,6 +2,8 @@ package umu.tds.apps.AppChat;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 
@@ -26,10 +28,23 @@ public abstract class Contact {
 		return nombre;
 	}
 
-	// Devuelve los mensajes que ese contacto recibe de mi
+	/**
+	 * Devuelve los mensajes que ese contacto recibe de mi
+	 * 
+	 * @return Lista con todos los mensajes
+	 */
 	public List<Message> getMensajesEnviados() {
 		return mensajes;
 	}
+
+	/**
+	 * Devuelve los mensajes que recibo de ese contacto
+	 * 
+	 * @param usuario Usuario al que se le mandaron los mensajes
+	 * @return Lista con los mensajes que este contacto envió al usuario. Estará
+	 *         vacía si no le envió ninguno
+	 */
+	public abstract List<Message> getMensajesRecibidos(Optional<User> usuario);
 
 	public int getCodigo() {
 		return codigo;

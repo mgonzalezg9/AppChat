@@ -20,7 +20,6 @@ import java.awt.Toolkit;
 import java.util.List;
 import java.util.Random;
 import java.awt.FlowLayout;
-import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -684,6 +683,7 @@ public class Principal extends JFrame {
 		writeText.add(scrollPane_2, gbc_scrollPane_2);
 
 		textField = new JTextField();
+		textField.setSelectionColor(SECONDARY_COLOR);
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {

@@ -45,18 +45,24 @@ public class IndividualContact extends Contact {
 	}
 
 	// Methods
-	// Dado un usuario me devuelve el contacto que este usuario tiene (como lo ve
-	// desde su perspectiva)
+	/** 
+	 * Dado un usuario me devuelve el contacto que este usuario tiene (como lo ve desde su perspectiva)
+	 * 
+	 * @param usuario Usuario cuyo contacto quiero obtener
+	 * @return Devuelve el contacto que tengo guardado para el usuario pasado como parámetro. Null si no lo tengo guardado
+	 */
 	public IndividualContact getContacto(User usuario) {
 		return this.usuario.getContactos().stream().filter(c -> c instanceof IndividualContact)
-				.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().getNick().equals(usuario.getNick()))
-				.findAny().orElse(null);
+				.map(c -> (IndividualContact) c).filter(c -> c.getUsuario().equals(usuario)).findAny().orElse(null);
 	}
 
-	// Devuelve los mensajes que el usuario pasado como parametro recibe de este
-	// contacto
-	public List<Message> getMensajesRecibidos(User usuario) {
-		return (getContacto(usuario) != null) ? getContacto(usuario).getMensajesEnviados() : new LinkedList<Message>();
+	@Override
+	public List<Message> getMensajesRecibidos(Optional<User> usuario) {
+		IndividualContact contacto = getContacto(usuario.orElse(null));
+		if (contacto != null) {
+			return contacto.getMensajesEnviados();
+		} else
+			return new LinkedList<>();
 	}
 
 	// Devuelve el estado del contacto
@@ -76,11 +82,12 @@ public class IndividualContact extends Contact {
 
 	/**
 	 * Modifica el grupo del contacto
+	 * 
 	 * @param g Grupo ya modificado
 	 */
 	public void modificarGrupo(Group g) {
 		List<Group> grupos = usuario.getGrupos();
-		
+
 		grupos.remove(g);
 		grupos.add(g);
 	}
@@ -107,6 +114,7 @@ public class IndividualContact extends Contact {
 
 	/**
 	 * Dos contactos son iguales si tienen el mismo número de teléfono
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -121,6 +129,17 @@ public class IndividualContact extends Contact {
 		if (movil != other.movil)
 			return false;
 		return true;
+	}
+
+	/**
+	 * Comprueba si se corresponde con el usuario pasado como parámetro
+	 * 
+	 * @param otherUser Usuario con el que realizar la comprobación
+	 * @return Devuelve si el usuario asociado al contacto es el mismo que el pasado
+	 *         como parámetro
+	 */
+	public boolean isUser(User otherUser) {
+		return usuario.equals(otherUser);
 	}
 
 }

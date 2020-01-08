@@ -4,6 +4,7 @@ import static umu.tds.apps.vistas.Theme.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
@@ -55,8 +56,9 @@ public class Group extends Contact {
 		this.integrantes = contactos;
 	}
 
-	// Devuelve los mensajes que han enviado el resto de usuarios por el grupo
-	public List<Message> getMensajesRecibidos() {
+	// Devuelve los mensajes que han enviado el resto de usuarios por el grupo. El valor del parametro pasado como parámetro no importa
+	@Override
+	public List<Message> getMensajesRecibidos(Optional<User> emptyOpt) {
 		return this.integrantes.stream().flatMap(c -> c.getUsuario().getContactos().stream())
 				.filter(c -> c instanceof Group).map(c -> (Group) c).filter(g -> this.equals(g))
 				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
@@ -69,7 +71,7 @@ public class Group extends Contact {
 
 	// Borra los mensajes que recibo de ese contacto
 	public List<Message> removeMensajesRecibidos() {
-		List<Message> recibidos = getMensajesRecibidos();
+		List<Message> recibidos = getMensajesRecibidos(Optional.empty());
 		List<Message> copia = new LinkedList<Message>(recibidos);
 		recibidos.clear();
 		return copia;

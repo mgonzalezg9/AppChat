@@ -46,7 +46,8 @@ public class CreateContact extends JFrame {
 	 */
 	public CreateContact(DefaultListModel<Contact> modelo) {
 		this.modelContacts = modelo;
-		setIconImage(Toolkit.getDefaultToolkit().getImage(CreateContact.class.getResource("/umu/tds/apps/resources/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(CreateContact.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("Add contact");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 558, 334);
@@ -55,12 +56,12 @@ public class CreateContact extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{150, 0, 150, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[] { 150, 0, 150, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_contentPane.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
-		
+
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
@@ -70,11 +71,11 @@ public class CreateContact extends JFrame {
 		gbc_panel_1.gridy = 0;
 		contentPane.add(panel_1, gbc_panel_1);
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		JLabel label = new JLabel("");
 		panel_1.add(label);
 		label.setIcon(new ImageIcon(CreateContact.class.getResource("/umu/tds/apps/resources/icon.png")));
-		
+
 		JPanel panel = new JPanel();
 		panel.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -84,12 +85,12 @@ public class CreateContact extends JFrame {
 		gbc_panel.gridy = 1;
 		contentPane.add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 13, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.columnWidths = new int[] { 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 13, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-		
+
 		JLabel lblName = new JLabel("Name");
 		lblName.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
@@ -98,8 +99,13 @@ public class CreateContact extends JFrame {
 		gbc_lblName.gridx = 0;
 		gbc_lblName.gridy = 0;
 		panel.add(lblName, gbc_lblName);
-		
+
 		textFieldName = new JTextField();
+		textFieldName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addContact();
+			}
+		});
 		textFieldName.setForeground(TEXT_COLOR_LIGHT);
 		textFieldName.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldName.setCaretColor(TEXT_COLOR_LIGHT);
@@ -117,7 +123,7 @@ public class CreateContact extends JFrame {
 		gbc_textField.gridy = 0;
 		panel.add(textFieldName, gbc_textField);
 		textFieldName.setColumns(10);
-		
+
 		JLabel lblPhoneNumber = new JLabel("Phone number");
 		lblPhoneNumber.setForeground(TEXT_COLOR_LIGHT);
 		GridBagConstraints gbc_lblPhoneNumber = new GridBagConstraints();
@@ -126,8 +132,13 @@ public class CreateContact extends JFrame {
 		gbc_lblPhoneNumber.gridx = 0;
 		gbc_lblPhoneNumber.gridy = 3;
 		panel.add(lblPhoneNumber, gbc_lblPhoneNumber);
-		
+
 		textFieldTelf = new JTextField();
+		textFieldTelf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addContact();
+			}
+		});
 		textFieldTelf.setForeground(TEXT_COLOR_LIGHT);
 		textFieldTelf.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		textFieldTelf.setCaretColor(TEXT_COLOR_LIGHT);
@@ -144,7 +155,7 @@ public class CreateContact extends JFrame {
 		gbc_textField_1.gridy = 3;
 		panel.add(textFieldTelf, gbc_textField_1);
 		textFieldTelf.setColumns(10);
-		
+
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(MAIN_COLOR_LIGHT);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -154,68 +165,75 @@ public class CreateContact extends JFrame {
 		gbc_panel_2.gridy = 2;
 		contentPane.add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Comprobamos que los datos son correctos
-				if (!datosCorrectos())
-					return;
-				
-				// Creamos el contacto
-				IndividualContact nuevoContacto = Controlador.getInstancia().crearContacto(textFieldName.getText(), Integer.valueOf(textFieldTelf.getText()));
-				if (nuevoContacto == null) {
-					// No se ha podido crear el usuario
-					Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(CreateContact.this,
-							"The contact is already saved or its user does not exist", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				} else {
-					// Usuario creado
-					modelContacts.add(modelContacts.size(), nuevoContacto);
-					JOptionPane.showMessageDialog(CreateContact.this, "Contact added successfully", "Info",
-							JOptionPane.INFORMATION_MESSAGE);
-				}
+				addContact();
 			}
+
 		});
 		btnAdd.setBackground(SECONDARY_COLOR);
 		panel_2.add(btnAdd);
 	}
-	
-	private boolean datosCorrectos () {
+
+	private boolean datosCorrectos() {
 		List<String> errores = new LinkedList<>();
-		
+
 		if (textFieldName.getText().equals("")) {
 			errores.add("Name value is invalid");
 			textFieldName.setBackground(WRONG_INPUT_COLOR);
 		}
-		
-		if (textFieldTelf.getText().equals("") || !isNumeric(textFieldTelf.getText()) || Integer.parseInt(textFieldTelf.getText()) < 0) {
+
+		if (textFieldTelf.getText().equals("") || !isNumeric(textFieldTelf.getText())
+				|| Integer.parseInt(textFieldTelf.getText()) < 0) {
 			textFieldTelf.setBackground(WRONG_INPUT_COLOR);
-			errores.add("Phone number value is invalid");		
+			errores.add("Phone number value is invalid");
 		}
-				
+
 		if (errores.size() > 0) {
 			String error = "";
 			for (String e : errores)
 				error += e + "\n";
-			JOptionPane.showMessageDialog(CreateContact.this,
-					error, "Error",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(CreateContact.this, error, "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		return true;
 	}
-	
+
 	private boolean isNumeric(String strNum) {
-	    if (strNum == null) {
-	        return false;
-	    }
-	    try {
-	        Integer.parseInt(strNum);
-	    } catch (NumberFormatException nfe) {
-	        return false;
-	    }
-	    return true;
+		if (strNum == null) {
+			return false;
+		}
+		try {
+			Integer.parseInt(strNum);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Comprueba errores y añade el contacto si está todo correcto
+	 */
+	private void addContact() {
+		// Comprobamos que los datos son correctos
+		if (!datosCorrectos())
+			return;
+
+		// Creamos el contacto
+		IndividualContact nuevoContacto = Controlador.getInstancia().crearContacto(textFieldName.getText(),
+				Integer.valueOf(textFieldTelf.getText()));
+		if (nuevoContacto == null) {
+			// No se ha podido crear el usuario
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(CreateContact.this, "The contact is already saved or its user does not exist",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		} else {
+			// Usuario creado
+			modelContacts.add(modelContacts.size(), nuevoContacto);
+			JOptionPane.showMessageDialog(CreateContact.this, "Contact added successfully", "Info",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 }

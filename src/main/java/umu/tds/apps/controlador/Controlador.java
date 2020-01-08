@@ -180,16 +180,22 @@ public class Controlador implements MessagesListener {
 		return u.getContactos();
 	}
 
-	// Devuelvo mi lista de mensajes con ese contacto
+	/**
+	 * Obtiene la lista de mensajes con ese contacto
+	 * 
+	 * @param contacto Contacto cuya conversación quiere obtenerse
+	 * @return Lista con los mensajes de la conversación
+	 */
 	public List<Message> getMensajes(Contact contacto) {
-		if (contacto instanceof IndividualContact) {
+		// Si la conversacion es conmigo mismo es suficiente con mostrar mis mensajes
+		if (contacto instanceof IndividualContact && !((IndividualContact) contacto).isUser(usuarioActual)) {
 			return Stream
 					.concat(contacto.getMensajesEnviados().stream(),
-							((IndividualContact) contacto).getMensajesRecibidos(usuarioActual).stream())
+							contacto.getMensajesRecibidos(Optional.of(usuarioActual)).stream())
 					.sorted().collect(Collectors.toList());
 		} else {
 			// Dentro de los enviados estan contenidos todos los mensajes
-			return ((Group) contacto).getMensajesEnviados();
+			return contacto.getMensajesEnviados().stream().sorted().collect(Collectors.toList());
 		}
 	}
 
@@ -254,7 +260,7 @@ public class Controlador implements MessagesListener {
 
 		participantes.stream().forEach(p -> {
 			User usuario = p.getUsuario();
-			catalogoUsuarios.addUsuario(usuario);
+			// catalogoUsuarios.addUsuario(usuario);
 			adaptadorUsuario.modificarUsuario(usuario);
 		});
 
@@ -304,11 +310,6 @@ public class Controlador implements MessagesListener {
 		adaptadorGrupo.modificarGrupo(grupo);
 
 		// Actualiza los usuarios que no estaban antes en el grupo
-		/*
-		 * participantes.stream().forEach(p -> { User usuario = p.getUsuario();
-		 * adaptadorUsuario.modificarUsuario(usuario); });
-		 */
-
 		nuevos.stream().map(IndividualContact::getUsuario).forEach(u -> adaptadorUsuario.modificarUsuario(u));
 
 		return grupo;
@@ -326,7 +327,7 @@ public class Controlador implements MessagesListener {
 				.getNombre();
 	}
 
-	// Devuelvo una lista con los grupos en los que se usuario y yo estamos.
+	// Devuelvo una lista con los grupos en los que ese usuario y yo estamos.
 	public List<Group> getGruposEnComun(IndividualContact contacto) {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
 				.filter(g -> g.getParticipantes().stream().anyMatch(c -> c.getMovil() == contacto.getMovil())
