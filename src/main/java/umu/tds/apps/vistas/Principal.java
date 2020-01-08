@@ -91,6 +91,10 @@ class ChatBurbujas extends JPanel implements Scrollable {
 		return 0;
 	}
 
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
 }
 
 /**
@@ -101,7 +105,7 @@ public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
 	private JPanel contentPane;
-	private JPanel chat;
+	private ChatBurbujas chat;
 	private JLabel profilePhoto;
 	private JTextField textField;
 	private JPopupMenu popupSettsGrupos;
@@ -112,26 +116,27 @@ public class Principal extends JFrame {
 	private JList<Contact> listaContactos;
 
 	// Últimos chats accedidos por el usuario
-	private Map<Contact, List<Message>> chatsRecientes;
+	private Map<Contact, ChatBurbujas> chatsRecientes;
+	private JScrollPane scrollBarChatBurbujas;
 
 	/**
 	 * Manda al contacto pasado como parametro el mensaje con el texto del textfield
 	 * y lo muestra en el panel.
 	 * 
-	 * @param panel     Panel dónde se mostrará el mensaje enviado
+	 * @param panel     Chat con las burbujas dónde se mostrará el mensaje enviado
 	 * @param textField Campo de texto con el mensaje a enviar
 	 * @param contacto  Contacto al que se le envia el mensaje
 	 */
-	private void sendMessage(JPanel panel, JTextField textField, Contact contacto) {
+	private void sendMessage(ChatBurbujas panel, JTextField textField, Contact contacto) {
 		// No permite enviar un mensaje si no hay seleccionado ningún contacto
 		if (contacto == null)
 			return;
 
-		Controlador.getInstancia().enviarMensaje(contacto, textField.getText());
+		controlador.enviarMensaje(contacto, textField.getText());
 
 		BubbleText burbuja = new BubbleText(panel, textField.getText(), SENT_MESSAGE_COLOR, "You", BubbleText.SENT,
 				MESSAGE_SIZE);
-		chat.add(burbuja);
+		panel.add(burbuja);
 		textField.setText(null);
 		listaContactos.updateUI();
 	}
@@ -140,19 +145,19 @@ public class Principal extends JFrame {
 	 * Manda al contacto pasado como parametro el mensaje con el emoticono y lo
 	 * muestra en el panel.
 	 * 
-	 * @param panel    Panel dónde se mostrará el mensaje enviado
+	 * @param panel    Panel con burbujas dónde se mostrará el mensaje enviado
 	 * @param iconID   Identificador del icono a enviar
 	 * @param contacto Contacto al que se le envia el mensaje
 	 */
-	private void sendIcon(JPanel panel, int iconID, Contact contacto) {
+	private void sendIcon(ChatBurbujas panel, int iconID, Contact contacto) {
 		// No permite enviar un emoji si no hay seleccionado ningún contacto
 		if (contacto == null)
 			return;
 
-		Controlador.getInstancia().enviarMensaje(contacto, iconID);
+		controlador.enviarMensaje(contacto, iconID);
 
 		BubbleText burbuja = new BubbleText(panel, iconID, SENT_MESSAGE_COLOR, "You", BubbleText.SENT, MESSAGE_SIZE);
-		chat.add(burbuja);
+		panel.add(burbuja);
 	}
 
 	/**
@@ -166,47 +171,53 @@ public class Principal extends JFrame {
 			return;
 		}
 
-		// Borra todas las burbujas del chat anterior
-		chat.removeAll();
+		chat = chatsRecientes.get(contacto);
 
-		List<Message> mensajesChat = chatsRecientes.get(contacto);
+		// Si no es un chat accedido recientemente tiene que crear el panel
+		if (chat == null) {
+			chat = new ChatBurbujas();
+			chat.setBackground(CHAT_COLOR);
+			scrollBarChatBurbujas.setViewportView(chat);
+			chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
+			chat.setSize(400, 700);
+			scrollBarChatBurbujas.getViewport().setBackground(CHAT_COLOR);
 
-		// Si no es un chat accedido recientemente se lo pide al controlador
-		if (mensajesChat == null) {
-			System.out.println("Fallo");
-			mensajesChat = Controlador.getInstancia().getMensajes(contacto);
+			// Coloca las burbujas en el panel nuevo
+			controlador.getMensajes(contacto).stream().map(m -> {
+				String emisor;
+				int direccionMensaje;
+				Color colorBurbuja;
+
+				if (m.getEmisor().equals(controlador.getUsuarioActual())) {
+					colorBurbuja = SENT_MESSAGE_COLOR;
+					emisor = "You";
+					direccionMensaje = BubbleText.SENT;
+				} else {
+					colorBurbuja = INCOMING_MESSAGE_COLOR;
+					emisor = m.getEmisor().getName();
+					direccionMensaje = BubbleText.RECEIVED;
+				}
+
+				if (m.getTexto().isEmpty()) {
+					return new BubbleText(chat, m.getEmoticono(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
+				}
+				return new BubbleText(chat, m.getTexto(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
+			}).forEach(b -> chat.add(b));
 
 			// Si no hay espacio en los chats recientes es necesario borrar uno
 			if (chatsRecientes.size() >= NUM_CHATS_CACHE) {
 				chatsRecientes.remove(chatsRecientes.keySet().stream().findFirst().orElse(null));
 			}
 
-			chatsRecientes.put(contacto, mensajesChat);
+			chatsRecientes.put(contacto, chat);
 		} else {
-			System.out.println("Acierto");
+			chat.setBackground(CHAT_COLOR);
+			scrollBarChatBurbujas.setViewportView(chat);
+			chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
+			chat.setSize(400, 700);
+			scrollBarChatBurbujas.getViewport().setBackground(CHAT_COLOR);
 		}
 
-		// Coloca las burbujas nuevas
-		mensajesChat.stream().map(m -> {
-			String emisor;
-			int direccionMensaje;
-			Color colorBurbuja;
-
-			if (m.getEmisor().equals(Controlador.getInstancia().getUsuarioActual())) {
-				colorBurbuja = SENT_MESSAGE_COLOR;
-				emisor = "You";
-				direccionMensaje = BubbleText.SENT;
-			} else {
-				colorBurbuja = INCOMING_MESSAGE_COLOR;
-				emisor = m.getEmisor().getName();
-				direccionMensaje = BubbleText.RECEIVED;
-			}
-
-			if (m.getTexto().isEmpty()) {
-				return new BubbleText(chat, m.getEmoticono(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
-			}
-			return new BubbleText(chat, m.getTexto(), colorBurbuja, emisor, direccionMensaje, MESSAGE_SIZE);
-		}).forEach(b -> chat.add(b));
 	}
 
 	/**
@@ -232,7 +243,7 @@ public class Principal extends JFrame {
 
 		iconsVisible = false;
 
-		// Contactos de ejemplo
+		// Se extraen los contactos del usuario
 		List<Contact> contactos = controlador.getContactosUsuarioActual();
 
 		// Creamos el modelo
@@ -273,7 +284,7 @@ public class Principal extends JFrame {
 		settingsIzq.add(panel_1, gbc_panel_1);
 
 		JLabel lblMiFoto = new JLabel();
-		lblMiFoto.setIcon(resizeIcon(Controlador.getInstancia().getUsuarioActual().getProfilePhoto(), ICON_SIZE_MINI));
+		lblMiFoto.setIcon(resizeIcon(controlador.getUsuarioActual().getProfilePhoto(), ICON_SIZE_MINI));
 		lblMiFoto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -294,7 +305,7 @@ public class Principal extends JFrame {
 		gbc_panel_2.gridy = 0;
 		settingsIzq.add(panel_2, gbc_panel_2);
 
-		JLabel label_2 = new JLabel("");
+		JLabel label_2 = new JLabel();
 		label_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -306,7 +317,7 @@ public class Principal extends JFrame {
 		label_2.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/status-white.png")));
 		panel_2.add(label_2);
 
-		JLabel label_1 = new JLabel("");
+		JLabel label_1 = new JLabel();
 
 		label_1.setIcon(new ImageIcon(Principal.class.getResource("/umu/tds/apps/resources/3points-white.png")));
 		panel_2.add(label_1);
@@ -340,7 +351,7 @@ public class Principal extends JFrame {
 		mntmModifyGroup.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Controlador.getInstancia().getUsuarioActual().getGrupos().isEmpty()) {
+				if (controlador.getUsuarioActual().getGrupos().isEmpty()) {
 					JOptionPane.showMessageDialog(Principal.this, "Groups are needed", "Modify Group",
 							JOptionPane.ERROR_MESSAGE);
 					return;
@@ -363,7 +374,7 @@ public class Principal extends JFrame {
 		});
 		popupSettsGrupos.add(mntmMostrarContactos);
 
-		if (!Controlador.getInstancia().getUsuarioActual().isPremium()) {
+		if (!controlador.getUsuarioActual().isPremium()) {
 			JMenuItem mntmGetPremium = new JMenuItem("Get Premium");
 			mntmGetPremium.addActionListener(new ActionListener() {
 				@Override
@@ -376,12 +387,12 @@ public class Principal extends JFrame {
 			popupSettsGrupos.add(mntmGetPremium);
 		}
 
-		if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
+		if (controlador.getUsuarioActual().isPremium()) {
 			JMenuItem mntmShowStatistics = new JMenuItem("Show Statistics");
 			mntmShowStatistics.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (Controlador.getInstancia().getUsuarioActual().isPremium()) {
+					if (controlador.getUsuarioActual().isPremium()) {
 						UsageStatistics window = new UsageStatistics();
 						window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 						window.setVisible(true);
@@ -499,7 +510,7 @@ public class Principal extends JFrame {
 				Contact contacto = listaContactos.getSelectedValue();
 				if (contacto != null) {
 					// Borra los mensajes de la conversación de la base de datos
-					Controlador.getInstancia().deleteChat(listaContactos.getSelectedValue());
+					controlador.deleteChat(listaContactos.getSelectedValue());
 
 					chat.removeAll();
 					chat.updateUI();
@@ -519,16 +530,16 @@ public class Principal extends JFrame {
 				}
 
 				if (!(listaContactos.getSelectedValue() instanceof Group)
-						|| Controlador.getInstancia().isAdmin((Group) listaContactos.getSelectedValue())) {
+						|| controlador.isAdmin((Group) listaContactos.getSelectedValue())) {
 					JOptionPane.showMessageDialog(Principal.this, "This chat was deleted succesfully", "Chat deleted",
 							JOptionPane.INFORMATION_MESSAGE);
 					Contact contactoSeleccionado = listaContactos.getSelectedValue();
 					modelContacts.removeElement(contactoSeleccionado);
-					Controlador.getInstancia().deleteContact(contactoSeleccionado);
+					controlador.deleteContact(contactoSeleccionado);
 
 					if (modelContacts.isEmpty()) {
 						chat.removeAll();
-						Controlador.getInstancia().setChatActual(null);
+						controlador.setChatActual(null);
 						chatName.setText("");
 						chatPhoto.setIcon(null);
 					}
@@ -571,10 +582,9 @@ public class Principal extends JFrame {
 				Contact contactoActual = listaContactos.getSelectedValue();
 				if (contactoActual != null) {
 					loadChat(contactoActual);
-					Controlador.getInstancia().setChatActual(contactoActual);
+					controlador.setChatActual(contactoActual);
 					chatName.setText(contactoActual.getNombre());
 					chatPhoto.setIcon(resizeIcon(contactoActual.getFoto(), ICON_SIZE_MINI));
-					System.out.println(chatsRecientes);
 				}
 			}
 
@@ -597,22 +607,22 @@ public class Principal extends JFrame {
 		gbl_chatPersonal.rowWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		chatPersonal.setLayout(gbl_chatPersonal);
 
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBorder(null);
-		scrollPane_1.setBackground(CHAT_COLOR);
+		scrollBarChatBurbujas = new JScrollPane();
+		scrollBarChatBurbujas.setBorder(null);
+		scrollBarChatBurbujas.setBackground(CHAT_COLOR);
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane_1.gridx = 0;
 		gbc_scrollPane_1.gridy = 0;
-		chatPersonal.add(scrollPane_1, gbc_scrollPane_1);
+		chatPersonal.add(scrollBarChatBurbujas, gbc_scrollPane_1);
 
 		chat = new ChatBurbujas();
 		chat.setBackground(CHAT_COLOR);
-		scrollPane_1.setViewportView(chat);
+		scrollBarChatBurbujas.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
 		chat.setSize(400, 700);
-		scrollPane_1.getViewport().setBackground(CHAT_COLOR);
+		scrollBarChatBurbujas.getViewport().setBackground(CHAT_COLOR);
 
 		// Se muestran todas las burbujas de la conversacion actual
 		listaContactos.setSelectedIndex(0);

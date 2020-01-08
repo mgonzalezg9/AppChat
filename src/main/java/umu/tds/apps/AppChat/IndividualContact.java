@@ -45,11 +45,13 @@ public class IndividualContact extends Contact {
 	}
 
 	// Methods
-	/** 
-	 * Dado un usuario me devuelve el contacto que este usuario tiene (como lo ve desde su perspectiva)
+	/**
+	 * Dado un usuario me devuelve el contacto que este usuario tiene (como lo ve
+	 * desde su perspectiva)
 	 * 
 	 * @param usuario Usuario cuyo contacto quiero obtener
-	 * @return Devuelve el contacto que tengo guardado para el usuario pasado como parámetro. Null si no lo tengo guardado
+	 * @return Devuelve el contacto que tengo guardado para el usuario pasado como
+	 *         parámetro. Null si no lo tengo guardado
 	 */
 	public IndividualContact getContacto(User usuario) {
 		return this.usuario.getContactos().stream().filter(c -> c instanceof IndividualContact)
@@ -142,8 +144,4 @@ public class IndividualContact extends Contact {
 		return usuario.equals(otherUser);
 	}
 
-	@Override
-	public String toString() {
-		return super.getNombre();
-	}
 }

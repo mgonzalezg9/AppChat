@@ -78,4 +78,8 @@ public abstract class Contact {
 		mensajes.add(message);
 	}
 
+	@Override
+	public String toString() {
+		return nombre;
+	}
 }

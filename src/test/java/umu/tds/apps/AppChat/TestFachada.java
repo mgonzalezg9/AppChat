@@ -38,7 +38,7 @@ public class TestFachada {
 			TestFachada.class.getResource("/umu/tds/apps/resources/icon.png"));
 	private final static String GROUP_NAME = "Juernes";
 	private final static String NEW_GROUP_NAME = "Sabado sabadete";
-	private final static int EMOJI = 3;
+	private final static int EMOJI = 5;
 
 	// Persistencia
 	private static Controlador controlador;
