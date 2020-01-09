@@ -225,7 +225,7 @@ public class StatusWindow extends JFrame {
 				// Si tiene estado se muestra
 				if (s.isPresent()) {
 					list.clearSelection();
-					lblNombreContacto.setFont(new Font("Tahoma", Font.BOLD, 18));
+					//lblNombreContacto.setFont(new Font("Tahoma", Font.BOLD, 18));
 					panelMiEstado.setBackground(SECONDARY_COLOR);
 					panelMiNombre.setBackground(SECONDARY_COLOR);
 					lblEstadoSeleccionado.setIcon(resizeIcon(s.get().getImg(), STATUS_IMAGE_SIZE));
@@ -259,7 +259,7 @@ public class StatusWindow extends JFrame {
 		lblNombreContacto.setForeground(TEXT_COLOR_LIGHT);
 		lblNombreContacto.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
-		JButton btnNuevoEstado = new JButton("    +    ");
+		JButton btnNuevoEstado = new JButton("           +           ");
 		btnNuevoEstado.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnNuevoEstado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -280,11 +280,11 @@ public class StatusWindow extends JFrame {
 		panelIzq.add(panelMisContactos, gbc_panelMisContactos);
 		panelMisContactos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JLabel label_1 = new JLabel("My contacts");
-		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setForeground(TEXT_COLOR_LIGHT);
-		label_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		panelMisContactos.add(label_1);
+		JLabel lblYourContactsStatus = new JLabel("Contact status");
+		lblYourContactsStatus.setHorizontalAlignment(SwingConstants.CENTER);
+		lblYourContactsStatus.setForeground(TEXT_COLOR_LIGHT);
+		lblYourContactsStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panelMisContactos.add(lblYourContactsStatus);
 
 		JPanel listaEstados = new JPanel();
 		panelIzq.setBackground(MAIN_COLOR_LIGHT);

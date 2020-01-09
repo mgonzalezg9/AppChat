@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -103,7 +104,7 @@ class ChatBurbujas extends JPanel implements Scrollable {
 public class Principal extends JFrame {
 	private static final int NUM_CHATS_CACHE = 3;
 	private static final long serialVersionUID = 1L;
-	private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
+	
 	private JPanel contentPane;
 	private ChatBurbujas chat;
 	private JLabel profilePhoto;
@@ -751,13 +752,6 @@ public class Principal extends JFrame {
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				Contact contacto = (Contact) value;
-				IndividualContact contactoIndividual = null;
-				boolean isIndividual = false;
-
-				if (contacto instanceof IndividualContact) {
-					isIndividual = true;
-					contactoIndividual = (IndividualContact) contacto;
-				}
 
 				JPanel panel = new JPanel();
 				GridBagLayout gbl_contentPane = new GridBagLayout();
@@ -767,15 +761,10 @@ public class Principal extends JFrame {
 				gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 				panel.setLayout(gbl_contentPane);
 
-				JLabel label = new JLabel("");
-				if (isIndividual) {
-					ImageIcon img = contactoIndividual.getFoto();
-					label.setIcon(resizeIcon(img, 50));
-				} else {
-					ImageIcon imagen = new ImageIcon(Principal.class.getResource(GROUP_ICON_PATH));
-					imagen.setDescription(GROUP_ICON_PATH);
-					label.setIcon(imagen);
-				}
+				JLabel label = new JLabel();
+				ImageIcon img = contacto.getFoto();
+				label.setIcon(resizeIcon(img, 50));
+
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
 				gbc_label.gridheight = 2;
@@ -784,36 +773,44 @@ public class Principal extends JFrame {
 				gbc_label.gridy = 1;
 				panel.add(label, gbc_label);
 
-				JLabel lblNewLabel = new JLabel(contacto.getNombre());
+				JLabel lblContactName = new JLabel(contacto.getNombre());
 				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
 				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 				gbc_lblNewLabel.gridx = 1;
 				gbc_lblNewLabel.gridy = 1;
-				panel.add(lblNewLabel, gbc_lblNewLabel);
+				panel.add(lblContactName, gbc_lblNewLabel);
 
-				JLabel lblNewLabel_1;
+				JLabel lblUltimoMensaje;
 				Message ultimoMensaje = Controlador.getInstancia().getUltimoMensaje(contacto);
 				if (ultimoMensaje != null) {
-					lblNewLabel_1 = new JLabel(ultimoMensaje.getHora().format(format).toString());
+					lblUltimoMensaje = new JLabel(ultimoMensaje.getHora().format(DATE_FORMAT).toString());
+					lblUltimoMensaje.setFont(lblUltimoMensaje.getFont().deriveFont(Font.PLAIN));
 				} else {
-					lblNewLabel_1 = new JLabel();
+					lblUltimoMensaje = new JLabel();
 				}
 				GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 				gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHEAST;
 				gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
 				gbc_lblNewLabel_1.gridx = 2;
 				gbc_lblNewLabel_1.gridy = 1;
-				panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+				panel.add(lblUltimoMensaje, gbc_lblNewLabel_1);
 
 				JLabel lblMensaje;
 				if (ultimoMensaje != null) {
 					// Si no tiene texto es un emoji
-					if (ultimoMensaje.getTexto().isEmpty()) {
+					String textoUltimoMensaje = ultimoMensaje.getTexto();
+					if (textoUltimoMensaje.isEmpty()) {
 						lblMensaje = new JLabel("😀");
 						lblMensaje.setFont(lblMensaje.getFont().deriveFont(20));
 					} else {
-						lblMensaje = new JLabel(ultimoMensaje.getTexto());
+						// Si el último mensaje es muy largo no se muestra entero
+						if (textoUltimoMensaje.length() > MAX_CHARS_LAST_MESSAGE) {
+							textoUltimoMensaje = textoUltimoMensaje.substring(0, Math.min(MAX_CHARS_LAST_MESSAGE, textoUltimoMensaje.lastIndexOf(' '))) + "...";
+						}
+						
+						lblMensaje = new JLabel(textoUltimoMensaje);
+						lblMensaje.setFont(lblMensaje.getFont().deriveFont(Font.ITALIC));
 					}
 				} else {
 					lblMensaje = new JLabel();

@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -31,6 +32,8 @@ public class Theme {
 	public static final String PROFILE_PHOTO_NAME = "profilePhoto";
 	public static final String STATUS_NAME = "status";
 	public static final Color[] PIECHART_COLORS = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62), new Color(236, 143, 110), new Color(243, 180, 159), new Color(246, 199, 182) };
+	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+	public static final int MAX_CHARS_LAST_MESSAGE = 35;
 
 	public static ImageIcon resizeIcon(ImageIcon img, int resolution) {
 		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);

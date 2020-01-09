@@ -440,83 +440,83 @@ public class Controlador implements MessagesListener {
 
 		try {
 			// Creamos el documento PDF
-			FileOutputStream archivo;
-			archivo = new FileOutputStream(ruta);
+			FileOutputStream archivo = new FileOutputStream(ruta);
 			Document documento = new Document();
 			PdfWriter.getInstance(documento, archivo);
 			documento.open();
 
 			// Escribimos en el documento PDF
 			int i = 1;
-			Paragraph p;
 			// Recorremos los contactos del usuario actual
 			for (IndividualContact contacto : contactos) {
-				documento.add(new Paragraph("Contacto número " + i));
+				documento.add(new Paragraph("Contact no. " + i));
 				documento.add(Chunk.NEWLINE);
 
 				// Imagen del contacto
-				Image img;
-				img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);
+				Image img = Image.getInstance(Theme.resizeIcon(contacto.getFoto(), 100).getImage(), null);
 				documento.add(img);
 
 				// Nombre del contacto
-				p = new Paragraph();
-				p.setTabSettings(new TabSettings(30f));
-				p.add(Chunk.TABBING);
-				p.add(new Chunk("- Nombre del contacto: " + contacto.getNombre()));
-				documento.add(p);
+				Paragraph parrafoActual = new Paragraph();
+				parrafoActual.setTabSettings(new TabSettings(30f));
+				parrafoActual.add(Chunk.TABBING);
+				parrafoActual.add(new Chunk("- Contact name: " + contacto.getNombre()));
+				documento.add(parrafoActual);
 
 				// Número de teléfono del contacto
-				p = new Paragraph();
-				p.setTabSettings(new TabSettings(30f));
-				p.add(Chunk.TABBING);
-				p.add(new Chunk("- Número de teléfono: " + contacto.getMovil()));
-				documento.add(p);
+				parrafoActual = new Paragraph();
+				parrafoActual.setTabSettings(new TabSettings(30f));
+				parrafoActual.add(Chunk.TABBING);
+				parrafoActual.add(new Chunk("- Phone: " + contacto.getMovil()));
+				documento.add(parrafoActual);
 
 				// Mostramos la información de los grupos en común que tenemos con ese contacto
-				p = new Paragraph();
-				p.setTabSettings(new TabSettings(30f));
-				p.add(Chunk.TABBING);
-				p.add(new Chunk("- Grupos en común:"));
-				documento.add(p);
+				parrafoActual = new Paragraph();
+				parrafoActual.setTabSettings(new TabSettings(30f));
+				parrafoActual.add(Chunk.TABBING);
+				parrafoActual.add(new Chunk("- Groups shared:"));
+				documento.add(parrafoActual);
 
 				// Recorremos todos los grupos en común
 				int z = 1;
 				for (Group grupo : getGruposEnComun(contacto)) {
 					// Nombre del grupo
-					p = new Paragraph();
-					p.setTabSettings(new TabSettings(60f));
-					p.add(Chunk.TABBING);
-					p.add(new Chunk("+ Nombre del grupo: " + grupo.getNombre()));
-					documento.add(p);
+					parrafoActual = new Paragraph();
+					parrafoActual.setTabSettings(new TabSettings(60f));
+					parrafoActual.add(Chunk.TABBING);
+					parrafoActual.add(new Chunk("+ Group name: " + grupo.getNombre()));
+					documento.add(parrafoActual);
 
 					// Admin del grupo
-					p = new Paragraph();
-					p.setTabSettings(new TabSettings(60f));
-					p.add(Chunk.TABBING);
-					p.add(new Chunk("+ Admin del grupo: "
+					parrafoActual = new Paragraph();
+					parrafoActual.setTabSettings(new TabSettings(60f));
+					parrafoActual.add(Chunk.TABBING);
+					parrafoActual.add(new Chunk("+ Group admin: "
 							+ ((grupo.getAdmin().getCodigo() == usuarioActual.getCodigo()) ? usuarioActual.getName()
 									: getNombreContacto(grupo.getAdmin()))));
-					documento.add(p);
+					documento.add(parrafoActual);
 
 					// Mostramos los participantes del grupo
-					p = new Paragraph();
-					p.setTabSettings(new TabSettings(60f));
-					p.add(Chunk.TABBING);
-					p.add(new Chunk("+ Participantes:"));
-					documento.add(p);
+					parrafoActual = new Paragraph();
+					parrafoActual.setTabSettings(new TabSettings(60f));
+					parrafoActual.add(Chunk.TABBING);
+					parrafoActual.add(new Chunk("+ Participants:"));
+					documento.add(parrafoActual);
 
 					// Recorro todos los participantes
 					for (IndividualContact participante : grupo.getParticipantes()) {
 						// Información del participante
-						p = new Paragraph();
-						p.setTabSettings(new TabSettings(90f));
-						p.add(Chunk.TABBING);
-						p.add(new Chunk("- Nombre: " + participante.getNombre()
-								+ ((participante.getEstado().isPresent()) ? ", estado: " + participante.getEstado()
-										: "")
-								+ ", teléfono: " + participante.getMovil()));
-						documento.add(p);
+						parrafoActual = new Paragraph();
+						parrafoActual.setTabSettings(new TabSettings(90f));
+						parrafoActual.add(Chunk.TABBING);
+						parrafoActual.add(new Chunk("- Name: " + participante.getNombre()));
+						documento.add(parrafoActual);
+
+						parrafoActual = new Paragraph();
+						parrafoActual.setTabSettings(new TabSettings(90f));
+						parrafoActual.add(Chunk.TABBING);
+						parrafoActual.add(new Chunk("- Phone: " + participante.getMovil()));
+						documento.add(parrafoActual);
 					}
 
 					if (z < grupo.getParticipantes().size())
@@ -524,6 +524,30 @@ public class Controlador implements MessagesListener {
 					z++;
 				}
 
+				// Estado de mi contacto, si tiene
+				Optional<Status> estado = contacto.getEstado();
+				if (estado.isPresent()) {
+					parrafoActual = new Paragraph();
+					parrafoActual.setTabSettings(new TabSettings(30f));
+					parrafoActual.add(Chunk.TABBING);
+					parrafoActual.add(new Chunk("- Status:"));
+					documento.add(parrafoActual);
+
+					Paragraph parrafoDescEstado = new Paragraph();
+					parrafoDescEstado.setTabSettings(new TabSettings(60f));
+					parrafoDescEstado.add(Chunk.TABBING);
+					Image estadoImg = Image.getInstance(Theme.resizeIcon(estado.get().getImg(), 200).getImage(),
+							null);
+					parrafoDescEstado.add(estadoImg);
+					documento.add(parrafoDescEstado);
+
+					parrafoDescEstado = new Paragraph();
+					parrafoDescEstado.setTabSettings(new TabSettings(60f));
+					parrafoDescEstado.add(Chunk.TABBING);
+					parrafoDescEstado.add(new Chunk("\"" + estado.get().getFrase() + "\""));
+					documento.add(parrafoDescEstado);
+				}
+				
 				if (i < contactos.size()) {
 					documento.add(Chunk.NEWLINE);
 					documento.add(Chunk.NEWLINE);
