@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -34,8 +35,10 @@ import javax.swing.JTextField;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.Image;
+import java.awt.AlphaComposite;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -109,17 +112,17 @@ public class Register extends JFrame {
 		gbc_lblChooseImage.gridy = 0;
 		panel.add(lblChooseImage, gbc_lblChooseImage);
 
-		final JLabel imgUser = new JLabel("");
+		final JLabel lblImgUser = new JLabel();
 		ImageIcon imagenPorDefecto = new ImageIcon(Register.class.getResource("/umu/tds/apps/resources/user.png"));
 		imagenPorDefecto.setDescription("/umu/tds/apps/resources/user.png");
-		imgUser.setIcon(imagenPorDefecto);
+		lblImgUser.setIcon(imagenPorDefecto);
 		GridBagConstraints gbc_imgUser = new GridBagConstraints();
 		gbc_imgUser.fill = GridBagConstraints.BOTH;
 		gbc_imgUser.gridx = 1;
 		gbc_imgUser.gridy = 0;
-		panel.add(imgUser, gbc_imgUser);
+		panel.add(lblImgUser, gbc_imgUser);
 
-		imgUser.addMouseListener(new MouseListener() {
+		lblImgUser.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
@@ -134,16 +137,22 @@ public class Register extends JFrame {
 					try {
 						File file = jfc.getSelectedFile();
 						img = ImageIO.read(file);
-						Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-						ImageIcon icon = new ImageIcon(imgScaled);
+
+						// Redondea la imagen
+						img = roundImage(img);
+
+						// Escala el tamaño de la imagen para mostrarla
+						ImageIcon icon = resizeIcon(img, 128);
+						
+						// Le da una descripción para guardarla a posteriori
 						icon.setDescription(file.getPath());
-						imgUser.setIcon(icon);
+						lblImgUser.setIcon(icon);
 
-						Dimension imageSize = new Dimension(128, 128);
-						imgUser.setPreferredSize(imageSize);
+						/*Dimension imageSize = new Dimension(128, 128);
+						lblImgUser.setPreferredSize(imageSize);*/
 
-						imgUser.revalidate();
-						imgUser.repaint();
+						lblImgUser.revalidate();
+						lblImgUser.repaint();
 						lblChooseImage.setText("");
 					} catch (IOException e1) {
 						e1.printStackTrace();
@@ -384,7 +393,7 @@ public class Register extends JFrame {
 					return;
 
 				// Registra al usuario
-				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (imgUser.getIcon()),
+				boolean creada = Controlador.getInstancia().crearCuenta((ImageIcon) (lblImgUser.getIcon()),
 						textFieldUser.getText(), textFieldPassword.getText(), textFieldEmail.getText(),
 						textFieldName.getText(), Integer.parseInt(textFieldPNumber.getText()),
 						birthDateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -506,4 +515,7 @@ public class Register extends JFrame {
 			return false;
 		return EMAIL_PATTERN.matcher(email).matches();
 	}
+
+	
+
 }

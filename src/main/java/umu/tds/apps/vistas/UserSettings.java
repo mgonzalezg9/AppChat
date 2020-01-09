@@ -90,11 +90,14 @@ public class UserSettings extends JFrame {
 			int returnValue = jfc.showOpenDialog(null);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				try {
-					// Escala la imagen
 					BufferedImage img = ImageIO.read(jfc.getSelectedFile());
-					Image imgScaled = img.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-					icon = new ImageIcon(imgScaled);
-					icon.setDescription(jfc.getSelectedFile().getPath());
+					
+					// Redondea la imagen
+					img = roundImage(img);
+
+					// Escala el tamaño de la imagen para mostrarla
+					icon = resizeIcon(img, 128);
+					//icon.setDescription(jfc.getSelectedFile().getPath());
 
 					// La añade a la lista
 					icon.setDescription("/umu/tds/apps/photos/" + jfc.getSelectedFile().getName());
