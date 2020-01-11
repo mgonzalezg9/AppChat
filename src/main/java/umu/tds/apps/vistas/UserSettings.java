@@ -91,7 +91,7 @@ public class UserSettings extends JFrame {
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				try {
 					BufferedImage img = ImageIO.read(jfc.getSelectedFile());
-					
+
 					// Redondea la imagen
 					img = roundImage(img);
 
@@ -108,7 +108,7 @@ public class UserSettings extends JFrame {
 				numImagen = imagenes.size() - 1;
 				int numMostrado = numImagen + 1;
 				lblIndicadorCarrousel.setText(numMostrado + "/" + imagenes.size());
-				profilePhoto.setIcon(imagenes.get(imagenes.size() - 1));
+				profilePhoto.setIcon(imagenes.get(numImagen));
 			}
 			return icon;
 		}
@@ -137,6 +137,13 @@ public class UserSettings extends JFrame {
 			}
 			imagenes.remove(op);
 			Controlador.getInstancia().removeImagenUsuario(op);
+
+			// Actualiza el indice consecuentemente
+			numImagen = imagenes.size() - 1;
+			int numMostrado = numImagen + 1;
+			lblIndicadorCarrousel.setText(numMostrado + "/" + imagenes.size());
+			profilePhoto.setIcon(imagenes.get(numImagen));
+
 			return true;
 		}
 
