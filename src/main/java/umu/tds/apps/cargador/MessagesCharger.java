@@ -1,14 +1,15 @@
 package umu.tds.apps.cargador;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import umu.tds.apps.whatsappparser.MensajeWhatsApp;
-import umu.tds.apps.whatsappparser.Plataforma;
-import umu.tds.apps.whatsappparser.SimpleTextParser;
+import modelo.MensajeWhatsApp;
+import modelo.Plataforma;
+import parser.SimpleTextParser;
+
+
 
 public class MessagesCharger implements Serializable {
 	public static String IOS = "IOS";

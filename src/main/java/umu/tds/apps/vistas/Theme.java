@@ -28,7 +28,7 @@ public class Theme {
 	public static final Color WRONG_INPUT_COLOR = Color.RED;
 	public static final int MESSAGE_SIZE = 12;
 	public static final String GROUP_ICON_PATH = "/umu/tds/apps/resources/group.png";
-	public static final int ICON_SIZE_MINI = 25;
+	public static final int ICON_SIZE_MINI = 35;
 	public static final int ICON_SIZE = 50;
 	public static final int STATUS_IMAGE_SIZE = 250;
 	public static final String PROFILE_PHOTO_NAME = "profilePhoto";
@@ -41,16 +41,14 @@ public class Theme {
 	public static ImageIcon resizeIcon(ImageIcon img, int newSize) {
 		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = bi.createGraphics();
+		
 		// paint the Icon to the BufferedImage.
 		img.paintIcon(null, g, 0, 0);
 		g.dispose();
 
-		Image imgScaled = bi.getScaledInstance(newSize, newSize, Image.SCALE_DEFAULT);
-		ImageIcon icon = new ImageIcon(imgScaled);
-
-		return icon;
+		return resizeIcon(bi, newSize);
 	}
-	
+
 	public static ImageIcon resizeIcon(BufferedImage img, int newSize) {
 		return new ImageIcon(img.getScaledInstance(newSize, newSize, Image.SCALE_DEFAULT));
 	}
@@ -72,7 +70,7 @@ public class Theme {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static BufferedImage roundImage(BufferedImage bufImage) {
 		int diameter = Math.min(bufImage.getWidth(), bufImage.getHeight());
 		BufferedImage mask = new BufferedImage(bufImage.getWidth(), bufImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -94,7 +92,7 @@ public class Theme {
 
 		return masked;
 	}
-	
+
 	public static void applyQualityRenderingHints(Graphics2D g2d) {
 		g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

@@ -97,7 +97,6 @@ public class UserSettings extends JFrame {
 
 					// Escala el tamaño de la imagen para mostrarla
 					icon = resizeIcon(img, 128);
-					//icon.setDescription(jfc.getSelectedFile().getPath());
 
 					// La añade a la lista
 					icon.setDescription("/umu/tds/apps/photos/" + jfc.getSelectedFile().getName());

@@ -112,7 +112,7 @@ public class TestFachada {
 		
 		// Other da los buenos dias por el grupo
 		assertTrue(controlador.iniciarSesion(OTHER_NICK, PASSWORD));
-		controlador.enviarMensaje(grupo, "Buenos días por la mañana!");
+		controlador.enviarMensaje(grupo, "Buenos días in the morning!");
 		controlador.cerrarSesion();
 	}
 

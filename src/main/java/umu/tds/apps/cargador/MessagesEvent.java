@@ -2,7 +2,8 @@ package umu.tds.apps.cargador;
 
 import java.util.EventObject;
 import java.util.List;
-import umu.tds.apps.whatsappparser.MensajeWhatsApp;
+
+import modelo.MensajeWhatsApp;
 
 public class MessagesEvent extends EventObject {
 	private static final long serialVersionUID = 1L;

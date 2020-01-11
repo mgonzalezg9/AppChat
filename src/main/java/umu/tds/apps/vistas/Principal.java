@@ -757,13 +757,13 @@ public class Principal extends JFrame {
 				GridBagLayout gbl_contentPane = new GridBagLayout();
 				gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
 				gbl_contentPane.rowHeights = new int[] { 10, 26, 5, 10, 0 };
-				gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
 				gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 				panel.setLayout(gbl_contentPane);
 
 				JLabel label = new JLabel();
 				ImageIcon img = contacto.getFoto();
-				label.setIcon(resizeIcon(img, 50));
+				label.setIcon(resizeIcon(img, ICON_SIZE));
 
 				GridBagConstraints gbc_label = new GridBagConstraints();
 				gbc_label.anchor = GridBagConstraints.SOUTH;
@@ -784,7 +784,7 @@ public class Principal extends JFrame {
 				JLabel lblUltimoMensaje;
 				Message ultimoMensaje = Controlador.getInstancia().getUltimoMensaje(contacto);
 				if (ultimoMensaje != null) {
-					lblUltimoMensaje = new JLabel(ultimoMensaje.getHora().format(DATE_FORMAT).toString());
+					lblUltimoMensaje = new JLabel(ultimoMensaje.getHora().format(DATE_FORMAT) + " ");
 					lblUltimoMensaje.setFont(lblUltimoMensaje.getFont().deriveFont(Font.PLAIN));
 				} else {
 					lblUltimoMensaje = new JLabel();
@@ -795,7 +795,7 @@ public class Principal extends JFrame {
 				gbc_lblNewLabel_1.gridx = 2;
 				gbc_lblNewLabel_1.gridy = 1;
 				panel.add(lblUltimoMensaje, gbc_lblNewLabel_1);
-
+				
 				JLabel lblMensaje;
 				if (ultimoMensaje != null) {
 					// Si no tiene texto es un emoji

@@ -15,21 +15,15 @@ import javax.swing.ImageIcon;
 
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.Histogram;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.internal.ChartBuilder;
 import org.knowm.xchart.internal.chartpart.Chart;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -46,8 +40,8 @@ import umu.tds.apps.persistencia.MessageDAO;
 import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
 import umu.tds.apps.vistas.Theme;
-import umu.tds.apps.whatsappparser.MensajeWhatsApp;
-import umu.tds.apps.whatsappparser.Plataforma;
+import modelo.MensajeWhatsApp;
+import modelo.Plataforma;
 
 public class Controlador implements MessagesListener {
 	// Instancia del controlador.

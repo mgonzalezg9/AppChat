@@ -27,5 +27,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/h2-1.3.160.jar"/>
 	<classpathentry kind="lib" path="lib/chatWindowLib.jar"/>
 	<classpathentry kind="lib" path="lib/luz.jar"/>
+	<classpathentry kind="lib" path="lib/messageParser.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
