@@ -10,6 +10,8 @@ import umu.tds.apps.controlador.Controlador;
 import java.awt.Toolkit;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JComboBox;
@@ -64,7 +66,13 @@ public class WhatsappChatChooser extends JFrame {
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String opElegida = (String) comboBox.getSelectedItem();
-				Controlador.getInstancia().cargarMensajes(path, opElegida);
+				try {
+					Controlador.getInstancia().cargarMensajes(path, opElegida);
+				} catch (Exception e2) {
+					getToolkit().beep();
+					JOptionPane.showMessageDialog(WhatsappChatChooser.this, "Please check the chat file is correct.", "Error parsing messages",
+							JOptionPane.ERROR_MESSAGE);
+				}
 				setVisible(false);
 			}
 		});

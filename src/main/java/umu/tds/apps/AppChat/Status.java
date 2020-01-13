@@ -3,8 +3,6 @@ package umu.tds.apps.AppChat;
 import javax.swing.ImageIcon;
 
 public class Status {
-	public final static Status NONE = new Status(null, "");
-	
 	// Properties.
 	private int codigo;
 	private ImageIcon img;
@@ -15,29 +13,29 @@ public class Status {
 		this.img = img;
 		this.frase = frs;
 	}
-	
+
 	// Getters.
 	public ImageIcon getImg() {
 		return img;
 	}
-	
+
 	public String getFrase() {
 		return frase;
 	}
-	
+
 	public int getCodigo() {
 		return codigo;
 	}
-	
+
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
-	
-	//  setters
-	public void setFrase(String frase) { // Lo utilizamos para la pruebas de persistencia
+
+	// Setters.
+	public void setFrase(String frase) { // Lo utilizamos para los test de persistencia
 		this.frase = frase;
 	}
-	
+
 	// HashCode y equals
 	@Override
 	public int hashCode() {
@@ -72,7 +70,7 @@ public class Status {
 			return false;
 		return true;
 	}
-	
+
 	// toString
 	@Override
 	public String toString() {

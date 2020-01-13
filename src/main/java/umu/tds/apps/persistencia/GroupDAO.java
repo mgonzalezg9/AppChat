@@ -3,7 +3,6 @@ package umu.tds.apps.persistencia;
 import java.util.List;
 
 import umu.tds.apps.AppChat.Group;
-import umu.tds.apps.AppChat.User;
 
 public interface GroupDAO {
 	public void registrarGrupo(Group grupo);

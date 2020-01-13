@@ -26,7 +26,7 @@ public class Message implements Comparable<Message> {
 		this.setEmisor(emisor);
 		this.setReceptor(receptor);
 	}
-	
+
 	public Message(String texto, int emoticono, LocalDateTime hora) {
 		this.texto = texto;
 		this.emoticono = emoticono;

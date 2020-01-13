@@ -59,7 +59,6 @@ public class TestPersistenciaGroup {
 	/**
 	 * Prueba que funcione la modificación de un grupo
 	 */
-
 	@Test
 	public void modifyGroup() {
 		registerGroup();

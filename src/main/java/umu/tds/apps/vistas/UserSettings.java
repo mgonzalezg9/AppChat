@@ -14,7 +14,6 @@ import java.awt.Toolkit;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -54,7 +53,7 @@ public class UserSettings extends JFrame {
 		 */
 		public Carrousel(List<ImageIcon> imagenes) {
 			this.imagenes = imagenes.stream().map(i -> resizeIcon(i, 128)).collect(Collectors.toList());
-			this.numImagen = 0;
+			this.numImagen = imagenes.size() - 1;
 
 			profilePhoto.setIcon(this.imagenes.get(numImagen));
 

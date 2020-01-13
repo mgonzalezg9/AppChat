@@ -18,9 +18,9 @@ public class Group extends Contact {
 	/**
 	 * Constructor de la clase grupo
 	 * 
-	 * @param nombre Nombre del grupo
+	 * @param nombre    Nombre del grupo
 	 * @param contactos Participantes del grupo
-	 * @param admin Usuario admin del grupo
+	 * @param admin     Usuario admin del grupo
 	 */
 	public Group(String nombre, List<IndividualContact> contactos, User admin) {
 		super(nombre);
@@ -31,10 +31,10 @@ public class Group extends Contact {
 	/**
 	 * Constructor sobrecargado de la clase grupo
 	 * 
-	 * @param nombre Nombre del grupo
-	 * @param mensajes Mensajes intercambiados en el grupo
+	 * @param nombre    Nombre del grupo
+	 * @param mensajes  Mensajes intercambiados en el grupo
 	 * @param contactos Participantes del grupo
-	 * @param admin Usuario admin del grupo
+	 * @param admin     Usuario admin del grupo
 	 */
 	public Group(String nombre, List<Message> mensajes, List<IndividualContact> contactos, User admin) {
 		super(nombre, mensajes);
@@ -100,10 +100,10 @@ public class Group extends Contact {
 	public void setIntegrantes(List<IndividualContact> contactos) {
 		this.integrantes = contactos;
 	}
-	
+
 	/**
-	 * Devuelve los mensajes que han enviado el resto de usuarios por el grupo.
-	 * El valor del parametro pasado como parámetro no importa
+	 * Devuelve los mensajes que han enviado el resto de usuarios por el grupo. El
+	 * valor del parametro pasado como parámetro no importa
 	 * 
 	 * @param emptyOpt Usuario opcional del que obtengo los mensajes recibidos
 	 * @return Lista con los mensajes recibidos de ese usuario
@@ -138,12 +138,12 @@ public class Group extends Contact {
 
 	/**
 	 * Indica si el usuario pertenece al grupo
+	 * 
 	 * @param usuario Usuario a comprobar si está en el grupo
 	 * @return Devuelve si el usuario pertenece al grupo
 	 */
 	public boolean hasParticipante(User usuario) {
-		return integrantes.stream()
-				.anyMatch(i -> i.getUsuario().equals(usuario));
+		return integrantes.stream().anyMatch(i -> i.getUsuario().equals(usuario));
 	}
 
 	// HashCode e Equals
@@ -160,6 +160,7 @@ public class Group extends Contact {
 
 	/**
 	 * Dos grupos son iguales si tienen el mismo nombre.
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

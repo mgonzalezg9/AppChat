@@ -9,16 +9,14 @@ import modelo.MensajeWhatsApp;
 import modelo.Plataforma;
 import parser.SimpleTextParser;
 
-
-
 public class MessagesCharger implements Serializable {
-	public static String IOS = "IOS";
-	public static String ANDROID_1 = "ANDROID_1";
-	public static String ANDROID_2 = "ANDROID_2";
-	public static String IOS_DATE = "d/M/yy H:mm:ss";
-	public static String ANDROID_1_DATE = "d/M/yy H:mm";
-	public static String ANDROID_2_DATE = "d/M/yyyy H:mm";
-	
+	public final static String IOS = "IOS";
+	public final static String ANDROID_1 = "ANDROID_1";
+	public final static String ANDROID_2 = "ANDROID_2";
+	public final static String IOS_DATE = "d/M/yy H:mm:ss";
+	public final static String ANDROID_1_DATE = "d/M/yy H:mm";
+	public final static String ANDROID_2_DATE = "d/M/yyyy H:mm";
+
 	private static final long serialVersionUID = 1L;
 	private List<MessagesListener> observadores;
 	private List<MensajeWhatsApp> listaMensajes;
@@ -38,18 +36,14 @@ public class MessagesCharger implements Serializable {
 		return listaMensajes;
 	}
 
-	public void setFichero(String path, Plataforma plataforma, String dateFormat) {
+	public void setFichero(String path, Plataforma plataforma, String dateFormat) throws IOException {
 		List<MensajeWhatsApp> chat;
-		try {
-			chat = SimpleTextParser.parse(path, dateFormat, plataforma);
+		chat = SimpleTextParser.parse(path, dateFormat, plataforma);
 
-			if (!listaMensajes.equals(chat)) {
-				MessagesEvent evento = new MessagesEvent(this, listaMensajes, chat);
-				listaMensajes = chat;
-				notificarCambioMensajes(evento);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (!listaMensajes.equals(chat)) {
+			MessagesEvent evento = new MessagesEvent(this, listaMensajes, chat);
+			listaMensajes = chat;
+			notificarCambioMensajes(evento);
 		}
 	}
 

@@ -37,7 +37,6 @@ import javax.swing.DefaultListModel;
 import tds.BubbleText;
 import umu.tds.apps.AppChat.Contact;
 import umu.tds.apps.AppChat.Group;
-import umu.tds.apps.AppChat.IndividualContact;
 import umu.tds.apps.AppChat.Message;
 import umu.tds.apps.controlador.Controlador;
 
@@ -47,7 +46,6 @@ import javax.swing.Scrollable;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
@@ -104,7 +102,7 @@ class ChatBurbujas extends JPanel implements Scrollable {
 public class Principal extends JFrame {
 	private static final int NUM_CHATS_CACHE = 3;
 	private static final long serialVersionUID = 1L;
-	
+
 	private JPanel contentPane;
 	private ChatBurbujas chat;
 	private JLabel profilePhoto;
@@ -230,7 +228,7 @@ public class Principal extends JFrame {
 				Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setTitle("AppChat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 781, 637);
+		setBounds(100, 100, 1131, 708);
 		contentPane = new JPanel();
 		contentPane.setBackground(MAIN_COLOR_LIGHT);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -488,7 +486,10 @@ public class Principal extends JFrame {
 					JFrame ventana = new WhatsappChatChooser(jfc.getSelectedFile().getAbsolutePath());
 					ventana.setVisible(true);
 
-					loadChat(listaContactos.getSelectedValue());
+					// El chat actual es necesario cargarlo de nuevo para que se actualice
+					Contact chatActual = listaContactos.getSelectedValue();
+					chatsRecientes.remove(chatActual);
+					//loadChat(chatActual);
 				}
 			}
 		});
@@ -603,7 +604,7 @@ public class Principal extends JFrame {
 		contentPane.add(chatPersonal, gbc_chatPersonal);
 		GridBagLayout gbl_chatPersonal = new GridBagLayout();
 		gbl_chatPersonal.columnWidths = new int[] { 66, 0 };
-		gbl_chatPersonal.rowHeights = new int[] { 476, 80, 0, 0 };
+		gbl_chatPersonal.rowHeights = new int[] { 476, 0, 0, 0 };
 		gbl_chatPersonal.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_chatPersonal.rowWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		chatPersonal.setLayout(gbl_chatPersonal);
@@ -628,24 +629,17 @@ public class Principal extends JFrame {
 		// Se muestran todas las burbujas de la conversacion actual
 		listaContactos.setSelectedIndex(0);
 
-		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBorder(null);
-		GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
-		gbc_scrollPane_3.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_3.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane_3.gridx = 0;
-		gbc_scrollPane_3.gridy = 1;
-		chatPersonal.add(scrollPane_3, gbc_scrollPane_3);
-
+		JScrollPane scrollPaneIconos = new JScrollPane();
+		scrollPaneIconos.setBorder(null);
 		JPanel panel_iconos = new JPanel();
-		scrollPane_3.setViewportView(panel_iconos);
-		scrollPane_3.setBackground(CHAT_COLOR);
+		scrollPaneIconos.setViewportView(panel_iconos);
+		scrollPaneIconos.setBackground(CHAT_COLOR);
 		panel_iconos.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panel_iconos.setBackground(CHAT_COLOR);
 
-		// Añadimos todos los iconos al panel.
+		// Añadimos todos los iconos al panel
 		for (int i = 0; i <= BubbleText.MAXICONO; i++) {
-			JLabel labelIconos = new JLabel("");
+			JLabel labelIconos = new JLabel();
 			labelIconos.setIcon(BubbleText.getEmoji(i));
 			labelIconos.setName(Integer.toString(i));
 			panel_iconos.add(labelIconos);
@@ -656,8 +650,6 @@ public class Principal extends JFrame {
 				}
 			});
 		}
-
-		scrollPane_3.setVisible(iconsVisible);
 
 		JPanel writeText = new JPanel();
 		writeText.setBackground(SECONDARY_COLOR);
@@ -675,7 +667,7 @@ public class Principal extends JFrame {
 		gbl_writeText.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		writeText.setLayout(gbl_writeText);
 
-		JLabel lblEmoji = new JLabel("");
+		JLabel lblEmoji = new JLabel();
 		lblEmoji.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblEmoji.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEmoji.setBackground(SECONDARY_COLOR);
@@ -683,7 +675,20 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				iconsVisible = !iconsVisible;
-				scrollPane_3.setVisible(iconsVisible);
+				if (!iconsVisible) {
+					chatPersonal.remove(scrollPaneIconos);
+					
+					gbl_chatPersonal.rowHeights[1] = 0;
+				} else {
+					GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
+					gbc_scrollPane_3.fill = GridBagConstraints.BOTH;
+					gbc_scrollPane_3.insets = new Insets(0, 0, 5, 0);
+					gbc_scrollPane_3.gridx = 0;
+					gbc_scrollPane_3.gridy = 1;
+					chatPersonal.add(scrollPaneIconos, gbc_scrollPane_3);
+					
+					gbl_chatPersonal.rowHeights[1] = 80; 
+				}
 				chatPersonal.updateUI();
 				loadChat(listaContactos.getSelectedValue());
 			}
@@ -773,7 +778,7 @@ public class Principal extends JFrame {
 				gbc_label.gridy = 1;
 				panel.add(label, gbc_label);
 
-				JLabel lblContactName = new JLabel(contacto.getNombre());
+				JLabel lblContactName = new JLabel(recortarString(contacto.getNombre()));
 				GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 				gbc_lblNewLabel.anchor = GridBagConstraints.SOUTH;
 				gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
@@ -795,7 +800,7 @@ public class Principal extends JFrame {
 				gbc_lblNewLabel_1.gridx = 2;
 				gbc_lblNewLabel_1.gridy = 1;
 				panel.add(lblUltimoMensaje, gbc_lblNewLabel_1);
-				
+
 				JLabel lblMensaje;
 				if (ultimoMensaje != null) {
 					// Si no tiene texto es un emoji
@@ -805,11 +810,7 @@ public class Principal extends JFrame {
 						lblMensaje.setFont(lblMensaje.getFont().deriveFont(20));
 					} else {
 						// Si el último mensaje es muy largo no se muestra entero
-						if (textoUltimoMensaje.length() > MAX_CHARS_LAST_MESSAGE) {
-							textoUltimoMensaje = textoUltimoMensaje.substring(0, Math.min(MAX_CHARS_LAST_MESSAGE, textoUltimoMensaje.lastIndexOf(' '))) + "...";
-						}
-						
-						lblMensaje = new JLabel(textoUltimoMensaje);
+						lblMensaje = new JLabel(recortarString(textoUltimoMensaje));
 						lblMensaje.setFont(lblMensaje.getFont().deriveFont(Font.ITALIC));
 					}
 				} else {

@@ -25,7 +25,7 @@ public abstract class Contact {
 	/**
 	 * Constructor sobrecargado de la clase contacto
 	 * 
-	 * @param nombre Nombre del contacto
+	 * @param nombre   Nombre del contacto
 	 * @param mensajes Lista de mensajes intercambiados con el usuario
 	 */
 	public Contact(String nombre, List<Message> mensajes) {
@@ -120,7 +120,8 @@ public abstract class Contact {
 	/**
 	 * Método para añadir un mensajes con ese contacto
 	 * 
-	 * @param mensaje Mensaje a añadir a la lista de mensajes que le he enviado a ese contaacto
+	 * @param mensaje Mensaje a añadir a la lista de mensajes que le he enviado a
+	 *                ese contaacto
 	 */
 	public void sendMessage(Message message) {
 		mensajes.add(message);

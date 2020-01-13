@@ -24,8 +24,8 @@ import com.toedter.calendar.JDateChooser;
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
 
-import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -44,6 +44,7 @@ public class Search extends JFrame {
 	 * Create the frame.
 	 */
 	public Search() {
+		setBackground(CHAT_COLOR);
 		setTitle("Search");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Search.class.getResource("/umu/tds/apps/resources/icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -153,15 +154,16 @@ public class Search extends JFrame {
 		gbc_scrollPane.gridy = 1;
 		contentPane.add(scrollPane, gbc_scrollPane);
 		
-		JTextPane textPane = new JTextPane();
-		scrollPane.setViewportView(textPane);
+		JTextField textField = new JTextField();
+		scrollPane.setViewportView(textField);
 		
-		textPane.setForeground(TEXT_COLOR_LIGHT);
-		textPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		textPane.setCaretColor(TEXT_COLOR_LIGHT);
-		textPane.setBackground(MAIN_COLOR);
+		textField.setForeground(TEXT_COLOR_LIGHT);
+		textField.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		textField.setCaretColor(TEXT_COLOR_LIGHT);
+		textField.setBackground(MAIN_COLOR);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBackground(CHAT_COLOR);
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 5);
 		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
@@ -170,7 +172,7 @@ public class Search extends JFrame {
 		gbc_scrollPane_1.gridy = 3;
 		contentPane.add(scrollPane_1, gbc_scrollPane_1);
 		
-		JPanel chat = new JPanel();
+		ChatBurbujas chat = new ChatBurbujas();
 		chat.setBackground(CHAT_COLOR);
 		scrollPane_1.setViewportView(chat);
 		chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
@@ -187,7 +189,7 @@ public class Search extends JFrame {
 					List<String> nombreUsuario = misContactos.stream().filter(c -> c.getNombre().equals(comboBox.getSelectedItem().toString())).filter(c -> c instanceof IndividualContact).map(c -> ((IndividualContact) c).getUsuario().getName()).collect(Collectors.toList());
 					emisorMensaje = nombreUsuario.get(0);
 				}
-				List<Message> mensajes = Controlador.getInstancia().buscarMensajes(emisorMensaje, fechaInicio, fechaFin, textPane.getText());
+				List<Message> mensajes = Controlador.getInstancia().buscarMensajes(emisorMensaje, fechaInicio, fechaFin, textField.getText());
 				
 				chat.removeAll();
 				chat.repaint();

@@ -36,12 +36,12 @@ public class Theme {
 	public static final Color[] PIECHART_COLORS = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62),
 			new Color(236, 143, 110), new Color(243, 180, 159), new Color(246, 199, 182) };
 	public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
-	public static final int MAX_CHARS_LAST_MESSAGE = 35;
+	private static final int MAX_CHARS_STRING_CHAT_LIST = 35;
 
 	public static ImageIcon resizeIcon(ImageIcon img, int newSize) {
 		BufferedImage bi = new BufferedImage(img.getIconWidth(), img.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = bi.createGraphics();
-		
+
 		// paint the Icon to the BufferedImage.
 		img.paintIcon(null, g, 0, 0);
 		g.dispose();
@@ -102,5 +102,19 @@ public class Theme {
 		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+	}
+
+	/**
+	 * En caso de que sea mayor que un cierto número de caracteres añade recorta la
+	 * cadena y le añade puntos suspensivos al final para que no sea tan larga
+	 * 
+	 * @param cadena Cadena a recortar en caso de exceder el tamaño permitido
+	 * @return Cadena recortada si excede el tamaño
+	 */
+	public static String recortarString(String cadena) {
+		if (cadena.length() > MAX_CHARS_STRING_CHAT_LIST) {
+			return cadena.substring(0, Math.min(MAX_CHARS_STRING_CHAT_LIST, cadena.lastIndexOf(' '))) + "...";
+		}
+		return cadena;
 	}
 }

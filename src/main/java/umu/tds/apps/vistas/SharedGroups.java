@@ -22,7 +22,7 @@ import umu.tds.apps.controlador.Controlador;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.JList;
 import java.awt.GridBagConstraints;
@@ -58,10 +58,11 @@ public class SharedGroups extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 
 		final DefaultListModel<String> modelNameGroup = new DefaultListModel<>();
-		List<Group> gruposCompartidos = Controlador.getInstancia().getGruposEnComun(contact);
-		for (int i = 0; i < gruposCompartidos.size(); i++)
-			modelNameGroup.add(i, gruposCompartidos.get(i).getNombre());
-
+		Set<Group> gruposCompartidos = Controlador.getInstancia().getGruposEnComun(contact);
+		for (Group grupo : gruposCompartidos) {
+			modelNameGroup.addElement(grupo.getNombre());
+		}
+		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;

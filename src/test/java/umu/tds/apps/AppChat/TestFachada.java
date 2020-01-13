@@ -98,18 +98,18 @@ public class TestFachada {
 		assertTrue(controlador.crearCuenta(ICON, OTHER_NICK, PASSWORD, OTHER_MAIL, OTHER_NAME, OTHER_PHONE,
 				LocalDate.now()));
 		controlador.cerrarSesion();
-		
+
 		// Admin añade como contacto a Other
 		assertTrue(controlador.iniciarSesion(ADMIN_NICK, PASSWORD));
 		IndividualContact contactoOther = controlador.crearContacto(OTHER_NICK, OTHER_PHONE);
 		assertNotNull(contactoOther);
-		
+
 		// Mete a Other al grupo Juernes
 		List<IndividualContact> participantes = new LinkedList<>(grupo.getParticipantes());
 		participantes.add(contactoOther);
 		controlador.modificarGrupo(grupo, NEW_GROUP_NAME, participantes);
 		controlador.cerrarSesion();
-		
+
 		// Other da los buenos dias por el grupo
 		assertTrue(controlador.iniciarSesion(OTHER_NICK, PASSWORD));
 		controlador.enviarMensaje(grupo, "Buenos días in the morning!");

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,7 +18,9 @@ import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
+import org.knowm.xchart.PieSeries;
 import org.knowm.xchart.internal.chartpart.Chart;
+import org.knowm.xchart.style.PieStyler;
 import org.knowm.xchart.style.Styler.LegendPosition;
 
 import com.itextpdf.text.Chunk;
@@ -254,7 +257,6 @@ public class Controlador implements MessagesListener {
 
 		participantes.stream().forEach(p -> {
 			User usuario = p.getUsuario();
-			// catalogoUsuarios.addUsuario(usuario);
 			adaptadorUsuario.modificarUsuario(usuario);
 		});
 
@@ -322,11 +324,10 @@ public class Controlador implements MessagesListener {
 	}
 
 	// Devuelvo una lista con los grupos en los que ese usuario y yo estamos.
-	public List<Group> getGruposEnComun(IndividualContact contacto) {
+	public Set<Group> getGruposEnComun(IndividualContact contacto) {
 		return usuarioActual.getContactos().stream().filter(c -> c instanceof Group).map(c -> (Group) c)
-				.filter(g -> g.getParticipantes().stream().anyMatch(c -> c.getMovil() == contacto.getMovil())
-						|| g.getAdmin().getNumTelefono() == contacto.getMovil())
-				.collect(Collectors.toList());
+				.filter(g -> g.hasParticipante(contacto.getUsuario()))
+				.collect(Collectors.toSet());
 	}
 
 	public void hacerPremium() {
@@ -530,8 +531,7 @@ public class Controlador implements MessagesListener {
 					Paragraph parrafoDescEstado = new Paragraph();
 					parrafoDescEstado.setTabSettings(new TabSettings(60f));
 					parrafoDescEstado.add(Chunk.TABBING);
-					Image estadoImg = Image.getInstance(Theme.resizeIcon(estado.get().getImg(), 200).getImage(),
-							null);
+					Image estadoImg = Image.getInstance(Theme.resizeIcon(estado.get().getImg(), 200).getImage(), null);
 					parrafoDescEstado.add(estadoImg);
 					documento.add(parrafoDescEstado);
 
@@ -541,7 +541,7 @@ public class Controlador implements MessagesListener {
 					parrafoDescEstado.add(new Chunk("\"" + estado.get().getFrase() + "\""));
 					documento.add(parrafoDescEstado);
 				}
-				
+
 				if (i < contactos.size()) {
 					documento.add(Chunk.NEWLINE);
 					documento.add(Chunk.NEWLINE);
@@ -580,7 +580,7 @@ public class Controlador implements MessagesListener {
 		return chart;
 	}
 
-	public Chart crearTarta(String titulo) {
+	public Chart<PieStyler, PieSeries> crearTarta(String titulo) {
 		PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Diagram").build();
 		chart.getStyler().setSeriesColors(Theme.PIECHART_COLORS);
 		chart.getStyler().setLegendVisible(true);
@@ -640,7 +640,7 @@ public class Controlador implements MessagesListener {
 	}
 
 	// Guarda una lista de mensajes de Whatsapp
-	public void cargarMensajes(String path, String opElegida) {
+	public void cargarMensajes(String path, String opElegida) throws IOException {
 		Plataforma plataforma;
 		String dateFormat;
 

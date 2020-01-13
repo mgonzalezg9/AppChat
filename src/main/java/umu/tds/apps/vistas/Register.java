@@ -14,12 +14,12 @@ import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -34,11 +34,6 @@ import java.util.regex.Pattern;
 import javax.swing.JTextField;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.Image;
-import java.awt.AlphaComposite;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics2D;
 
 import com.toedter.calendar.JDateChooser;
 

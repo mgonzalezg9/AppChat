@@ -23,11 +23,4 @@ public class MessagesEvent extends EventObject {
 		return newMessages;
 	}
 
-	public void setOldMessages(List<MensajeWhatsApp> oldMessages) {
-		this.oldMessages = oldMessages;
-	}
-
-	public void setNewMessages(List<MensajeWhatsApp> newMessages) {
-		this.newMessages = newMessages;
-	}
 }
