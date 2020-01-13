@@ -15,12 +15,27 @@ public class Group extends Contact {
 	private User admin;
 
 	// Constructor.
+	/**
+	 * Constructor de la clase grupo
+	 * 
+	 * @param nombre Nombre del grupo
+	 * @param contactos Participantes del grupo
+	 * @param admin Usuario admin del grupo
+	 */
 	public Group(String nombre, List<IndividualContact> contactos, User admin) {
 		super(nombre);
 		this.integrantes = contactos;
 		this.admin = admin;
 	}
 
+	/**
+	 * Constructor sobrecargado de la clase grupo
+	 * 
+	 * @param nombre Nombre del grupo
+	 * @param mensajes Mensajes intercambiados en el grupo
+	 * @param contactos Participantes del grupo
+	 * @param admin Usuario admin del grupo
+	 */
 	public Group(String nombre, List<Message> mensajes, List<IndividualContact> contactos, User admin) {
 		super(nombre, mensajes);
 		this.integrantes = contactos;
@@ -28,14 +43,29 @@ public class Group extends Contact {
 	}
 
 	// Getters
+	/**
+	 * Devuelve los participantes del grupo
+	 * 
+	 * @return Lista con los participantes del grupo
+	 */
 	public List<IndividualContact> getParticipantes() {
 		return integrantes;
 	}
 
+	/**
+	 * Devuelvo el usuario administrador del grupo
+	 * 
+	 * @return Usuario administrador del grupo
+	 */
 	public User getAdmin() {
 		return admin;
 	}
 
+	/**
+	 * Devuelve la foto de perfil del grupo
+	 * 
+	 * @return Imagen de perfil del grupo
+	 */
 	@Override
 	public ImageIcon getFoto() {
 		ImageIcon imagen = new ImageIcon(Group.class.getResource(GROUP_ICON_PATH));
@@ -44,19 +74,40 @@ public class Group extends Contact {
 	}
 
 	// Methods
+	/**
+	 * Añade un nuevo integrante del grupo
+	 * 
+	 * @param c Contacto a añadir al grupo
+	 */
 	public void addIntegrante(IndividualContact c) {
 		integrantes.add(c);
 	}
 
+	/**
+	 * Cambia el admin del grupo
+	 * 
+	 * @param u Usuario que será el nuevo admin
+	 */
 	public void cambiarAdmin(User u) {
 		admin = u;
 	}
 
+	/**
+	 * Insertar integrantes para el grupo
+	 * 
+	 * @param contactos Lista de contactos que serán los participantes del grupo
+	 */
 	public void setIntegrantes(List<IndividualContact> contactos) {
 		this.integrantes = contactos;
 	}
-
-	// Devuelve los mensajes que han enviado el resto de usuarios por el grupo. El valor del parametro pasado como parámetro no importa
+	
+	/**
+	 * Devuelve los mensajes que han enviado el resto de usuarios por el grupo.
+	 * El valor del parametro pasado como parámetro no importa
+	 * 
+	 * @param emptyOpt Usuario opcional del que obtengo los mensajes recibidos
+	 * @return Lista con los mensajes recibidos de ese usuario
+	 */
 	@Override
 	public List<Message> getMensajesRecibidos(Optional<User> emptyOpt) {
 		return this.integrantes.stream().flatMap(c -> c.getUsuario().getContactos().stream())
@@ -64,12 +115,20 @@ public class Group extends Contact {
 				.flatMap(g -> g.getMensajesEnviados().stream()).collect(Collectors.toList());
 	}
 
+	/**
+	 * Devuelve los mensajes que ha enviado el usuario al grupo
+	 * 
+	 * @param usuario Usuario del que cojo los mensajes que el ha enviado a su grupo
+	 * @return Lista con los mensajes que el usuario ha enviado al grupo
+	 */
 	public List<Message> getMisMensajesGrupo(User usuario) {
 		return getMensajesEnviados().stream().filter(m -> m.getEmisor().getCodigo() == usuario.getCodigo())
 				.collect(Collectors.toList());
 	}
 
-	// Borra los mensajes que recibo de ese contacto
+	/**
+	 * Borra todos los mensajes del grupo
+	 */
 	public List<Message> removeMensajesRecibidos() {
 		List<Message> recibidos = getMensajesRecibidos(Optional.empty());
 		List<Message> copia = new LinkedList<Message>(recibidos);

@@ -13,16 +13,32 @@ public abstract class Contact {
 	private List<Message> mensajes;
 
 	// Constructor.
+	/**
+	 * Constructor de la clase contacto
+	 * 
+	 * @param nombre Nombre del contacto
+	 */
 	public Contact(String nombre) {
 		this(nombre, new LinkedList<>());
 	}
 
+	/**
+	 * Constructor sobrecargado de la clase contacto
+	 * 
+	 * @param nombre Nombre del contacto
+	 * @param mensajes Lista de mensajes intercambiados con el usuario
+	 */
 	public Contact(String nombre, List<Message> mensajes) {
 		this.nombre = nombre;
 		this.mensajes = mensajes;
 	}
 
 	// Getters.
+	/**
+	 * Devuelve el nombre del contacto
+	 * 
+	 * @return Nombre del contacto
+	 */
 	public String getNombre() {
 		return nombre;
 	}
@@ -45,34 +61,67 @@ public abstract class Contact {
 	 */
 	public abstract List<Message> getMensajesRecibidos(Optional<User> usuario);
 
+	/**
+	 * Devuelve el código del contacto
+	 * 
+	 * @return Código del contacto
+	 */
 	public int getCodigo() {
 		return codigo;
 	}
 
+	/**
+	 * Devuelve la foto del contacto
+	 * 
+	 * @return Devuelve la foto del contacto
+	 */
 	public abstract ImageIcon getFoto();
 
 	// Setters
+	/**
+	 * Setter para el código
+	 * 
+	 * @param codigo Codigo del contacto
+	 */
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
 
+	/**
+	 * Setter para el nombre
+	 * 
+	 * @param nombre Nombre del contacto
+	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
+	/**
+	 * Elimina los mensajes eliminados
+	 * 
+	 * @return Lista con los mensajes que le envié a ese contacto.
+	 */
 	public List<Message> removeMensajesEnviados() {
 		List<Message> lista = new LinkedList<>(mensajes); // copia
 		mensajes.clear();
 		return lista;
 	}
 
+	/**
+	 * Método para añadir mensajes con ese contacto
+	 * 
+	 * @param mensajes Mensajes a añadir a la lista de mensajes
+	 */
 	public void addMensajes(List<Message> mensajes) {
 		this.mensajes.addAll(mensajes);
 	}
 
-	// public abstract List<Message> removeMensajesRecibidos();
-
 	// Methods
+	/**
+	 * Método para añadir un mensajes con ese contacto
+	 * 
+	 * @param mensaje Mensaje a añadir a la lista de mensajes que le he enviado a ese contaacto
+	 */
 	public void sendMessage(Message message) {
 		mensajes.add(message);
 	}
