@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import umu.tds.apps.cargador.MessagesCharger;
+import componente.MessagesCharger;
 import umu.tds.apps.controlador.Controlador;
 
 import java.awt.Toolkit;

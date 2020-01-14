@@ -31,10 +31,12 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import componente.MessagesCharger;
+import componente.MessagesEvent;
+import componente.MessagesListener;
+import modelo.MensajeWhatsApp;
+import modelo.Plataforma;
 import umu.tds.apps.AppChat.*;
-import umu.tds.apps.cargador.MessagesCharger;
-import umu.tds.apps.cargador.MessagesEvent;
-import umu.tds.apps.cargador.MessagesListener;
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.GroupDAO;
@@ -43,8 +45,7 @@ import umu.tds.apps.persistencia.MessageDAO;
 import umu.tds.apps.persistencia.StatusDAO;
 import umu.tds.apps.persistencia.UserDAO;
 import umu.tds.apps.vistas.Theme;
-import modelo.MensajeWhatsApp;
-import modelo.Plataforma;
+
 
 public class Controlador implements MessagesListener {
 	// Instancia del controlador.
