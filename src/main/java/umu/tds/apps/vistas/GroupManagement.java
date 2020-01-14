@@ -73,7 +73,7 @@ public class GroupManagement extends JFrame {
 		gbl_contentPane.rowHeights = new int[] { 0, 0, 50, 0, 0, 50, 0, 18, 10, 0 };
 		gbl_contentPane.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel settings = new JPanel();
@@ -82,7 +82,7 @@ public class GroupManagement extends JFrame {
 		GridBagConstraints gbc_settings = new GridBagConstraints();
 		gbc_settings.gridwidth = 12;
 		gbc_settings.insets = new Insets(0, 0, 5, 0);
-		gbc_settings.fill = GridBagConstraints.BOTH;
+		gbc_settings.fill = GridBagConstraints.HORIZONTAL;
 		gbc_settings.gridx = 0;
 		gbc_settings.gridy = 0;
 		contentPane.add(settings, gbc_settings);
@@ -98,7 +98,6 @@ public class GroupManagement extends JFrame {
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.WEST;
 		gbc_panel.insets = new Insets(0, 0, 0, 5);
-		gbc_panel.fill = GridBagConstraints.VERTICAL;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 0;
 		settings.add(panel, gbc_panel);
@@ -116,7 +115,6 @@ public class GroupManagement extends JFrame {
 		panel_1.setBackground(MAIN_COLOR);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.anchor = GridBagConstraints.EAST;
-		gbc_panel_1.fill = GridBagConstraints.VERTICAL;
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 0;
 		settings.add(panel_1, gbc_panel_1);

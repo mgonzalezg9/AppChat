@@ -624,8 +624,10 @@ public class Controlador implements MessagesListener {
 
 			if (autor.isPresent())
 				mensajes.add(new Message(message.getTexto(), message.getFecha(), autor.get(), chatActual));
-			else
+			else {
+				System.err.println("Alguno de los usuarios que intenta importar no existen. Pruebe a renombrar el fichero de entrada.");
 				return;
+			}
 		}
 
 		chatActual.addMensajes(mensajes);

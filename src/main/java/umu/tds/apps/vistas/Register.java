@@ -143,9 +143,6 @@ public class Register extends JFrame {
 						icon.setDescription(file.getPath());
 						lblImgUser.setIcon(icon);
 
-						/*Dimension imageSize = new Dimension(128, 128);
-						lblImgUser.setPreferredSize(imageSize);*/
-
 						lblImgUser.revalidate();
 						lblImgUser.repaint();
 						lblChooseImage.setText("");

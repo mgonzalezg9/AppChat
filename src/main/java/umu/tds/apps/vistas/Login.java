@@ -42,8 +42,8 @@ public class Login extends JFrame {
 				try {
 					Login window = new Login();
 					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (ExceptionInInitializerError e) {
+					System.err.println("Error al cargar el contenido de la BD. Pruebe a refrescar el proyecto.");
 				}
 			}
 		});
